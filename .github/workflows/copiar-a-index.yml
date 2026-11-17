@@ -1,0 +1,18 @@
+name: Copiar a index.html
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  copiar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copiar duelo-neural-en-linea.html a index.html
+        run: |
+          cp duelo-neural-en-linea.html index.html
+          git config user.name "thedecro3312-ux"
+          git config user.email "thedecro3312-ux@users.noreply.github.com"
+          git add index.html
+          git commit -m "Actualización: efectos de cartas reparados y clic en cartas"
+          git push

@@ -810,6 +810,64 @@
       .rules-overlay .rules-list{ margin:.35rem 0 0; padding-left:1.25rem; }
       .rules-overlay .rules-list li{ margin:.35rem 0; color:var(--ink-dim); }
       .rules-overlay .rules-list li b{ color:var(--ink); }
+      /* ---------- Pantallas de preparación: mazos (paso 1), moneda (paso 2) y en línea ----------
+         La selección de mazos y la moneda ya no viven dentro del lobby: cada una es su
+         propia pantalla (.screen) y el flujo es lobby → mazos → moneda → duelo.
+         Heredan el mismo neón rosa/cian fijo de la pantalla principal. */
+      #scr-decks,#scr-coin,#scr-online{
+        --np-pink:#ff2e88; --np-pink2:#ff5da2; --np-cyan:#25e2ff; --np-cyan2:#7df3ff;
+        --panel:#0d0a24; --panel2:#150f33; --line:#3b2a6e;
+        --ink:#f4efff; --ink-dim:#c9baee; --ink-faint:#a493d8; --neon:#25e2ff;
+        color:var(--ink); position:relative;
+      }
+      body:has(#scr-decks.on),body:has(#scr-coin.on),body:has(#scr-online.on){ background:#04020c; }
+      #scr-decks::before,#scr-coin::before,#scr-online::before{ content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+        background:
+          radial-gradient(920px 540px at 88% -8%, rgba(255,46,136,.30), transparent 62%),
+          radial-gradient(840px 540px at 6% 108%, rgba(37,226,255,.24), transparent 62%),
+          radial-gradient(640px 420px at 50% 42%, rgba(124,58,237,.12), transparent 65%),
+          repeating-linear-gradient(0deg, rgba(37,226,255,.05) 0 1px, transparent 1px 44px),
+          repeating-linear-gradient(90deg, rgba(255,46,136,.045) 0 1px, transparent 1px 44px),
+          linear-gradient(180deg,#05030f,#0a0618 55%,#04020c);
+      }
+      .prep-head{ text-align:center; padding:1.7rem 0 .5rem; }
+      .prep-step{ font-family:"Orbitron"; font-size:.82rem; letter-spacing:.22em; text-transform:uppercase;
+        color:var(--np-cyan2); margin:.2rem 0; text-shadow:0 0 10px rgba(37,226,255,.6); }
+      .prep-title{ font-size:clamp(1.5rem,5.5vw,2.3rem); font-weight:900; margin:.25rem 0; color:#fff;
+        text-shadow:0 0 14px rgba(255,46,136,.45); }
+      .prep-sub{ color:var(--ink-dim); max-width:580px; margin:.3rem auto .6rem; }
+      .prep-sub:empty{ display:none; }
+      .prep-nav{ display:flex; gap:.7rem; justify-content:space-between; align-items:center; flex-wrap:wrap; margin:1.1rem 0 .4rem; }
+      #scr-decks button,#scr-coin button,#scr-online button{ background:#150f33; border-color:rgba(37,226,255,.5); color:#f4efff; }
+      #scr-decks button:hover,#scr-coin button:hover,#scr-online button:hover{ border-color:var(--np-cyan); box-shadow:0 0 12px rgba(37,226,255,.35); }
+      #scr-decks button.primary,#scr-coin button.primary,#scr-online button.primary{ background:linear-gradient(120deg,#b3125f,#ff2e88 48%,#7b2ff7 135%);
+        border-color:var(--np-pink2); color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.4);
+        box-shadow:0 0 16px rgba(255,46,136,.45), inset 0 0 10px rgba(255,255,255,.12); }
+      #scr-decks button.primary:disabled,#scr-coin button.primary:disabled,#scr-online button.primary:disabled{ box-shadow:none; }
+      #scr-decks button.ghost,#scr-coin button.ghost,#scr-online button.ghost{ background:transparent; }
+      #scr-decks .setupbox{ background:linear-gradient(160deg, rgba(21,15,51,.94), rgba(9,6,26,.96));
+        border:1px solid rgba(255,46,136,.42); border-radius:6px; box-shadow:0 0 16px rgba(255,46,136,.10); }
+      #scr-decks .setupbox h3{ color:#fff; text-shadow:0 0 10px rgba(255,46,136,.4); }
+      #scr-online .modepanel{ background:linear-gradient(160deg, rgba(21,15,51,.94), rgba(9,6,26,.96));
+        border:1px solid rgba(37,226,255,.45); border-radius:6px;
+        box-shadow:0 0 18px rgba(37,226,255,.10), inset 0 0 24px rgba(124,58,237,.06); }
+      #scr-decks input[type=text],#scr-online input[type=text]{ background:#0a0722; border-color:rgba(37,226,255,.4); color:#f4efff; }
+      #scr-decks input[type=text]:focus,#scr-online input[type=text]:focus{ outline:2px solid rgba(255,46,136,.65); border-color:var(--np-pink); }
+      #scr-decks .deckcard,#scr-online .deckcard{ background:rgba(10,7,28,.92); border:1px solid rgba(124,90,220,.5); border-radius:8px; }
+      #scr-decks .deckcard:hover,#scr-online .deckcard:hover{ border-color:var(--np-cyan); box-shadow:0 0 14px rgba(37,226,255,.32); }
+      #scr-decks .deckcard.sel,#scr-online .deckcard.sel{ box-shadow:0 0 18px -2px currentColor, inset 0 0 14px rgba(255,255,255,.04); background:rgba(18,12,44,.96); }
+      #scr-decks .deckcard p,#scr-online .deckcard p{ color:#b7a8e2; }
+      #scr-decks .diffbtn.sel{ outline:2px solid var(--np-pink); border-color:var(--np-pink); box-shadow:0 0 14px rgba(255,46,136,.35); }
+      #scr-coin #coinResult{ color:var(--np-cyan2); text-shadow:0 0 12px rgba(37,226,255,.65); }
+      #scr-coin .coinwrap{ background:linear-gradient(160deg, rgba(21,15,51,.94), rgba(9,6,26,.96));
+        border:1px solid rgba(37,226,255,.45); border-radius:6px;
+        box-shadow:0 0 18px rgba(37,226,255,.10); padding:1.2rem 1rem 1.4rem; }
+      #scr-online .code{ border:1.5px dashed var(--np-pink); color:var(--np-cyan2); background:rgba(255,46,136,.08);
+        box-shadow:0 0 16px rgba(255,46,136,.35); text-shadow:0 0 10px rgba(37,226,255,.8); }
+      #scr-online .onlinestatus{ color:var(--np-cyan2); }
+      #scr-online .choicebtn.sel{ outline:2px solid var(--np-pink); border-color:var(--np-pink); box-shadow:0 0 12px rgba(255,46,136,.4); }
+      #scr-decks .note,#scr-coin .note,#scr-online .note{ color:#a493d8; }
+      @media (max-width:820px){ .prep-head{ padding:1.05rem 0 .3rem; } }
     </style>
   </head>
   <body>
@@ -834,7 +892,18 @@
           <button class="primary modebtn" id="btnModeOnline" type="button">🌐 En línea con código — dos dispositivos</button>
         </div>
 
-        <div class="modepanel" id="onlinePanel" style="display:none">
+        <button class="primary modebtn blockbtn" id="btnOpenBuilder" type="button">🛠️ Editor de mazos</button>
+
+      </section>
+
+      <!-- ============ EN LÍNEA: PANTALLA PROPIA (mazo + sala) ============ -->
+      <section id="scr-online" class="screen">
+        <div class="prep-head">
+          <p class="prep-step">Modo en línea</p>
+          <h2 class="prep-title">🌐 Elige tu mazo y entra a la sala</h2>
+          <p class="prep-sub">Primero tu nombre y tu mazo; después creas la sala o te unes con el código. La moneda se lanza sola en cuanto tu rival entra a la sala.</p>
+        </div>
+<div class="modepanel" id="onlinePanel">
             <div class="orow">
               <div>
                 <label for="onlineName"><b>Tu nombre</b></label>
@@ -865,9 +934,19 @@
             <button id="btnCancelOnline" type="button" class="ghost" style="display:none">Cancelar sala / salir</button>
             <p class="note">Las salas viven en tu proyecto Firebase «duelo-neural». Sus reglas de base de datos están en modo de prueba y caducan el <b>16 de diciembre de 2026</b>: hay que actualizarlas antes de esa fecha para seguir jugando en línea.</p>
         </div>
+        <div class="prep-nav">
+          <button type="button" class="ghost" id="btnBackOnline">← Volver a los modos</button>
+        </div>
+      </section>
 
-        <div id="setupArea" style="display:none">
-          <div class="setupgrid">
+      <!-- ============ PASO 1: SELECCIÓN DE MAZOS (pantalla propia) ============ -->
+      <section id="scr-decks" class="screen">
+        <div class="prep-head">
+          <p class="prep-step">Paso 1 de 2 · Mazos</p>
+          <h2 class="prep-title">Elige los mazos</h2>
+          <p class="prep-sub" id="decksModeName"></p>
+        </div>
+<div class="setupgrid">
             <div class="setupbox">
               <h3 id="name1Label">Jugador 1</h3>
               <input type="text" id="name1" value="Decro" maxlength="16" />
@@ -881,13 +960,26 @@
               <div class="deckgrid" id="deckPick2" style="grid-template-columns:1fr"></div>
             </div>
           </div>
-          <div id="aiDiffRow" style="display:none; margin-bottom:1rem">
+<div id="aiDiffRow" style="display:none; margin-bottom:1rem">
             <div class="setupbox">
               <h3 id="aiDiffTitle">🎧 Dificultad de Nina</h3>
               <div class="diffgrid" id="diffPickSetup"></div>
             </div>
           </div>
-          <div class="coinwrap">
+        <div class="prep-nav">
+          <button type="button" class="ghost" id="btnBackDecks">← Volver a los modos</button>
+          <button type="button" class="primary" id="btnToCoin" style="font-size:1.05rem; padding:.65rem 1.4rem">Continuar: la moneda →</button>
+        </div>
+      </section>
+
+      <!-- ============ PASO 2: LA MONEDA (pantalla propia, después de los mazos) ============ -->
+      <section id="scr-coin" class="screen">
+        <div class="prep-head">
+          <p class="prep-step">Paso 2 de 2 · Moneda</p>
+          <h2 class="prep-title">La moneda decide quién empieza</h2>
+          <p class="prep-sub" id="coinSummary"></p>
+        </div>
+<div class="coinwrap">
             <p>¿Quién empieza? <span id="coinPickLabel">El Jugador 1 elige:</span></p>
             <div>
               <button id="pickCara" type="button">🪙 Cara</button>
@@ -897,10 +989,9 @@
             <p id="coinResult" class="big orb" style="min-height:1.6em"></p>
             <button class="primary" id="btnStart" type="button" disabled style="font-size:1.1rem; padding:.7rem 1.6rem">¡A duelar!</button>
           </div>
+        <div class="prep-nav">
+          <button type="button" class="ghost" id="btnBackCoin">← Cambiar los mazos</button>
         </div>
-
-        <button class="primary modebtn blockbtn" id="btnOpenBuilder" type="button">🛠️ Editor de mazos</button>
-
       </section>
 
       <!-- ============ DUEL ============ -->
@@ -1902,8 +1993,22 @@ function buildPicks(elId,idx){
     el.appendChild(b);
   });
 }
+/* ---------- Navegación entre pantallas: lobby → mazos → moneda → duelo ----------
+   La selección de mazos y la moneda son pantallas propias (.screen): elegir un
+   modo abre la pantalla de mazos (paso 1) y, con los mazos elegidos, el botón
+   «Continuar» abre la pantalla de la moneda (paso 2), desde donde «¡A duelar!»
+   entra al tablero. El modo en línea tiene su propia pantalla (scr-online). */
+function showPrepScreen(id){
+  ["scr-lobby","scr-decks","scr-coin","scr-online","scr-duel"].forEach(function(s){var el=$(s);if(el)el.classList.toggle("on",s===id);});
+  window.scrollTo(0,0);
+}
 function setMode(m){
-  MODE=m; $("setupArea").style.display="block";
+  MODE=m;
+  /* cada preparación nueva empieza con la moneda sin lanzar */
+  coinChoice=null; firstPlayer=0;
+  var bs=$("btnStart"); if(bs)bs.disabled=true;
+  var cr=$("coinResult"); if(cr)cr.textContent="";
+  var cf=$("coin"); if(cf)cf.classList.remove("flip");
   var mb={pvp:"btnModePvp",ai:"btnModeAi",sim:"btnModeSim"}[m];
   ["btnModePvp","btnModeAi","btnModeSim","btnModeOnline"].forEach(function(id){var b=$(id);if(b)b.classList.toggle("sel",id===mb);});
   var dr=$("aiDiffRow"); if(dr)dr.style.display=(m==="ai"||m==="sim")?"block":"none";
@@ -1917,12 +2022,25 @@ function setMode(m){
     $("coinPickLabel").textContent="La IA 1 elige:";
   }
   else{$("name2").value="Alan";$("name2Label").textContent="Jugador 2";$("name1Label").textContent="Jugador 1";$("coinPickLabel").textContent="El Jugador 1 elige:";}
-  $("setupArea").scrollIntoView({behavior:"smooth",block:"start"});
+  var mn=$("decksModeName"); if(mn)mn.textContent={pvp:"⚔️ Duelo para 2 jugadores — pasa-y-juega en este dispositivo",ai:"🎧 Contra Nina (la IA) — ella juega con el mazo que elijas para ella",sim:"🤖 IA contra IA — Simulación: las dos IA juegan solas y tú solo miras"}[m]||"";
+  showPrepScreen("scr-decks"); /* paso 1: la selección de mazos, en su propia pantalla */
   if(m==="ai")ninaSay("greeting"); /* Nina se presenta con su voz al elegir el modo */
 }
 $("btnModePvp").onclick=function(){setMode("pvp");};
 $("btnModeAi").onclick=function(){setMode("ai");};
 $("btnModeSim").onclick=function(){setMode("sim");};
+/* ---------- Botones de paso entre las pantallas de preparación ---------- */
+$("btnBackDecks").onclick=function(){showPrepScreen("scr-lobby");};
+$("btnToCoin").onclick=function(){
+  var n1=($("name1").value||"Jugador 1").trim(), n2=($("name2").value||"Jugador 2").trim();
+  var cs=$("coinSummary"); if(cs)cs.textContent=n1+" juega «"+deckDef(pickDeck[0]).label+"» · "+n2+" juega «"+deckDef(pickDeck[1]).label+"». Lanza la moneda y pulsa «¡A duelar!» para dar inicio a la batalla.";
+  showPrepScreen("scr-coin"); /* paso 2: la moneda, en su propia pantalla */
+};
+$("btnBackCoin").onclick=function(){showPrepScreen("scr-decks");};
+$("btnBackOnline").onclick=function(){
+  if(typeof ONLINE!=="undefined"&&ONLINE.roomRef&&!ONLINE.inDuel){var c=$("btnCancelOnline"); if(c)c.click();}
+  showPrepScreen("scr-lobby");
+};
 
 /* ---------- Simulación IA contra IA ----------
    Los dos jugadores son IA (ai:true): el motor ya resuelve solo todas las
@@ -1953,9 +2071,8 @@ function exitSim(){
   if(G)G.over=true; /* la cadena de turnos de la IA se detiene sola al ver el duelo cerrado */
   try{ aiQueue.length=0; }catch(e){}
   closeSheet();
-  $("scr-duel").classList.remove("on"); $("scr-lobby").classList.add("on");
+  showPrepScreen("scr-lobby");
   $("btnStart").disabled=true; $("coinResult").textContent="";
-  window.scrollTo(0,0);
 }
 $("btnSimPause").onclick=function(){ SIM_PAUSED=!SIM_PAUSED; updateSimBar(); };
 $("btnSimSpeed").onclick=function(){ SIM_SPEED=(SIM_SPEED>=8)?1:SIM_SPEED*2; updateSimBar(); };
@@ -2297,7 +2414,7 @@ function startDuel(){
   G={players:[newPlayer(n1,pickDeck[0],MODE==="sim"),newPlayer(n2,pickDeck[1],MODE==="ai"||MODE==="sim")],
      turn:firstPlayer,turnNo:1,phase:"main",over:false,busy:false,targeting:null,evoSel:null,log:[],aiDiff:(MODE==="ai"||MODE==="sim"?AI_DIFF:null)};
   for(var p=0;p<2;p++)for(var i=0;i<5;i++)drawCard(G.players[p],true);
-  $("scr-lobby").classList.remove("on"); $("scr-duel").classList.add("on");
+  showPrepScreen("scr-duel"); /* de la pantalla de la moneda, directo a la batalla */
   log("🪙 El duelo empieza. "+G.players[G.turn].name+" va primero (sin robar ni atacar en el primer turno).");
   if(MODE==="ai")log("🎧 Tu rival es Nina, en dificultad "+aiDiffName()+". "+aiDiffDesc());
   if(MODE==="sim")log("🤖 Simulación IA contra IA en dificultad "+aiDiffName()+": "+n1+" juega "+deckDef(pickDeck[0]).label+" y "+n2+" juega "+deckDef(pickDeck[1]).label+". Las dos manos están visibles: a mirar el balance.");
@@ -2375,7 +2492,7 @@ function loseGame(P,why){
     simBtns=" <button id='btnSimAgain'>🔁 Otra simulación con estos mazos</button>";
   }
   showSheet("<div class='win'>🏆</div><h2>¡"+esc(W.name)+" gana el duelo!</h2><p>"+esc(P.name)+" perdió porque "+esc(why)+".</p>"+simHtml+"<button class='primary' id='btnAgain'>Jugar otra vez</button>"+simBtns);
-  sheetBtn("btnAgain",function(){NinaVoice.stop();closeSheet();if(MODE==="online")onlineCleanup(true);$("scr-duel").classList.remove("on");$("scr-lobby").classList.add("on");$("btnStart").disabled=true;$("coinResult").textContent="";window.scrollTo(0,0);});
+  sheetBtn("btnAgain",function(){NinaVoice.stop();closeSheet();if(MODE==="online")onlineCleanup(true);showPrepScreen("scr-lobby");$("btnStart").disabled=true;$("coinResult").textContent="";});
   if(MODE==="sim")sheetBtn("btnSimAgain",function(){ closeSheet(); firstPlayer=(Math.random()<0.5?0:1); startDuel(); }); /* la moneda se reparte al azar en la repetición */
 }
 function checkAlive(){return !G.over;}
@@ -4509,9 +4626,11 @@ function buildOnlinePicks(){
   });
 }
 $("btnModeOnline").onclick=function(){
-  var p=$("onlinePanel"); p.style.display=p.style.display==="none"?"block":"none";
-  this.classList.toggle("sel",p.style.display==="block");
-  if(p.style.display==="block")p.scrollIntoView({behavior:"smooth",block:"start"});
+  /* El modo en línea también se prepara en su propia pantalla (scr-online):
+     ahí se elige el mazo y se crea la sala o se entra con el código. */
+  ["btnModePvp","btnModeAi","btnModeSim"].forEach(function(id){var b=$(id);if(b)b.classList.remove("sel");});
+  this.classList.add("sel");
+  showPrepScreen("scr-online");
 };
 $("onlinePickCara").onclick=function(){ONLINE.coinChoice="cara";$("onlinePickCara").classList.add("sel");$("onlinePickCruz").classList.remove("sel");};
 $("onlinePickCruz").onclick=function(){ONLINE.coinChoice="cruz";$("onlinePickCruz").classList.add("sel");$("onlinePickCara").classList.remove("sel");};
@@ -4631,8 +4750,7 @@ function enterDuelScreen(){
   if(typeof closeBuilder==="function")closeBuilder();
   if(typeof closeSettings==="function")closeSettings();
   MODE="online"; ONLINE.inDuel=true;
-  $("scr-lobby").classList.remove("on"); $("scr-duel").classList.add("on");
-  window.scrollTo(0,0);
+  showPrepScreen("scr-duel"); /* de la pantalla en línea, directo a la batalla */
   try{ ONLINE.roomRef.onDisconnect().update({ status:"finished", winner:1-ONLINE.myIdx, reason:"Un jugador se desconectó." }); }catch(e){}
   var lb=$("btnLeaveOnline"); if(lb)lb.style.display="inline-block";
 }

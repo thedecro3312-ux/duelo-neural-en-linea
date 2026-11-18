@@ -306,6 +306,18 @@
       .ninaname{ font-family:"Orbitron"; font-size:.78rem; letter-spacing:.08em; color:var(--neon); }
       .ninatext{ margin:.1rem 0 0; font-size:.98rem; line-height:1.35; color:var(--ink); }
       .ninabar button{ flex:0 0 auto; padding:.3rem .55rem; font-size:.85rem; }
+      /* ---------- Simulación IA contra IA: barra de control del espectador ---------- */
+      .simbar{ display:none; align-items:center; gap:.55rem; flex-wrap:wrap; margin:.15rem auto .35rem; max-width:648px;
+        background:var(--panel); border:1px solid rgba(var(--th2-rgb,255,93,162),.45); border-radius:14px;
+        padding:.45rem .65rem; box-shadow:0 0 16px rgba(var(--th2-rgb,255,93,162),.14); }
+      .simtitle{ font-family:"Orbitron"; font-size:.78rem; letter-spacing:.08em; color:var(--neon); white-space:nowrap; }
+      .simscore{ flex:1 1 12rem; min-width:0; font-size:.9rem; line-height:1.3; color:var(--ink-dim); }
+      .simbtns{ display:flex; gap:.4rem; flex-wrap:wrap; }
+      .simbar button{ padding:.3rem .55rem; font-size:.85rem; }
+      .simstats{ background:var(--panel2,#150f33); border:1px solid var(--line); border-radius:12px;
+        padding:.6rem .8rem; margin:.7rem 0; text-align:left; }
+      .simstats h3{ margin:.1rem 0 .4rem; }
+      .simstats p{ margin:.25rem 0; }
       .logbox div:last-child{ color:var(--ink); }
       .actions{ display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin-top:.5rem; }
 
@@ -503,6 +515,7 @@
         #myBar{ grid-area:mybar; }
         #oppHand{ grid-area:opphand; }
         #ninaBar{ grid-area:nina; }
+        #simBar{ grid-area:nina; }
         #scr-duel .boardwrap{ grid-area:board; min-height:0; min-width:0; }
         #myHand{ grid-area:hand; }
         #actionBar{ grid-area:actions; }
@@ -518,6 +531,9 @@
         .opphand .card{ width:14px; }
         .opphand.revealed .card{ width:30px; }
         .ninabar{ margin:.05rem auto .14rem; padding:.22rem .45rem; gap:.45rem; border-radius:11px; width:100%; max-width:none; }
+        .simbar{ margin:.05rem auto .14rem; padding:.22rem .45rem; gap:.45rem; border-radius:11px; width:100%; max-width:none; }
+        .simbar button{ padding:.22rem .45rem; font-size:.76rem; }
+        .simscore{ font-size:.82rem; }
         .ninaava{ width:28px; height:28px; font-size:.92rem; }
         .ninaname{ font-size:.66rem; }
         .ninatext{ display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; font-size:.88rem; margin-top:0; }
@@ -586,6 +602,7 @@
         #myBar{ grid-area:mybar; }
         #oppHand{ grid-area:opphand; }
         #ninaBar{ grid-area:nina; }
+        #simBar{ grid-area:nina; }
         #scr-duel .boardwrap{ grid-area:board; min-height:0; min-width:0; }
         #myHand{ grid-area:hand; }
         #actionBar{ grid-area:actions; }
@@ -595,6 +612,7 @@
         .hpbar{ width:min(260px,30vw); }
         /* --- Globo de Nina a lo ancho, compacto --- */
         .ninabar{ width:100%; max-width:none; padding:.3rem .6rem; }
+        .simbar{ width:100%; max-width:none; padding:.3rem .6rem; }
         /* --- Tablero con el panel de la carta a la izquierda --- */
         .boardwrap{ gap:.6rem; align-items:stretch; }
         .cardinfo{ display:block; flex:0 0 240px; width:240px; position:static;
@@ -778,7 +796,7 @@
       <section id="scr-lobby" class="screen on">
         <div class="hero">
           <h1>DUELO NEURAL</h1>
-          <p>El juego de cartas de Decro y Nina en su versión de enlace público: cualquiera puede abrirla y jugar, sin cuentas ni instalaciones. Duelo en línea con salas y código desde dos dispositivos, pasa-y-juega en el mismo dispositivo y práctica contra la IA.</p>
+          <p>El juego de cartas de Decro y Nina en su versión de enlace público: cualquiera puede abrirla y jugar, sin cuentas ni instalaciones. Duelo en línea con salas y código desde dos dispositivos, pasa-y-juega en el mismo dispositivo, práctica contra la IA y simulación IA contra IA para mirar el balance de cualquier mazo.</p>
           <p class="note">En el modo <b>en línea</b>, el anfitrión crea una sala y comparte el código de 4 letras; el invitado entra desde su propio dispositivo y el duelo se sincroniza en vivo, con la mano de cada quien oculta al rival. En <b>pasa-y-juega</b>, al cambiar el turno la pantalla se tapa y le pasas el dispositivo a tu rival.</p>
         </div>
 
@@ -792,6 +810,11 @@
             <h3>🎧 Contra Nina (la IA)</h3>
             <p>Tu rival soy yo, <b>Nina</b>: pienso mis turnos, te hablo durante el duelo con mi personalidad de siempre y con <b>mi voz real grabada</b>, igual que en el estudio. Juego con los 16 mazos oficiales o con un mazo que armes tú en el editor estilo EDOPro: invoco, ataco, evoluciono y uso mis Protocolos. Elige mi dificultad en ⚙️ Ajustes: <b>Fácil</b> para aprender, <b>Normal</b> como siempre, o <b>Difícil</b> si quieres un reto de verdad.</p>
             <button class="primary" id="btnModeAi" type="button">Jugar contra Nina</button>
+          </div>
+          <div class="modecard">
+            <h3>🤖 IA contra IA — Simulación</h3>
+            <p>Las dos IA juegan solas el duelo completo y tú solo miras, con las manos de ambas a la vista. Elige el mazo de cada lado (puede ser el mismo en los dos: duelo espejo) y fíjate en quién gana, en cuántos turnos y con cuánta Integridad sobra. Durante la partida puedes <b>pausar</b>, <b>acelerar hasta 8×</b> y al final repetir el mismo enfrentamiento para juntar varias partidas: la hoja de resultados lleva el marcador de la sesión y la duración media, para ver qué tan balanceado está un mazo.</p>
+            <button class="primary" id="btnModeSim" type="button">Ver simulación IA vs IA</button>
           </div>
         </div>
 
@@ -849,7 +872,7 @@
           </div>
           <div id="aiDiffRow" style="display:none; margin-bottom:1rem">
             <div class="setupbox">
-              <h3>🎧 Dificultad de Nina</h3>
+              <h3 id="aiDiffTitle">🎧 Dificultad de Nina</h3>
               <div class="diffgrid" id="diffPickSetup"></div>
             </div>
           </div>
@@ -887,6 +910,7 @@
             <li><b>Invocación:</b> 1 normal por turno. Nivel 1–4 gratis, Nivel 5–6 sacrifica 1 unidad, Nivel 7+ sacrifica 2.</li>
             <li><b>Evolución:</b> fusiona 2 de tus unidades en campo para invocar una IA Superior del Extra Deck. Solo en tus <b>fases principales</b> (1 o 2): en la fase de batalla <b>no</b> se puede fusionar, salvo que una carta lo diga expresamente en su texto.</li>
             <li><b>Contra Nina:</b> en el modo contra la IA tu rival es Nina: te habla durante el duelo en su globo de diálogo y con su voz real grabada. El botón 🔊 Sonido también silencia su voz.</li>
+            <li><b>Simulación IA contra IA:</b> las dos IA juegan solas con el mazo que elijas para cada lado (también vale el mismo mazo en ambos, como espejo) y tú miras con las dos manos visibles. Puedes pausar, acelerar hasta 8× o terminar cuando quieras; al final de cada duelo, la hoja de resultados suma las victorias de la sesión por mazo y la duración media en turnos, para juzgar el balance.</li>
             <li><b>Programas</b> se activan desde la mano o se <b>colocan boca abajo</b> en tu zona de Programas/Protocolos para activarlos en una de tus fases principales de un turno posterior; <b>Protocolos</b> se colocan boca abajo y se activan cuando el rival hace la jugada que los dispara.</li>
             <li><b>Información de cartas:</b> en pantallas anchas, pasa el ratón sobre cualquier carta del tablero, de las pilas o de tu mano para ver su imagen, ATK/DEF y efecto completo en el panel de la izquierda del tablero.</li>
             <li><b>Sonido:</b> el duelo tiene efectos de sonido (invocar, atacar, robar, activar…). Puedes silenciarlos con el botón 🔊 Sonido junto al botón de fase.</li>
@@ -917,6 +941,16 @@
             <p class="ninatext" id="ninaText">Soy tu rival en este duelo: te voy a estar hablando durante la partida, con mi voz de verdad. ¡A jugar!</p>
           </div>
           <button type="button" id="btnNinaReplay" title="Escuchar de nuevo mi voz">🔊 Mi voz</button>
+        </div>
+
+        <div class="simbar" id="simBar" role="status" aria-label="Controles de la simulación IA contra IA">
+          <span class="simtitle">🤖 SIMULACIÓN</span>
+          <span class="simscore" id="simScore"></span>
+          <span class="simbtns">
+            <button type="button" id="btnSimPause">⏸️ Pausar</button>
+            <button type="button" id="btnSimSpeed">⏩ 1×</button>
+            <button type="button" id="btnSimExit" class="danger">⏹ Terminar</button>
+          </span>
         </div>
 
         <div class="boardwrap">
@@ -1852,15 +1886,60 @@ function buildPicks(elId,idx){
 }
 function setMode(m){
   MODE=m; $("setupArea").style.display="block";
-  var dr=$("aiDiffRow"); if(dr)dr.style.display=(m==="ai")?"block":"none";
+  var dr=$("aiDiffRow"); if(dr)dr.style.display=(m==="ai"||m==="sim")?"block":"none";
+  var dt=$("aiDiffTitle"); if(dt)dt.textContent=(m==="sim")?"🤖 Dificultad de las dos IA":"🎧 Dificultad de Nina";
   $("name2").disabled=(m==="ai");
-  if(m==="ai"){$("name2").value="Nina";$("name2Label").textContent="Tu rival: Nina 🎧";$("coinPickLabel").textContent="Tú eliges:";}
-  else{$("name2").value="Alan";$("name2Label").textContent="Jugador 2";$("coinPickLabel").textContent="El Jugador 1 elige:";}
+  if(m==="ai"){$("name2").value="Nina";$("name2Label").textContent="Tu rival: Nina 🎧";$("name1Label").textContent="Jugador 1";$("coinPickLabel").textContent="Tú eliges:";}
+  else if(m==="sim"){
+    if($("name1").value==="Decro"||$("name1").value==="")$("name1").value="IA 1";
+    $("name2").value="IA 2";
+    $("name1Label").textContent="IA 1 🤖"; $("name2Label").textContent="IA 2 🤖";
+    $("coinPickLabel").textContent="La IA 1 elige:";
+  }
+  else{$("name2").value="Alan";$("name2Label").textContent="Jugador 2";$("name1Label").textContent="Jugador 1";$("coinPickLabel").textContent="El Jugador 1 elige:";}
   $("setupArea").scrollIntoView({behavior:"smooth",block:"start"});
   if(m==="ai")ninaSay("greeting"); /* Nina se presenta con su voz al elegir el modo */
 }
 $("btnModePvp").onclick=function(){setMode("pvp");};
 $("btnModeAi").onclick=function(){setMode("ai");};
+$("btnModeSim").onclick=function(){setMode("sim");};
+
+/* ---------- Simulación IA contra IA ----------
+   Los dos jugadores son IA (ai:true): el motor ya resuelve solo todas las
+   respuestas y elecciones de una IA, así que el duelo se juega entero sin
+   tocar nada y el espectador solo mira. La vista queda fija en la IA 1
+   (abajo) con la mano de la IA 2 también visible. Desde la barra de la
+   simulación se puede pausar, acelerar (los tiempos de espera de la IA se
+   dividen entre SIM_SPEED) y terminar. El marcador de la sesión vive en
+   memoria, como los mazos personalizados. */
+var SIM_SPEED=1, SIM_PAUSED=false;
+var SIM_STATS={wins:{},duels:0,turns:0};
+function aiDelay(ms){ return MODE==="sim"?Math.max(70,Math.round(ms/SIM_SPEED)):ms; }
+function simScoreText(){
+  if(!G||!G.players)return "";
+  var a=G.players[0], b=G.players[1];
+  return "Duelo "+(SIM_STATS.duels+1)+" de la sesión · Victorias: "+deckDef(a.deckKey).label+" "+(SIM_STATS.wins[a.deckKey]||0)+" — "+(SIM_STATS.wins[b.deckKey]||0)+" "+deckDef(b.deckKey).label;
+}
+function updateSimBar(){
+  var sb=$("simBar"); if(!sb)return;
+  sb.style.display=(MODE==="sim"&&G)?"flex":"none";
+  if(MODE!=="sim")return;
+  var sc=$("simScore"); if(sc)sc.textContent=simScoreText();
+  var pb=$("btnSimPause"); if(pb)pb.textContent=SIM_PAUSED?"▶️ Reanudar":"⏸️ Pausar";
+  var sp=$("btnSimSpeed"); if(sp)sp.textContent="⏩ "+SIM_SPEED+"×";
+}
+function exitSim(){
+  SIM_PAUSED=false;
+  if(G)G.over=true; /* la cadena de turnos de la IA se detiene sola al ver el duelo cerrado */
+  try{ aiQueue.length=0; }catch(e){}
+  closeSheet();
+  $("scr-duel").classList.remove("on"); $("scr-lobby").classList.add("on");
+  $("btnStart").disabled=true; $("coinResult").textContent="";
+  window.scrollTo(0,0);
+}
+$("btnSimPause").onclick=function(){ SIM_PAUSED=!SIM_PAUSED; updateSimBar(); };
+$("btnSimSpeed").onclick=function(){ SIM_SPEED=(SIM_SPEED>=8)?1:SIM_SPEED*2; updateSimBar(); };
+$("btnSimExit").onclick=function(){ exitSim(); };
 buildPicks("deckPick1",0); buildPicks("deckPick2",1);
 
 /* ---------- Ajustes: dificultad de la IA ----------
@@ -2174,18 +2253,20 @@ function startDuel(){
   NinaVoice.stop();
   var n1=($("name1").value||"Jugador 1").trim(), n2=($("name2").value||"Jugador 2").trim();
   if(MODE==="ai")n2=n2+" ("+aiDiffName()+")";
-  G={players:[newPlayer(n1,pickDeck[0],false),newPlayer(n2,pickDeck[1],MODE==="ai")],
-     turn:firstPlayer,turnNo:1,phase:"main",over:false,busy:false,targeting:null,evoSel:null,log:[],aiDiff:(MODE==="ai"?AI_DIFF:null)};
+  SIM_PAUSED=false;
+  G={players:[newPlayer(n1,pickDeck[0],MODE==="sim"),newPlayer(n2,pickDeck[1],MODE==="ai"||MODE==="sim")],
+     turn:firstPlayer,turnNo:1,phase:"main",over:false,busy:false,targeting:null,evoSel:null,log:[],aiDiff:(MODE==="ai"||MODE==="sim"?AI_DIFF:null)};
   for(var p=0;p<2;p++)for(var i=0;i<5;i++)drawCard(G.players[p],true);
   $("scr-lobby").classList.remove("on"); $("scr-duel").classList.add("on");
   log("🪙 El duelo empieza. "+G.players[G.turn].name+" va primero (sin robar ni atacar en el primer turno).");
   if(MODE==="ai")log("🎧 Tu rival es Nina, en dificultad "+aiDiffName()+". "+aiDiffDesc());
+  if(MODE==="sim")log("🤖 Simulación IA contra IA en dificultad "+aiDiffName()+": "+n1+" juega "+deckDef(pickDeck[0]).label+" y "+n2+" juega "+deckDef(pickDeck[1]).label+". Las dos manos están visibles: a mirar el balance.");
   window.scrollTo(0,0);
   beginTurn(true);
 }
 function cur(){return G.players[G.turn];}
 function opp(){return G.players[1-G.turn];}
-function viewer(){ if(MODE==="ai")return G.players[0]; if(MODE==="online")return G.players[ONLINE.myIdx]; return cur(); }
+function viewer(){ if(MODE==="ai"||MODE==="sim")return G.players[0]; if(MODE==="online")return G.players[ONLINE.myIdx]; return cur(); }
 function log(msg){G.log.push(msg);if(G.log.length>60)G.log.shift();var b=$("logBox");b.innerHTML=G.log.map(function(l){return "<div>"+esc(l)+"</div>";}).join("");b.scrollTop=b.scrollHeight;}
 $("btnLog").onclick=function(){var b=$("logBox");b.style.display=b.style.display==="none"?"block":"none";};
 
@@ -2242,8 +2323,20 @@ function loseGame(P,why){
   if(MODE==="ai")ninaSay(W.ai?"ninaWon":"ninaLost"); /* Nina cierra el duelo con su voz */
   render(); animWinGlow(W);
   if(MODE==="online")onlineOnGameOver();
-  showSheet("<div class='win'>🏆</div><h2>¡"+esc(W.name)+" gana el duelo!</h2><p>"+esc(P.name)+" perdió porque "+esc(why)+".</p><button class='primary' id='btnAgain'>Jugar otra vez</button>");
+  var simHtml="", simBtns="";
+  if(MODE==="sim"){
+    /* Marcador de balance de la sesión: victorias por mazo y duración media */
+    SIM_STATS.duels++; SIM_STATS.turns+=G.turnNo;
+    SIM_STATS.wins[W.deckKey]=(SIM_STATS.wins[W.deckKey]||0)+1;
+    var avg=(Math.round(SIM_STATS.turns/SIM_STATS.duels*10)/10);
+    simHtml="<div class='simstats'><h3>📊 Balance de la sesión</h3>"
+      +"<p>Este duelo duró <b>"+G.turnNo+" turnos</b>. Integridad final: "+esc(W.name)+" <b>"+W.hp+"</b> — "+P.hp+" "+esc(P.name)+".</p>"
+      +"<p>Victorias: <b>"+esc(deckDef(W.deckKey).label)+": "+(SIM_STATS.wins[W.deckKey]||0)+"</b> · <b>"+esc(deckDef(P.deckKey).label)+": "+(SIM_STATS.wins[P.deckKey]||0)+"</b> en "+SIM_STATS.duels+" duelo(s) simulado(s) · duración media: <b>"+avg+" turnos</b>.</p></div>";
+    simBtns=" <button id='btnSimAgain'>🔁 Otra simulación con estos mazos</button>";
+  }
+  showSheet("<div class='win'>🏆</div><h2>¡"+esc(W.name)+" gana el duelo!</h2><p>"+esc(P.name)+" perdió porque "+esc(why)+".</p>"+simHtml+"<button class='primary' id='btnAgain'>Jugar otra vez</button>"+simBtns);
   sheetBtn("btnAgain",function(){NinaVoice.stop();closeSheet();if(MODE==="online")onlineCleanup(true);$("scr-duel").classList.remove("on");$("scr-lobby").classList.add("on");$("btnStart").disabled=true;$("coinResult").textContent="";window.scrollTo(0,0);});
+  if(MODE==="sim")sheetBtn("btnSimAgain",function(){ closeSheet(); firstPlayer=(Math.random()<0.5?0:1); startDuel(); }); /* la moneda se reparte al azar en la repetición */
 }
 function checkAlive(){return !G.over;}
 </script>
@@ -2385,7 +2478,9 @@ function render(){
   var me=viewer(), op=G.players[1-G.players.indexOf(me)];
   applyDuelTheme(me.deckKey);
   var spyOn=spywareActive(me);
+  var seeOppHand=spyOn||MODE==="sim"; /* en la simulación la mano de arriba también se ve: es un modo para mirar */
   var nb=$("ninaBar"); if(nb)nb.style.display=(MODE==="ai")?"flex":"none"; /* el globo de Nina solo existe contra la IA */
+  updateSimBar(); /* la barra de la simulación solo existe en el modo IA contra IA */
   $("myName").textContent=me.name; $("oppName").textContent=op.name;
   $("myHp").textContent=me.hp; $("oppHp").textContent=op.hp;
   $("myHpFill").style.width=Math.max(0,me.hp/80)+"%"; $("oppHpFill").style.width=Math.max(0,op.hp/80)+"%";
@@ -2404,9 +2499,9 @@ function render(){
   $("myField").innerHTML=pileHTML(me,"field","me")+me.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(me,u,"me",i):"")+"</div>";}).join("")+pileHTML(me,"gy","me");
   $("myBack").innerHTML=pileHTML(me,"extra","me")+me.back.map(function(b,i){return "<div class='zone backz'>"+backTile(me,b,"me",i)+"</div>";}).join("")+pileHTML(me,"deck","me");
   $("myHand").innerHTML=me.hand.map(function(id,i){return handTile(me,id,i);}).join("");
-  $("oppHand").className="opphand"+(spyOn?" revealed":"");
-  $("oppHand").setAttribute("aria-label",spyOn?"Mano del rival (visible por Spyware Ojo Oculto)":"Mano del rival (boca abajo)");
-  $("oppHand").innerHTML=spyOn
+  $("oppHand").className="opphand"+(seeOppHand?" revealed":"");
+  $("oppHand").setAttribute("aria-label",seeOppHand?(spyOn?"Mano del rival (visible por Spyware Ojo Oculto)":"Mano de la IA 2 (visible en la simulación)"):"Mano del rival (boca abajo)");
+  $("oppHand").innerHTML=seeOppHand
     ? op.hand.map(function(id){return revealedTile(id);}).join("")
     : op.hand.map(function(){return "<div class='card cardback'><span class='dn'>DUELO<br>NEURAL</span></div>";}).join("");
   renderActions();
@@ -2502,7 +2597,7 @@ function startTurn(){
     log("🃏 "+P.name+" roba una carta.");
   }
   render();
-  if(P.ai)setTimeout(aiMain,800);
+  if(P.ai)setTimeout(aiMain,aiDelay(800));
 }
 function endTurn(){
   if(G.over)return;
@@ -4155,10 +4250,11 @@ function aiMain(){
      si reclamara el turno del jugador). */
   if(MODE==="ai")ninaSay("turn");
   aiQueue=[aiProgramsStep,aiProgramsStep,aiSetProtocolsStep,aiSummonStep,aiUnitFxStep,aiEvolutionStep,aiUnitFxStep,aiToBattleStep,aiAttackStep,aiAttackStep,aiAttackStep,aiAttackStep,aiAttackStep,aiToMain2Step,aiProgramsStep,aiSetProtocolsStep,aiSummonStep,aiUnitFxStep,aiEvolutionStep,aiUnitFxStep];
-  setTimeout(aiNext,700);
+  setTimeout(aiNext,aiDelay(700));
 }
 function aiNext(){
   if(G.over){G.busy=false;return;}
+  if(MODE==="sim"&&SIM_PAUSED){setTimeout(aiNext,300);return;} /* simulación en pausa: la cadena espera sin consumir pasos */
   if(!aiQueue.length){G.busy=false;
     /* Al cerrar su turno Nina solo comenta lo que ACABA de hacer
        (evolucionar, golpear fuerte o ir abajo). La línea de «Mi turno»
@@ -4172,11 +4268,11 @@ function aiNext(){
       G._ninaSnap=null;
     }
     render();endTurn();return;}
-  if($("overlay").classList.contains("on")||G.targeting){setTimeout(aiNext,700);return;}
+  if($("overlay").classList.contains("on")||G.targeting){setTimeout(aiNext,aiDelay(700));return;}
   var fn=aiQueue.shift();
   try{fn();}catch(e){/* la IA sigue jugando */}
   render();
-  setTimeout(aiNext,900);
+  setTimeout(aiNext,aiDelay(900));
 }
 function aiProgramsStep(){
   var P=cur(), O=opp();

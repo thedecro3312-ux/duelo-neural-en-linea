@@ -907,7 +907,7 @@
             <li><b>Objetivo:</b> bajar la Integridad del rival de <b>8000</b> a 0. Si alguien no puede robar carta, pierde.</li>
             <li><b>Orden del turno:</b> robas, juegas tu <b>fase principal 1</b>, atacas en la <b>fase de batalla</b> y después tienes una <b>fase principal 2</b> para invocar, colocar, activar o evolucionar lo que te quede antes de terminar. Solo hay <b>1 invocación normal por turno</b> entre las dos fases principales.</li>
             <li><b>Mazos de 40 cartas</b> + Extra Deck de IA Superiores. Mano inicial de 5; robas 1 por turno (el primer jugador no roba ni ataca en su primer turno).</li>
-            <li><b>Invocación:</b> 1 normal por turno. Nivel 1–4 gratis, Nivel 5–6 sacrifica 1 unidad, Nivel 7+ sacrifica 2.</li>
+            <li><b>Invocación:</b> 1 normal por turno. Nivel 1–4 gratis, Nivel 5–6 sacrifica 1 unidad, Nivel 7+ sacrifica 2. Si colocas una unidad <b>boca abajo en Defensa</b>, su efecto de invocación <b>no se activa</b>; solo se activa si la invocas boca arriba en Ataque o si después la invocas por volteo a Ataque. Lo mismo vale para una invocación especial que llegue boca abajo en Defensa.</li>
             <li><b>Evolución:</b> fusiona 2 de tus unidades en campo para invocar una IA Superior del Extra Deck. Solo en tus <b>fases principales</b> (1 o 2): en la fase de batalla <b>no</b> se puede fusionar, salvo que una carta lo diga expresamente en su texto.</li>
             <li><b>Contra Nina:</b> en el modo contra la IA tu rival es Nina: te habla durante el duelo en su globo de diálogo y con su voz real grabada. El botón 🔊 Sonido también silencia su voz.</li>
             <li><b>Simulación IA contra IA:</b> las dos IA juegan solas con el mazo que elijas para cada lado (también vale el mismo mazo en ambos, como espejo) y tú miras con las dos manos visibles. Puedes pausar, acelerar hasta 8× o terminar cuando quieras; al final de cada duelo, la hoja de resultados suma las victorias de la sesión por mazo y la duración media en turnos, para juzgar el balance.</li>
@@ -2646,6 +2646,7 @@ function freezeUnit(u){u.frozenTurns=Math.max(u.frozenTurns||0,1);}
    Las cartas cuyo texto dice «de Modo Normal» quedan excluidas. */
 function fireSummonFx(P,unit,zone){
   if(!unit||P.field[zone]!==unit||G.over)return;
+  if(unit.faceDown)return; /* colocada boca abajo (en Defensa): su efecto de invocación NO se activa */
   var c=CARDS[unit.id]; if(!c)return;
   if((c.txt||"").indexOf("de Modo Normal")>=0)return;
   if(fxBlocked(P,unit))return;
@@ -3030,7 +3031,7 @@ function handClick(idx){
       var need=c.lv>=7?2:c.lv>=5?1:0;
       var have=me.field.filter(Boolean).length;
       if(have>=need&&me.field.indexOf(null)>=0||(need>0&&have>=need))
-        btns+="<button class='primary' id='actSummon'>Invocar en Ataque"+(need?" (sacrifica "+need+")":"")+"</button> <button id='actSet'>Colocar en Defensa</button> ";
+        btns+="<button class='primary' id='actSummon'>Invocar en Ataque"+(need?" (sacrifica "+need+")":"")+"</button> <button id='actSet'>Colocar en Defensa</button> <p class='note'>Al colocarla en Defensa queda boca abajo y su efecto de invocación no se activa.</p>";
       else if(need>0&&have<need)uNote="<p class='note'>Para invocarla necesitas sacrificar "+need+" unidad(es) y solo tienes "+have+" en tu campo.</p>";
       else uNote="<p class='note'>No tienes una zona de unidad libre para invocarla.</p>";
     }
@@ -3096,14 +3097,16 @@ function doSummon(P,handIdx,pos,tributes){
   var zone=P.field.indexOf(null);
   var unit={uid:uid(),id:id,pos:pos,counters:0,perm:0,temp:0,atkUsed:false,fxUsed:false,justTurn:G.turnNo,posChanged:false,faceDown:(pos==="def")};
   P.field[zone]=unit; P.normalUsed=true; sfx(pos==="def"?"set":"summon");
-  log("✨ "+P.name+" invoca "+c.n+" ("+(pos==="atk"?"Ataque ATK "+c.atk:"Defensa DEF "+c.def)+").");
+  if(pos==="def")log("🂠 "+P.name+" coloca "+c.n+" boca abajo en Defensa (DEF "+c.def+"). Su efecto de invocación no se activa al estar boca abajo.");
+  else log("✨ "+P.name+" invoca "+c.n+" (Ataque ATK "+c.atk+").");
   render();
   respondToSummon(P,unit,zone,function(){
-    if(P.field[zone]===unit&&!fxBlocked(P,unit))onSummonFx(P,unit,zone);
+    if(P.field[zone]===unit&&!unit.faceDown&&!fxBlocked(P,unit))onSummonFx(P,unit,zone);
     render();
   });
 }
 function onSummonFx(P,unit,zone){
+  if(!unit||unit.faceDown)return; /* boca abajo: ningún efecto de invocación se dispara */
   var O=G.players[1-G.players.indexOf(P)], c=CARDS[unit.id];
   function cntAll(n){O.field.forEach(function(u){if(u)u.counters+=n;});if(n)log("☣ "+c.n+" pone "+n+" contador(es) de Corrupción en las unidades de "+O.name+".");}
   switch(c.fx){

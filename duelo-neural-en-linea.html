@@ -1380,7 +1380,7 @@
           <li><b>Corrupción (Virus):</b> una unidad con 3 contadores de Corrupción se destruye al final del turno.</li>
           <li><b>Los 18 mazos oficiales:</b> Virus, Algoritmo, Sobrecarga, Enjambre, Espectro, Clon, Cuántico, Sinapsis, Tiempo, Ping, Battle Royale, RPG, VHS, Hacker, Roedor y Troll, más los híbridos Virus + Sobrecarga y VHS + Espectro.</li>
           <li><b>Polémica (Troll):</b> los contadores de Polémica se colocan sobre las unidades y cada unidad pierde <b>300 ATK por cada contador de Polémica</b> que tenga. Cartas como Troll Tormenta de Comentarios o Rey de los Hilos retiran todos los contadores del campo para convertirlos en destrucción o en daño.</li>
-          <li><b>Palabras clave:</b> <b>Eco</b> (Espectro: efecto al ir al cementerio), <b>Respawn</b> (Battle Royale: vuelve con −500 ATK), <b>Nivel</b> (RPG: +300 ATK al destruir en batalla), <b>Congelar</b> (Ping y Tiempo: la unidad no ataca en su próximo turno), <b>Copia</b> (Clon), <b>Superposición</b> (Cuántico: elige 1 de 2 efectos), <b>Interferencia</b> (VHS: apaga los efectos de 1 unidad rival al invocar) y <b>Hackeo</b> (Hacker: roba el control de 1 unidad rival hasta el final del turno) y <b>Madriguera</b> (Roedor: la unidad se coloca boca abajo en Defensa sin disparar nada y su efecto se activa cuando se voltea boca arriba: al invocarla por volteo a Ataque, al ser revelada en batalla o con cartas como Madriguera Profunda) y <b>Cebo</b> (Troll: cuando un Troll es seleccionado como objetivo de un ataque, dispara su efecto de castigo; también se dispara si estaba boca abajo y la batalla lo voltea).</li>
+          <li><b>Palabras clave:</b> <b>Eco</b> (Espectro: efecto al ir al cementerio), <b>Respawn</b> (Battle Royale: vuelve con −500 ATK), <b>Nivel</b> (RPG: +300 ATK al destruir en batalla), <b>Congelar</b> (Ping y Tiempo: la unidad no ataca en su próximo turno), <b>Copia</b> (Clon), <b>Superposición</b> (Cuántico: elige 1 de 2 efectos), <b>Interferencia</b> (VHS: apaga los efectos de 1 unidad rival al invocar) y <b>Hackeo</b> (Hacker: roba el control de 1 unidad rival hasta el final del turno) y <b>Madriguera</b> (Roedor: la unidad se coloca boca abajo en Defensa sin disparar nada y su efecto se activa cuando se voltea boca arriba: al invocarla por volteo a Ataque, al ser revelada en batalla o con cartas como Madriguera Profunda) y <b>Cebo</b> (Troll: cuando un Troll es seleccionado como objetivo de un ataque, dispara su efecto de castigo; también se dispara si estaba boca abajo y la batalla lo voltea. Troll de Puente es la excepción: su efecto es de volteo, destruye 1 unidad del rival al voltearse boca arriba.).</li>
         </ul>
         <div style="margin-top:1.1rem; text-align:right">
           <button class="primary" type="button" id="btnCloseRules2">¡Entendido!</button>
@@ -1772,8 +1772,8 @@ var CARDS = {
  "c900001415":{n:"Roedor El Gran Capibara",a:"roedor",t:"E",atk:2800,def:2400,fx:"flipAllSummon",txt:"IA Superior. Evolución de 2 unidades Roedor. Al ser invocado, voltea boca arriba todas las unidades «Roedor» que controlas en posición de defensa boca abajo."},
  "c900001416":{n:"Roedor Rey Rata del Servidor",a:"roedor",t:"E",atk:3000,def:2600,fx:"destroyBackrowAllSummon",txt:"IA Superior. Evolución de 2 unidades Roedor. Al ser invocado, destruye todos los Programas y Protocolos que controla el rival."},
  "c900001417":{n:"Roedor La Madriguera Infinita",a:"roedor",t:"E",atk:2900,def:2700,fx:"reviveMultiDefSummon",amt:2,txt:"IA Superior. Evolución de 2 unidades Roedor. Al ser invocado, invoca de Modo Especial hasta 2 unidades «Roedor» de tu cementerio en posición de defensa boca abajo."},
-/* ---------- TROLL (Cebo: efecto al ser objetivo de un ataque; contadores de Polémica: la unidad pierde 300 ATK por cada uno) ---------- */
- "c900001501":{n:"Troll de Puente",a:"troll",t:"U",lv:4,atk:1600,def:1400,cfx:"ceboDestroyAttacker",txt:"Cebo: cuando esta carta es seleccionada como objetivo de un ataque, destruye a la unidad atacante."},
+/* ---------- TROLL (Cebo: efecto al ser objetivo de un ataque, excepto Troll de Puente, cuyo efecto es de volteo; contadores de Polémica: la unidad pierde 300 ATK por cada uno) ---------- */
+ "c900001501":{n:"Troll de Puente",a:"troll",t:"U",lv:4,atk:1600,def:1400,mfx:"flipDestroyUnit",txt:"Cuando esta carta es volteada boca arriba, destruye 1 unidad del rival."},
  "c900001502":{n:"Troll Baitero",a:"troll",t:"U",lv:3,atk:1200,def:1600,cfx:"ceboSelfPolem",txt:"Cebo: cuando esta carta es seleccionada como objetivo de un ataque, coloca 2 contadores de Polémica en esta carta."},
  "c900001503":{n:"Troll de los Comentarios",a:"troll",t:"U",lv:4,atk:1500,def:1300,fx:"trollComentarios",txt:"Gana 300 ATK por cada contador de Polémica en el campo."},
  "c900001504":{n:"Troll Hater",a:"troll",t:"U",lv:5,atk:2000,def:1500,cfx:"ceboSpellLock",txt:"Cebo: cuando esta carta es seleccionada como objetivo de un ataque, el rival no puede activar Programas ni Protocolos durante su próximo turno."},
@@ -1838,7 +1838,7 @@ var DECKS = {
   roedor:{ label:"Roedor — Red · Madriguera", desc:"Madriguera: tus roedores se esconden boca abajo en Defensa y, al voltearse boca arriba, disparan su efecto de emboscada. Jefe: El Gran Capibara.",
     main:[["c900001401",3],["c900001402",3],["c900001403",3],["c900001404",3],["c900001405",3],["c900001406",3],["c900001407",3],["c900001408",3],["c900001409",3],["c900001410",3],["c900001411",2],["c900001412",2],["c900001413",3],["c900001414",3]],
     extra:["c900001415","c900001415","c900001416","c900001416","c900001417"] },
-  troll:{ label:"Troll — Caos · Cebo", desc:"Cebo: tus Troll castigan cada ataque que reciben, y los contadores de Polémica dejan sin ATK a las unidades que los cargan (−300 por contador). Jefe: El Troll Supremo.",
+  troll:{ label:"Troll — Caos · Cebo", desc:"Cebo: tus Troll castigan cada ataque que reciben (excepto Troll de Puente, que destruye 1 unidad del rival al voltearse boca arriba), y los contadores de Polémica dejan sin ATK a las unidades que los cargan (−300 por contador). Jefe: El Troll Supremo.",
     main:[["c900001501",3],["c900001502",3],["c900001503",3],["c900001504",3],["c900001505",3],["c900001506",3],["c900001507",3],["c900001508",3],["c900001509",3],["c900001510",3],["c900001511",2],["c900001512",2],["c900001513",3],["c900001514",3]],
     extra:["c900001515","c900001515","c900001516","c900001516","c900001517"] },
   hibVS:{ label:"Híbrido Virus + Sobrecarga — Caos + Energía", desc:"El híbrido de Decro: Corrupción Virus con el daño directo y la presión de Sobrecarga.",
@@ -3798,7 +3798,8 @@ function onFlipFx(P,unit,zone){
   if(!unit||unit.faceDown)return;
   var O=G.players[1-G.players.indexOf(P)], c=CARDS[unit.id];
   if(!c||!c.mfx)return;
-  log("🐹 ¡Madriguera! "+c.n+" se voltea boca arriba y dispara su efecto.");
+  if(c.a==="troll")log("🔄 "+c.n+" se voltea boca arriba y dispara su efecto.");
+  else log("🐹 ¡Madriguera! "+c.n+" se voltea boca arriba y dispara su efecto.");
   switch(c.mfx){
     case "flipDestroyBackrow":
       if(O.back.some(Boolean)){
@@ -3829,6 +3830,12 @@ function onFlipFx(P,unit,zone){
       if(O.field.some(Boolean)){
         if(P.ai||!canChoose(P)){var pz=-1,pa=-1;O.field.forEach(function(x,i){if(x&&effAtk(O,x)>pa){pa=effAtk(O,x);pz=i;}});if(pz>=0){O.field[pz].polem=(O.field[pz].polem||0)+2;log("🔥 "+c.n+" coloca 2 contadores de Polémica en "+CARDS[O.field[pz].id].n+".");}}
         else startTargeting("Elige la unidad rival que recibe 2 contadores de Polémica",O.field.map(function(x,i){return x?{side:"opp",zone:i,kind:"unit"}:null;}).filter(Boolean),function(sel){sel.player.field[sel.zone].polem=(sel.player.field[sel.zone].polem||0)+2;log("🔥 "+CARDS[unit.id].n+" coloca 2 contadores de Polémica en "+CARDS[sel.player.field[sel.zone].id].n+".");render();});
+      }
+      break;
+    case "flipDestroyUnit":
+      if(O.field.some(Boolean)){
+        if(P.ai||!canChoose(P)){var dz=-1,da=-1;O.field.forEach(function(x,i){if(x&&effAtk(O,x)>da){da=effAtk(O,x);dz=i;}});if(dz>=0){var dn=CARDS[O.field[dz].id].n;destroyUnit(O,dz,false);log("💥 "+c.n+" destruye a "+dn+".");}}
+        else startTargeting("Elige la unidad rival a destruir",O.field.map(function(x,i){return x?{side:"opp",zone:i,kind:"unit"}:null;}).filter(Boolean),function(sel){var dn2=CARDS[sel.player.field[sel.zone].id].n;destroyUnit(sel.player,sel.zone,false);log("💥 "+CARDS[unit.id].n+" destruye a "+dn2+".");render();});
       }
       break;
   }
@@ -4863,9 +4870,6 @@ function fireCebo(D,zone,atkP,atkU,atkZone){
   }
   log("🪝 ¡Cebo! "+c.n+" castiga el ataque de "+CARDS[atkU.id].n+".");
   switch(c.cfx){
-    case "ceboDestroyAttacker":
-      if(atkP.field[atkZone]===atkU){destroyUnit(atkP,atkZone,false);log("💥 Troll de Puente destruye a la unidad atacante.");}
-      break;
     case "ceboSelfPolem":
       u.polem=(u.polem||0)+2;
       log("🔥 Troll Baitero se carga con 2 contadores de Polémica: pierde 600 ATK, pero la polémica alimenta al resto del mazo.");
@@ -4933,6 +4937,7 @@ function resolveAttack(atkP,atkU,atkZone,tgtZone){
   } else {
     var dDef=effDef(D,defU);
     if(defU.faceDown){defU.faceDown=false;log("👀 "+dCard.n+" estaba boca abajo: DEF "+dDef+".");if(!fxBlocked(D,defU))onFlipFx(D,defU,tgtZone);}
+    if(atkP.field[atkZone]!==atkU){render();return;} /* el efecto de volteo destruyó a la unidad atacante: la batalla no se resuelve */
     if(aAtk>dDef){var pierceDmg=CARDS[atkU.id].fx==="pierce"?(aAtk-dDef):0;destroyUnit(D,tgtZone,true);onKill(atkU,atkP);if(pierceDmg>0){damage(D,pierceDmg,"daño de penetración de "+CARDS[atkU.id].n);log("🗡️ Penetración: "+D.name+" recibe "+pierceDmg+" de daño.");if(atkU.id==="c900000408"){foeDiscardRandom(atkP,"Pesadilla del Código");foeDiscardRandom(D,"Pesadilla del Código");}}else log("🛡️ "+dCard.n+" es destruida (sin daño de batalla).");}
     else if(aAtk<dDef){damage(atkP,dDef-aAtk,"rebotó contra DEF "+dDef);}
     else log("🛡️ La DEF aguanta el ataque.");
@@ -5142,7 +5147,7 @@ function aiAttackStep(){
     O.field.forEach(function(d,i){ if(!d)return; if(tauntOnly&&CARDS[d.id].fx!=="taunt")return; if(trollOnly&&CARDS[d.id].a!=="troll")return; var score=-1;
       if(d.pos==="atk"){var da=effAtk(O,d); if(aAtk>da)score=1000-da;}
       else if(aAtk>effDef(O,d))score=500-effDef(O,d);
-      if(CARDS[d.id].cfx==="ceboDestroyAttacker"&&aAtk>=1400)score=-1; /* Cebo de Troll de Puente: no regala sus unidades fuertes */
+      if(CARDS[d.id].mfx==="flipDestroyUnit"&&d.faceDown&&aAtk>=1400)score=-1; /* Troll de Puente: al voltearse destruye 1 unidad; no regala sus unidades fuertes */
       if(score>bestScore){bestScore=score;bestT=i;}
     });
     if(bestT>=0){

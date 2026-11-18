@@ -250,6 +250,21 @@
         font-family:"Orbitron"; font-size:.5rem; letter-spacing:.06em; padding:.08rem .3rem; border-radius:5px; z-index:3; }
       .pilecount{ position:absolute; bottom:3px; right:3px; background:rgba(3,6,14,.88); color:#fff; border:1px solid rgba(255,255,255,.35);
         font-family:"Orbitron"; font-size:.62rem; padding:.08rem .38rem; border-radius:999px; z-index:3; }
+      /* Celda del cementerio con la mini-pila de DESTIERRO pegada a un costado,
+         como el icono ✕ del campo estilo VRAINS: el destierro vive junto al
+         cementerio y nunca ocupa el hueco de la ZONA DE CAMPO, que conserva
+         su sitio y su tamaño al otro extremo de la fila de monstruos. */
+      .pilecell{ position:relative; aspect-ratio:177/254; }
+      .pilecell>.pile{ width:100%; height:100%; }
+      .pile.miniban{ position:absolute; width:54%; aspect-ratio:177/254; z-index:6; }
+      .pile.miniban.mbl{ left:0; bottom:0; }
+      .pile.miniban.mbr{ right:0; top:0; }
+      .pile.miniban .card{ box-shadow:2px 2px 0 rgba(0,0,0,.5), 0 0 0 2px rgba(167,139,250,.55); }
+      .pile.miniban.empty{ background:rgba(8,10,24,.85); }
+      .miniban .mbx{ position:absolute; top:2px; left:2px; z-index:3; background:rgba(3,6,14,.88); color:#c4b5fd;
+        border:1px solid rgba(167,139,250,.65); border-radius:4px; font-family:"Orbitron"; font-size:.52rem; line-height:1.25; padding:0 .16rem; }
+      .pile.miniban.empty .mbx{ position:static; background:none; border:none; font-size:.85rem; color:rgba(196,181,253,.75); padding:0; }
+      .miniban .pilecount{ font-size:.5rem; padding:.02rem .26rem; bottom:2px; right:2px; }
       .midrow{ display:flex; gap:.5rem; align-items:center; justify-content:space-between; flex-wrap:wrap;
         padding:.2rem .15rem; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:.18rem 0; }
       .phase{ font-family:"Orbitron"; font-size:.9rem; color:var(--neon); }
@@ -2864,15 +2879,30 @@ function pileHTML(P,kind,side){
     return "<div class='pile extra"+(side==="me"?" tappable":"")+"'"+clickE+"><div class='card cardback'><img class='art' src='"+CARD_BACK+"' alt='Reverso de carta DUELO NEURAL'></div><span class='pilelab'>EXTRA</span><span class='pilecount'>"+P.extra.length+"</span></div>";
   }
   if(kind==="gy"){
-    if(!P.gy.length)return "<div class='pile empty tappable' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><span>CEMENTERIO<br>vacío</span></div>";
-    var top=P.gy[P.gy.length-1];
-    return "<div class='pile tappable' data-hov='"+top+"' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><div class='card'><img class='art' src='"+cardImg(top)+"' alt='Cementerio: "+esc(CARDS[top].n)+"' loading='lazy'></div><span class='pilelab'>CEMENTERIO</span><span class='pilecount'>"+P.gy.length+"</span></div>";
+    var gyPile;
+    if(!P.gy.length)gyPile="<div class='pile empty tappable' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><span>CEMENTERIO<br>vacío</span></div>";
+    else{
+      var top=P.gy[P.gy.length-1];
+      gyPile="<div class='pile tappable' data-hov='"+top+"' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><div class='card'><img class='art' src='"+cardImg(top)+"' alt='Cementerio: "+esc(CARDS[top].n)+"' loading='lazy'></div><span class='pilelab'>CEMENTERIO</span><span class='pilecount'>"+P.gy.length+"</span></div>";
+    }
+    /* La pila de destierro va como mini-pila pegada a un costado del cementerio
+       (el icono ✕ del campo estilo VRAINS), nunca en el hueco de la zona de campo. */
+    return "<div class='pilecell'>"+gyPile+pileHTML(P,"banished",side)+"</div>";
   }
   if(kind==="banished"){
-    if(!P.banished.length)return "<div class='pile empty tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")'><span>DESTIERRO<br>vacío</span></div>";
+    /* Mini-pila de destierro: vive dentro de la celda del cementerio, en su
+       esquina exterior (abajo a la izquierda la del rival, arriba a la derecha
+       la del jugador), con su contador y su toque que abre la hoja del destierro. */
+    var mbCls=side==="me"?"mbr":"mbl";
+    if(!P.banished.length)return "<div class='pile miniban "+mbCls+" empty tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><span class='mbx'>✕</span></div>";
     var bt=P.banished[P.banished.length-1];
-    if(bt.fd)return "<div class='pile tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")'><div class='card cardback'><img class='art' src='"+CARD_BACK+"' alt='Destierro: carta boca abajo'></div><span class='pilelab'>DESTIERRO</span><span class='pilecount'>"+P.banished.length+"</span></div>";
-    return "<div class='pile tappable' data-hov='"+bt.id+"' role='button' data-call='pileClick(\"banished\",\""+side+"\")'><div class='card'><img class='art' src='"+cardImg(bt.id)+"' alt='Destierro: "+esc(CARDS[bt.id].n)+"' loading='lazy'></div><span class='pilelab'>DESTIERRO</span><span class='pilecount'>"+P.banished.length+"</span></div>";
+    if(bt.fd)return "<div class='pile miniban "+mbCls+" tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><div class='card cardback'><img class='art' src='"+CARD_BACK+"' alt='Destierro: carta boca abajo'></div><span class='mbx'>✕</span><span class='pilecount'>"+P.banished.length+"</span></div>";
+    return "<div class='pile miniban "+mbCls+" tappable' data-hov='"+bt.id+"' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><div class='card'><img class='art' src='"+cardImg(bt.id)+"' alt='Destierro: "+esc(CARDS[bt.id].n)+"' loading='lazy'></div><span class='mbx'>✕</span><span class='pilecount'>"+P.banished.length+"</span></div>";
+  }
+  if(kind==="field"){
+    /* Hueco decorativo de la ZONA DE CAMPO: su sitio original es el extremo
+       exterior de la fila de monstruos, con el mismo tamaño de siempre. */
+    return "<div class='pile empty'><span>ZONA<br>DE CAMPO</span></div>";
   }
   return "<div class='pile empty'><span>ZONA<br>DE CAMPO</span></div>";
 }
@@ -2988,8 +3018,8 @@ function render(){
   $("btnPhase").textContent=G.phase==="main"?"A batalla ⚔️":G.phase==="battle"?"A fase principal 2 ▶️":"Terminar turno ⏭️";
   $("btnPhase").disabled=!myTurn||G.busy||G.over||cur().ai;
   $("oppBack").innerHTML=pileHTML(op,"deck","opp")+op.back.map(function(b,i){return "<div class='zone backz'>"+backTile(op,b,"opp",i)+"</div>";}).join("")+pileHTML(op,"extra","opp");
-  $("oppField").innerHTML=pileHTML(op,"gy","opp")+op.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(op,u,"opp",i):"")+"</div>";}).join("")+pileHTML(op,"banished","opp");
-  $("myField").innerHTML=pileHTML(me,"banished","me")+me.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(me,u,"me",i):"")+"</div>";}).join("")+pileHTML(me,"gy","me");
+  $("oppField").innerHTML=pileHTML(op,"gy","opp")+op.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(op,u,"opp",i):"")+"</div>";}).join("")+pileHTML(op,"field","opp");
+  $("myField").innerHTML=pileHTML(me,"field","me")+me.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(me,u,"me",i):"")+"</div>";}).join("")+pileHTML(me,"gy","me");
   $("myBack").innerHTML=pileHTML(me,"extra","me")+me.back.map(function(b,i){return "<div class='zone backz'>"+backTile(me,b,"me",i)+"</div>";}).join("")+pileHTML(me,"deck","me");
   $("myHand").innerHTML=me.hand.map(function(id,i){return handTile(me,id,i);}).join("");
   $("oppHand").className="opphand"+(seeOppHand?" revealed":"");

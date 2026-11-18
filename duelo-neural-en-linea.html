@@ -207,6 +207,8 @@
       .duelbar{ display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; margin:.12rem 0; }
       .pinfo{ display:flex; align-items:center; gap:.6rem; min-width:0; }
       .pname{ font-family:"Orbitron"; font-size:.95rem; white-space:nowrap; }
+      .pava{ flex:0 0 auto; width:30px; height:30px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+        background:var(--panel); border:1px solid var(--line); color:var(--th,#37c8ff); font-family:"Orbitron"; font-weight:700; font-size:.9rem; line-height:1; }
       .hpbar{ width:min(180px,34vw); height:12px; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
       .hpfill{ height:100%; background:linear-gradient(90deg,#1f9d63,var(--good)); transition:width .5s; }
       .hpfill.low{ background:linear-gradient(90deg,#a11837,var(--bad)); }
@@ -220,7 +222,7 @@
         border:1px solid rgba(var(--th-rgb,56,80,126),.65); box-shadow:inset 0 0 0 3px rgba(var(--th-rgb,216,183,106),.16), inset 0 0 42px rgba(var(--th-rgb,55,200,255),.06), 0 10px 30px rgba(2,6,18,.35);
         border-radius:18px; padding:.38rem; color:#e8efff; }
       .boardwrap{ display:flex; gap:.7rem; align-items:flex-start; justify-content:center; }
-      .boardwrap .board{ flex:1 1 auto; min-width:0; max-width:648px; }
+      .boardwrap .board{ flex:1 1 auto; min-width:0; max-width:860px; }
       .cardinfo{ flex:0 0 190px; width:190px; position:sticky; top:.6rem; background:var(--panel);
         border:1px solid var(--line); border-color:rgba(var(--th-rgb,120,160,255),.38); box-shadow:0 0 22px rgba(var(--th-rgb,55,200,255),.13);
         border-radius:16px; padding:.6rem; color:var(--ink); }
@@ -405,6 +407,7 @@
         /* --- Duelo compacto: cabe casi todo en una sola pantalla --- */
         .duelbar{ margin:.04rem 0; gap:.4rem; }
         .pinfo{ gap:.42rem; }
+        .pava{ width:24px; height:24px; font-size:.74rem; }
         .pname{ font-size:.8rem; }
         .hpbar{ width:min(116px,29vw); height:9px; }
         .hpnum{ font-size:.92rem; }
@@ -506,17 +509,20 @@
         .hero{ padding:.5rem 0 .3rem; }
         .sheet{ max-height:94dvh; }
         /* --- Duelo en horizontal: rejilla de una sola pantalla (100dvh) ---
-           Primera fila: las DOS barras de Integridad arriba, lado a lado,
-           como en EDOPro. El tablero toma la fila flexible central y sus
-           cartas se ajustan por alto; la mano y los botones quedan abajo,
-           siempre visibles, sin desplazar la pantalla. */
+           Acomodo estilo VRAINS: arriba la mano del rival centrada y su barra
+           de Integridad en la esquina superior derecha; abajo la mano del
+           jugador centrada y su barra en la esquina inferior izquierda, junto
+           a los botones de acción. El tablero toma la fila flexible central y
+           sus cartas se ajustan por alto; todo queda siempre visible, sin
+           desplazar la pantalla. */
         #scr-duel.on{ display:grid; height:calc(100vh - .7rem); height:calc(100dvh - .7rem);
-          grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-          grid-template-rows:auto auto auto minmax(0,1fr) auto auto auto;
-          grid-template-areas:"oppbar mybar" "opphand opphand" "nina nina" "board board" "hand hand" "actions actions" "log log";
+          grid-template-columns:auto minmax(0,1fr) auto;
+          grid-template-rows:auto auto minmax(0,1fr) auto auto auto;
+          grid-template-areas:"opphand opphand oppbar" "nina nina nina" "board board board" "hand hand hand" "mybar actions actions" "log log log";
           column-gap:.5rem; }
-        #oppBar{ grid-area:oppbar; }
-        #myBar{ grid-area:mybar; }
+        #oppBar{ grid-area:oppbar; justify-self:end; width:fit-content; max-width:100%; }
+        #myBar{ grid-area:mybar; justify-self:start; width:fit-content; max-width:100%; }
+        #scr-duel .duelbar .counts{ display:none; }
         #oppHand{ grid-area:opphand; }
         #ninaBar{ grid-area:nina; }
         #simBar{ grid-area:nina; }
@@ -527,10 +533,10 @@
         .duelbar{ margin:.02rem 0; gap:.35rem; flex-wrap:nowrap; min-width:0; }
         .pinfo{ gap:.4rem; }
         .pname{ font-size:.8rem; }
+        .pava{ width:22px; height:22px; font-size:.7rem; }
         .hpbar{ width:min(104px,17vw); height:9px; }
         .hpnum{ font-size:.9rem; }
         .counts{ font-size:.74rem; }
-        #midCounts{ display:none; }
         .opphand{ margin:0 0 .05rem; min-height:6px; gap:2px; }
         .opphand .card{ width:14px; }
         .opphand.revealed .card{ width:30px; }
@@ -586,24 +592,28 @@
 
       /* ---------- Duelo en ESCRITORIO (computadora con ratón): el mismo
          campo estilo EDOPro de una sola pantalla que el teléfono acostado ----------
-         El duelo cabe en la pantalla sin scroll: las DOS barras de
-         Integridad arriba lado a lado, el panel de información de la carta
-         a la izquierda del tablero y el campo a la derecha, con las cartas
-         dimensionadas por alto para que nada se corte.
+         El duelo cabe en la pantalla sin scroll, con el acomodo estilo
+         VRAINS: la mano del rival arriba centrada y su barra de Integridad
+         en la esquina superior derecha; la mano del jugador abajo centrada
+         y su barra en la esquina inferior izquierda, junto a los botones.
+         El panel de información de la carta va a la izquierda del tablero y
+         el campo a la derecha, con las cartas dimensionadas por alto para
+         que nada se corte.
          SOLO ESCRITORIO: la rejilla exige (hover:hover) y (pointer:fine),
          así que un teléfono (hover:none / pointer:coarse) nunca entra aquí,
          y con (min-height:520px) una ventana demasiado baja tampoco: ahí
          sigue el diseño normal con scroll, que no se encima. */
       @media (min-width:900px) and (min-height:520px) and (hover:hover) and (pointer:fine){
         .wrap{ padding:.3rem .6rem .4rem; }
-        /* --- Rejilla de una sola pantalla (100dvh) --- */
+        /* --- Rejilla de una sola pantalla (100dvh), acomodo estilo VRAINS --- */
         #scr-duel.on{ display:grid; height:calc(100vh - .7rem); height:calc(100dvh - .7rem);
-          grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-          grid-template-rows:auto auto auto minmax(0,1fr) auto auto auto;
-          grid-template-areas:"oppbar mybar" "opphand opphand" "nina nina" "board board" "hand hand" "actions actions" "log log";
+          grid-template-columns:auto minmax(0,1fr) auto;
+          grid-template-rows:auto auto minmax(0,1fr) auto auto auto;
+          grid-template-areas:"opphand opphand oppbar" "nina nina nina" "board board board" "hand hand hand" "mybar actions actions" "log log log";
           column-gap:.5rem; }
-        #oppBar{ grid-area:oppbar; }
-        #myBar{ grid-area:mybar; }
+        #oppBar{ grid-area:oppbar; justify-self:end; width:fit-content; max-width:100%; }
+        #myBar{ grid-area:mybar; justify-self:start; width:fit-content; max-width:100%; }
+        #scr-duel .duelbar .counts{ display:none; }
         #oppHand{ grid-area:opphand; }
         #ninaBar{ grid-area:nina; }
         #simBar{ grid-area:nina; }
@@ -611,7 +621,7 @@
         #myHand{ grid-area:hand; }
         #actionBar{ grid-area:actions; }
         #logBox{ grid-area:log; }
-        /* --- Barras de Integridad lado a lado, como en EDOPro --- */
+        /* --- Barras de Integridad en las esquinas, como en la imagen --- */
         .duelbar{ flex-wrap:nowrap; min-width:0; gap:.4rem; }
         .hpbar{ width:min(260px,30vw); }
         /* --- Globo de Nina a lo ancho, compacto --- */
@@ -1261,6 +1271,7 @@
         <p class="rotatehint">📱 <b>Gira tu teléfono a horizontal:</b> el duelo se acomoda de lado, más compacto, y la información de cada carta aparece en el panel de la izquierda.</p>
         <div class="duelbar" id="oppBar">
           <div class="pinfo">
+            <span class="pava" id="oppAva" aria-hidden="true"></span>
             <span class="pname" id="oppName">Rival</span>
             <div class="hpbar"><div class="hpfill" id="oppHpFill" style="width:100%"></div></div>
             <span class="hpnum" id="oppHp">8000</span>
@@ -1313,6 +1324,7 @@
 
         <div class="duelbar" id="myBar">
           <div class="pinfo">
+            <span class="pava" id="myAva" aria-hidden="true"></span>
             <span class="pname" id="myName">Tú</span>
             <div class="hpbar"><div class="hpfill" id="myHpFill" style="width:100%"></div></div>
             <span class="hpnum" id="myHp">8000</span>
@@ -2709,7 +2721,7 @@ function buildDeckList(def){var list=[];def.main.forEach(function(e){for(var i=0
 function buildDeck(key){return buildDeckList(deckDef(key));}
 function newPlayer(name,deckKey,isAI,customDef){
   var def=customDef||deckDef(deckKey);
-  return {name:name,deckKey:deckKey,ai:!!isAI,hp:8000,deck:buildDeckList(def),hand:[],field:[null,null,null,null,null],back:[null,null,null,null,null],gy:[],extra:(def.extra||[]).slice(),normalUsed:false,compUsed:false,summonLocked:false,programLocked:false,spellLock:false,trollTaunt:false,haterLockTurn:0,protectUntil:0,protectArch:null,curseTurn:null,airdropTurn:0};
+  return {name:name,deckKey:deckKey,ai:!!isAI,hp:8000,deck:buildDeckList(def),hand:[],field:[null,null,null,null,null],back:[null,null,null,null,null],gy:[],banished:[],extra:(def.extra||[]).slice(),normalUsed:false,compUsed:false,summonLocked:false,programLocked:false,spellLock:false,trollTaunt:false,haterLockTurn:0,protectUntil:0,protectArch:null,curseTurn:null,airdropTurn:0};
 }
 function startDuel(){
   if(typeof closeBuilder==="function")closeBuilder();
@@ -2856,6 +2868,12 @@ function pileHTML(P,kind,side){
     var top=P.gy[P.gy.length-1];
     return "<div class='pile tappable' data-hov='"+top+"' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><div class='card'><img class='art' src='"+cardImg(top)+"' alt='Cementerio: "+esc(CARDS[top].n)+"' loading='lazy'></div><span class='pilelab'>CEMENTERIO</span><span class='pilecount'>"+P.gy.length+"</span></div>";
   }
+  if(kind==="banished"){
+    if(!P.banished.length)return "<div class='pile empty tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")'><span>DESTIERRO<br>vacío</span></div>";
+    var bt=P.banished[P.banished.length-1];
+    if(bt.fd)return "<div class='pile tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")'><div class='card cardback'><img class='art' src='"+CARD_BACK+"' alt='Destierro: carta boca abajo'></div><span class='pilelab'>DESTIERRO</span><span class='pilecount'>"+P.banished.length+"</span></div>";
+    return "<div class='pile tappable' data-hov='"+bt.id+"' role='button' data-call='pileClick(\"banished\",\""+side+"\")'><div class='card'><img class='art' src='"+cardImg(bt.id)+"' alt='Destierro: "+esc(CARDS[bt.id].n)+"' loading='lazy'></div><span class='pilelab'>DESTIERRO</span><span class='pilecount'>"+P.banished.length+"</span></div>";
+  }
   return "<div class='pile empty'><span>ZONA<br>DE CAMPO</span></div>";
 }
 function pileClick(kind,side){
@@ -2865,6 +2883,10 @@ function pileClick(kind,side){
   if(kind==="gy"){
     var P=side==="me"?me:op;
     showListSheet("Cementerio de "+P.name,P.gy);
+  }
+  if(kind==="banished"){
+    var PB=side==="me"?me:op;
+    showBanishedSheet(PB);
   }
 }
 /* ---------- estilos de la interfaz: el jugador elige el look y lo cambia cuando quiera ----------
@@ -2952,21 +2974,22 @@ function render(){
   var nb=$("ninaBar"); if(nb)nb.style.display=(MODE==="ai")?"flex":"none"; /* el globo de Nina solo existe contra la IA */
   updateSimBar(); /* la barra de la simulación solo existe en el modo IA contra IA */
   $("myName").textContent=me.name; $("oppName").textContent=op.name;
+  $("myAva").textContent=(me.name||"?").trim().charAt(0).toUpperCase(); $("oppAva").textContent=(op.name||"?").trim().charAt(0).toUpperCase();
   $("myHp").textContent=me.hp; $("oppHp").textContent=op.hp;
   $("myHpFill").style.width=Math.max(0,me.hp/80)+"%"; $("oppHpFill").style.width=Math.max(0,op.hp/80)+"%";
   $("myHpFill").className="hpfill"+(me.hp<=2000?" low":""); $("oppHpFill").className="hpfill"+(op.hp<=2000?" low":"");
-  $("myCounts").textContent="Mazo "+me.deck.length+" · Cementerio "+me.gy.length+" · Extra "+me.extra.length;
-  $("oppCounts").textContent="Mano "+op.hand.length+" · Mazo "+op.deck.length+" · Cementerio "+op.gy.length+" · Extra "+op.extra.length+(spyOn?" · 👁️ Mano visible (Spyware)":"");
+  $("myCounts").textContent="Mazo "+me.deck.length+" · Cementerio "+me.gy.length+" · Destierro "+me.banished.length+" · Extra "+me.extra.length;
+  $("oppCounts").textContent="Mano "+op.hand.length+" · Mazo "+op.deck.length+" · Cementerio "+op.gy.length+" · Destierro "+op.banished.length+" · Extra "+op.extra.length+(spyOn?" · 👁️ Mano visible (Spyware)":"");
   $("midCounts").textContent="Turno "+G.turnNo;
   var myTurn=(viewer()===cur());
   $("turnTag").textContent=myTurn?"Turno de "+cur().name:"Turno de "+cur().name;
   $("turnTag").className="turntag"+(myTurn?"":" opp");
-  $("phaseTag").textContent=G.phase==="main"?"Fase principal 1":G.phase==="battle"?"Fase de batalla":"Fase principal 2";
+  $("phaseTag").textContent=G.phase==="main"?"MP1":G.phase==="battle"?"BATALLA":"MP2";
   $("btnPhase").textContent=G.phase==="main"?"A batalla ⚔️":G.phase==="battle"?"A fase principal 2 ▶️":"Terminar turno ⏭️";
   $("btnPhase").disabled=!myTurn||G.busy||G.over||cur().ai;
   $("oppBack").innerHTML=pileHTML(op,"deck","opp")+op.back.map(function(b,i){return "<div class='zone backz'>"+backTile(op,b,"opp",i)+"</div>";}).join("")+pileHTML(op,"extra","opp");
-  $("oppField").innerHTML=pileHTML(op,"gy","opp")+op.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(op,u,"opp",i):"")+"</div>";}).join("")+pileHTML(op,"field","opp");
-  $("myField").innerHTML=pileHTML(me,"field","me")+me.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(me,u,"me",i):"")+"</div>";}).join("")+pileHTML(me,"gy","me");
+  $("oppField").innerHTML=pileHTML(op,"gy","opp")+op.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(op,u,"opp",i):"")+"</div>";}).join("")+pileHTML(op,"banished","opp");
+  $("myField").innerHTML=pileHTML(me,"banished","me")+me.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(me,u,"me",i):"")+"</div>";}).join("")+pileHTML(me,"gy","me");
   $("myBack").innerHTML=pileHTML(me,"extra","me")+me.back.map(function(b,i){return "<div class='zone backz'>"+backTile(me,b,"me",i)+"</div>";}).join("")+pileHTML(me,"deck","me");
   $("myHand").innerHTML=me.hand.map(function(id,i){return handTile(me,id,i);}).join("");
   $("oppHand").className="opphand"+(seeOppHand?" revealed":"");
@@ -3006,6 +3029,16 @@ function pickBtn(id,onclick,extra){
 }
 function showListSheet(title,ids){
   showSheet("<h2>"+esc(title)+"</h2>"+(ids.length?"<div class='picklist'>"+ids.map(function(id){return pickBtn(id,null);}).join("")+"</div>":"<p>Está vacío.</p>")+"<button id='btnOk'>Cerrar</button>",true);
+  sheetBtn("btnOk",closeSheet);
+}
+/* Hoja del destierro: las cartas boca arriba se ven con su ficha completa;
+   las boca abajo (desterradas por Ban Hammer) solo muestran el reverso. */
+function showBanishedSheet(P){
+  var items=P.banished.map(function(e){
+    if(e.fd)return "<button type='button' disabled><img class='thumb' src='"+CARD_BACK+"' alt='Carta desterrada boca abajo'><span class='pickinfo'><span class='pickname'>???</span><span class='pickmeta'>Desterrada boca abajo</span><span class='pickfx'>Su identidad se desconoce: salió del juego boca abajo.</span></span></button>";
+    return pickBtn(e.id,null);
+  }).join("");
+  showSheet("<h2>Destierro de "+esc(P.name)+"</h2>"+(P.banished.length?"<div class='picklist'>"+items+"</div>":"<p>Está vacío.</p>")+"<button id='btnOk'>Cerrar</button>",true);
   sheetBtn("btnOk",closeSheet);
 }
 /* ---------- panel de información al pasar el ratón (lado izquierdo del tablero) ---------- */
@@ -4825,6 +4858,7 @@ function fwDiscard(i){
    cementerio (no dispara Eco ni Respawn). */
 function banishUnit(P,zone){
   var u=P.field[zone]; if(!u)return;
+  P.banished.push({id:u.id,fd:true});
   animDestroyGhost(P,zone); P.field[zone]=null; sfx("destroy");
   log("🔨 "+CARDS[u.id].n+" es desterrada boca abajo: sale del juego.");
   render();
@@ -4879,7 +4913,7 @@ function fireCebo(D,zone,atkP,atkU,atkZone){
       log("🔇 Troll Hater: "+atkP.name+" no podrá activar Programas ni Protocolos durante su próximo turno.");
       break;
     case "ceboBanishGrave":
-      if(atkP.gy.length){var bi2=Math.floor(Math.random()*atkP.gy.length);var bg=atkP.gy.splice(bi2,1)[0];log("🚫 Troll Anónimo destierra "+CARDS[bg].n+" del cementerio de "+atkP.name+": sale del juego.");}
+      if(atkP.gy.length){var bi2=Math.floor(Math.random()*atkP.gy.length);var bg=atkP.gy.splice(bi2,1)[0];atkP.banished.push({id:bg,fd:false});log("🚫 Troll Anónimo destierra "+CARDS[bg].n+" del cementerio de "+atkP.name+": sale del juego.");}
       break;
     case "ceboPolemAllFoe":
       atkP.field.forEach(function(x){if(x)x.polem=(x.polem||0)+1;});
@@ -5372,7 +5406,7 @@ function serializeState(){
     startedKey:G.startedKey||"", winner:(G.winnerIdx!=null?G.winnerIdx:null), loseWhy:G.loseWhy||"",
     log:G.log.slice(-60),
     players:G.players.map(function(P){return { name:P.name, deckKey:P.deckKey, hp:P.hp,
-      deckCount:P.deck.length, gy:P.gy, extra:P.extra, field:P.field, back:P.back,
+      deckCount:P.deck.length, gy:P.gy, banished:P.banished, extra:P.extra, field:P.field, back:P.back,
       normalUsed:!!P.normalUsed, compUsed:!!P.compUsed,
       summonLocked:!!P.summonLocked, programLocked:!!P.programLocked, spellLock:!!P.spellLock, trollTaunt:!!P.trollTaunt, haterLockTurn:P.haterLockTurn||0,
       protectUntil:P.protectUntil||0, protectArch:P.protectArch||null,
@@ -5403,7 +5437,7 @@ function applyRemoteState(s,hands,decks){
   toArr(s.players).forEach(function(sp,i){
     var P=G.players[i]; if(!P)return;
     P.name=sp.name; P.deckKey=sp.deckKey; P.hp=sp.hp;
-    P.gy=toArr(sp.gy); P.extra=toArr(sp.extra);
+    P.gy=toArr(sp.gy); P.extra=toArr(sp.extra); P.banished=toArr(sp.banished);
     P.field=arr5(sp.field); P.back=arr5(sp.back);
     P.normalUsed=!!sp.normalUsed; P.compUsed=!!sp.compUsed;
     P.summonLocked=!!sp.summonLocked; P.programLocked=!!sp.programLocked; P.spellLock=!!sp.spellLock; P.trollTaunt=!!sp.trollTaunt; P.haterLockTurn=sp.haterLockTurn||0;

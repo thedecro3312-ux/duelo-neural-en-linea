@@ -1,0 +1,22 @@
+name: Copy duelo-neural-en-linea.html to index.html
+
+on:
+  workflow_dispatch:
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Copy file to index.html
+        run: cp duelo-neural-en-linea.html index.html
+      - name: Commit index.html
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Copy duelo-neural-en-linea.html to index.html"
+          git push

@@ -1009,6 +1009,124 @@
         #scr-lobby::after{ animation:none; }
         #scr-lobby button.primary{ animation:none; }
       }
+      /* ================= CROMO + GLITCH EN TODO LO DEMÁS =================
+         El mismo cromo con glitch fuerte del lobby se extiende a las pantallas
+         de preparación (mazos, moneda, en línea) y a las ventanas de Ajustes,
+         «Cómo se juega» y el Editor de mazos. ÚNICA excepción pedida: el campo
+         de batalla (#scr-duel) y las hojas que se abren durante el duelo
+         conservan el tema elegido en Ajustes; aquí no se toca nada de eso. */
+      #scr-decks,#scr-coin,#scr-online{
+        --np-pink:#ff2e63; --np-pink2:#ff5d8f; --np-cyan:#00efff; --np-cyan2:#8df6ff;
+        --panel:#10141d; --panel2:#1a212e; --line:#5d748f;
+        --ink:#eef4fc; --ink-dim:#aebdd2; --ink-faint:#8296af; --neon:#c7d6ea;
+      }
+      body:has(#scr-decks.on),body:has(#scr-coin.on),body:has(#scr-online.on){ background:#04060a; }
+      #scr-decks::before,#scr-coin::before,#scr-online::before{
+        background:
+          radial-gradient(920px 540px at 88% -8%, rgba(0,239,255,.13), transparent 62%),
+          radial-gradient(840px 540px at 6% 108%, rgba(255,46,99,.11), transparent 62%),
+          radial-gradient(640px 420px at 50% 42%, rgba(170,200,235,.07), transparent 65%),
+          repeating-linear-gradient(0deg, rgba(170,200,235,.055) 0 1px, transparent 1px 44px),
+          repeating-linear-gradient(90deg, rgba(170,200,235,.045) 0 1px, transparent 1px 44px),
+          repeating-linear-gradient(0deg, rgba(0,239,255,.03) 0 2px, transparent 2px 132px),
+          repeating-linear-gradient(90deg, rgba(255,46,99,.03) 0 2px, transparent 2px 132px),
+          linear-gradient(180deg,#05070c,#0a0e16 55%,#03050a);
+      }
+      /* Estática digital sobre las pantallas de preparación, como en el lobby */
+      #scr-decks::after,#scr-coin::after,#scr-online::after{ content:""; position:fixed; inset:-60px 0; z-index:1; pointer-events:none; opacity:.055;
+        background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.6'/></svg>");
+        animation:lobbyStatic .38s steps(3) infinite; }
+      /* Encabezados de preparación: paso en cian glitch y título cromado como el del lobby */
+      .prep-step{ color:#8df6ff; text-shadow:2px 0 rgba(255,46,99,.45), 0 0 10px rgba(0,239,255,.5); }
+      .prep-title{ background:linear-gradient(180deg,#ffffff 0%,#e8f1fb 16%,#a9bdd4 34%,#f9feff 47%,#26364e 50%,#5d748f 54%,#cfe0f2 68%,#ffffff 82%,#7d92ad 100%);
+        -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent;
+        filter:drop-shadow(0 2px 0 rgba(5,10,22,.95)) drop-shadow(3px 0 0 rgba(0,239,255,.25)) drop-shadow(-3px 0 0 rgba(255,46,99,.25));
+        animation:glitchChromeMain 3.4s infinite steps(1,end); }
+      .prep-sub{ color:#b9c7da; text-shadow:1px 0 rgba(0,239,255,.25), -1px 0 rgba(255,46,99,.25); }
+      /* Botones de preparación: metal oscuro y primarios de placa cromada, como el lobby */
+      #scr-decks button,#scr-coin button,#scr-online button{ position:relative; overflow:hidden;
+        background:linear-gradient(180deg,#2b3547 0%,#141a26 48%,#1d2635 52%,#0d121c 100%);
+        border:1px solid #8fa5c0; color:#eef4fc;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.45), inset 0 -1px 0 rgba(0,0,0,.6), 0 4px 14px rgba(0,0,0,.45);
+        text-shadow:1px 0 rgba(0,239,255,.35), -1px 0 rgba(255,46,99,.35); }
+      #scr-decks button:hover,#scr-coin button:hover,#scr-online button:hover{ border-color:#ffffff;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 3px 0 0 rgba(0,239,255,.55), -3px 0 0 rgba(255,46,99,.55), 0 0 18px rgba(170,205,255,.30); }
+      #scr-decks button.primary,#scr-coin button.primary,#scr-online button.primary{
+        background:linear-gradient(180deg,#ffffff 0%,#dfe9f5 22%,#93a7bf 48%,#e9f2fc 52%,#6e829c 78%,#c3d3e6 100%);
+        border:1px solid #e8f1fb; color:#0a1220; text-shadow:0 1px 0 rgba(255,255,255,.65);
+        box-shadow:inset 0 1px 0 #ffffff, inset 0 -2px 0 rgba(10,18,32,.35), 0 6px 18px rgba(0,0,0,.5), 2px 0 0 rgba(0,239,255,.35), -2px 0 0 rgba(255,46,99,.35);
+        animation:lobbyBtnGlitch 5.2s infinite steps(1,end); }
+      #scr-decks button.primary:hover,#scr-coin button.primary:hover,#scr-online button.primary:hover{ border-color:#ffffff; color:#0a1220;
+        box-shadow:inset 0 1px 0 #ffffff, 5px 0 0 rgba(0,239,255,.75), -5px 0 0 rgba(255,46,99,.75), 0 0 24px rgba(190,215,245,.45); }
+      #scr-decks button.primary:disabled,#scr-coin button.primary:disabled,#scr-online button.primary:disabled{ box-shadow:inset 0 1px 0 #ffffff; }
+      /* Paneles de preparación: marco cromado sobre metal oscuro */
+      #scr-decks .setupbox,#scr-online .modepanel,#scr-coin .coinwrap{
+        background:linear-gradient(160deg, rgba(26,33,46,.96), rgba(10,14,22,.97));
+        border:1px solid rgba(160,185,215,.55); border-radius:6px;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 0 18px rgba(0,0,0,.4), 2px 0 0 rgba(0,239,255,.14), -2px 0 0 rgba(255,46,99,.14); }
+      #scr-decks .setupbox h3{ color:#fff; text-shadow:2px 0 rgba(0,239,255,.4), -2px 0 rgba(255,46,99,.4); }
+      #scr-decks input[type=text],#scr-online input[type=text]{ background:#0a0f18; border-color:rgba(160,185,215,.45); color:#eef4fc; }
+      #scr-decks input[type=text]:focus,#scr-online input[type=text]:focus{ outline:2px solid rgba(0,239,255,.6); border-color:#ffffff; }
+      #scr-decks .deckcard,#scr-online .deckcard{ background:rgba(13,18,28,.94); border-color:rgba(140,165,195,.5); }
+      #scr-decks .deckcard:hover,#scr-online .deckcard:hover{ border-color:#ffffff; box-shadow:3px 0 0 rgba(0,239,255,.45), -3px 0 0 rgba(255,46,99,.45); }
+      #scr-decks .deckcard.sel,#scr-online .deckcard.sel{ box-shadow:0 0 18px -2px currentColor, inset 0 0 14px rgba(255,255,255,.04); background:rgba(24,32,46,.96); }
+      #scr-decks .deckcard img.cover,#scr-online .deckcard img.cover{ border-color:rgba(160,185,215,.4); }
+      #scr-decks .deckcard p,#scr-online .deckcard p{ color:#aebdd2; }
+      #scr-decks .diffbtn.sel{ outline:2px solid #00efff; border-color:#ffffff; box-shadow:3px 0 0 rgba(0,239,255,.6), -3px 0 0 rgba(255,46,99,.6); }
+      #scr-decks .note,#scr-coin .note,#scr-online .note{ color:#8296af; }
+      #scr-online .code{ border:1.5px dashed #c3d3e6; color:#ffffff; background:rgba(170,200,235,.07);
+        box-shadow:2px 0 0 rgba(0,239,255,.4), -2px 0 0 rgba(255,46,99,.4); text-shadow:2px 0 rgba(0,239,255,.6), -2px 0 rgba(255,46,99,.6); }
+      #scr-online .onlinestatus{ color:#8df6ff; }
+      #scr-online .choicebtn.sel{ outline:2px solid #00efff; border-color:#ffffff; box-shadow:3px 0 0 rgba(0,239,255,.6), -3px 0 0 rgba(255,46,99,.6); }
+      #scr-coin #coinResult{ color:#8df6ff; text-shadow:2px 0 rgba(255,46,99,.5), 0 0 12px rgba(0,239,255,.6); }
+      /* La moneda también es de cromo: cara plateada brillante y cruz de acero oscuro */
+      #scr-coin .coin .face{ background:radial-gradient(circle at 35% 30%, #ffffff, #a9bdd4 55%, #5d748f); border-color:#e8f1fb; color:#0a1220;
+        box-shadow:inset 0 2px 6px rgba(255,255,255,.7), inset 0 -3px 8px rgba(10,18,32,.35), 3px 0 0 rgba(0,239,255,.30), -3px 0 0 rgba(255,46,99,.30); }
+      #scr-coin .coin .back{ background:radial-gradient(circle at 35% 30%, #cfe0f2, #5d748f 60%, #26364e); border-color:#8fa5c0; color:#eef4fc; }
+      /* ---------- Ventanas: Ajustes, «Cómo se juega» y Editor de mazos ---------- */
+      .settings-overlay,.builder-overlay{
+        --panel:#10141d; --panel2:#1a212e; --line:#5d748f;
+        --ink:#eef4fc; --ink-dim:#aebdd2; --ink-faint:#8296af; --neon:#c7d6ea; --gold:#c7d6ea; }
+      .settings-window{ background:linear-gradient(165deg,#161e2a,#080b11);
+        border:1.5px solid rgba(160,185,215,.65); border-radius:8px;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.20), 3px 0 0 rgba(0,239,255,.16), -3px 0 0 rgba(255,46,99,.16), 0 18px 50px rgba(0,0,0,.65); }
+      .builder-window{ background:linear-gradient(165deg,#141b28,#07090f);
+        border:1.5px solid rgba(160,185,215,.65); border-radius:8px;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.20), 3px 0 0 rgba(0,239,255,.16), -3px 0 0 rgba(255,46,99,.16), 0 18px 50px rgba(0,0,0,.65); }
+      .settings-head{ border-bottom-color:rgba(160,185,215,.4); }
+      .settings-window h2,.settings-window h3,.builder-window h2,.builder-window h3{
+        text-shadow:1px 0 rgba(0,239,255,.35), -1px 0 rgba(255,46,99,.35); }
+      .settings-overlay button,.builder-overlay button{ position:relative; overflow:hidden;
+        background:linear-gradient(180deg,#2b3547 0%,#141a26 48%,#1d2635 52%,#0d121c 100%);
+        border:1px solid #8fa5c0; color:#eef4fc;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.45), inset 0 -1px 0 rgba(0,0,0,.6), 0 4px 14px rgba(0,0,0,.45);
+        text-shadow:1px 0 rgba(0,239,255,.35), -1px 0 rgba(255,46,99,.35); }
+      .settings-overlay button:hover,.builder-overlay button:hover{ border-color:#ffffff;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 3px 0 0 rgba(0,239,255,.55), -3px 0 0 rgba(255,46,99,.55), 0 0 18px rgba(170,205,255,.30); }
+      .settings-overlay button.primary,.builder-overlay button.primary{
+        background:linear-gradient(180deg,#ffffff 0%,#dfe9f5 22%,#93a7bf 48%,#e9f2fc 52%,#6e829c 78%,#c3d3e6 100%);
+        border:1px solid #e8f1fb; color:#0a1220; text-shadow:0 1px 0 rgba(255,255,255,.65);
+        box-shadow:inset 0 1px 0 #ffffff, inset 0 -2px 0 rgba(10,18,32,.35), 0 6px 18px rgba(0,0,0,.5), 2px 0 0 rgba(0,239,255,.35), -2px 0 0 rgba(255,46,99,.35);
+        animation:lobbyBtnGlitch 5.2s infinite steps(1,end); }
+      .settings-overlay button.primary:hover,.builder-overlay button.primary:hover{ border-color:#ffffff; color:#0a1220;
+        box-shadow:inset 0 1px 0 #ffffff, 5px 0 0 rgba(0,239,255,.75), -5px 0 0 rgba(255,46,99,.75), 0 0 24px rgba(190,215,245,.45); }
+      .settings-overlay button.danger,.builder-overlay button.danger{
+        background:linear-gradient(180deg,#4a1226,#2a0a18); border-color:#ff2e63; color:#fff; }
+      .settings-overlay .stylebtn.sel,.settings-overlay .diffbtn.sel{ outline:2px solid #00efff; border-color:#ffffff;
+        box-shadow:3px 0 0 rgba(0,239,255,.6), -3px 0 0 rgba(255,46,99,.6); }
+      .settings-overlay input[type=text],.settings-overlay select,
+      .builder-overlay input[type=text],.builder-overlay select{ background:#0a0f18; border:1px solid rgba(160,185,215,.45); color:#eef4fc; }
+      .builder-overlay .edo-info,.builder-overlay .edo-deck,.builder-overlay .edo-search{ background:rgba(16,20,29,.94); border-color:rgba(140,165,195,.45); }
+      .builder-overlay .edo-res{ background:linear-gradient(180deg,#232d3f,#12161f); border-color:rgba(140,165,195,.5); color:#eef4fc; }
+      .builder-overlay .edo-res:hover{ border-color:#ffffff; box-shadow:3px 0 0 rgba(0,239,255,.45), -3px 0 0 rgba(255,46,99,.45); }
+      .builder-overlay .edo-info img.edo-art,.builder-overlay .edo-cell img{ background:#0a1327; }
+      .builder-foot{ border-top-color:rgba(160,185,215,.4); }
+      @media (prefers-reduced-motion: reduce){
+        #scr-decks::after,#scr-coin::after,#scr-online::after{ animation:none; }
+        .prep-title{ animation:none; }
+        #scr-decks button.primary,#scr-coin button.primary,#scr-online button.primary,
+        .settings-overlay button.primary,.builder-overlay button.primary{ animation:none; }
+      }
     </style>
   </head>
   <body>

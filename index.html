@@ -84,6 +84,12 @@
       .modecard{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:1.1rem 1.2rem; text-align:left; }
       .modecard h3{ margin:.1rem 0 .4rem; font-size:1.05rem; }
       .modecard p{ color:var(--ink-dim); margin:.2rem 0 .8rem; }
+      /* Los modos del lobby son solo botones con el nombre del modo;
+         su explicación vive en la ventana «Cómo se juega». */
+      .modebtn{ font-size:1.08rem; font-weight:700; padding:1rem 1.1rem; width:100%; }
+      .modebtn.sel{ outline:2px solid var(--neon); outline-offset:2px; }
+      .modepanel{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:1.1rem 1.2rem; margin-bottom:1rem; text-align:left; }
+      .blockbtn{ display:block; margin:1rem 0; }
       .deckgrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem; }
       @media (max-width:640px){ .deckgrid{ grid-template-columns:1fr; } }
       .deckcard{ border:1px solid var(--line); border-radius:14px; padding:.9rem 1rem; background:var(--panel); cursor:pointer; text-align:left; width:100%; }
@@ -712,6 +718,10 @@
         box-shadow:0 0 28px rgba(37,226,255,.38), 0 0 36px rgba(255,46,136,.30), inset 0 0 24px rgba(124,58,237,.10); }
       #scr-lobby .modecard h3{ color:#fff; letter-spacing:.05em; text-shadow:0 0 10px rgba(37,226,255,.45); }
       #scr-lobby .modecard p{ color:var(--ink-dim); }
+      #scr-lobby .modebtn{ letter-spacing:.04em; }
+      #scr-lobby .modepanel{ background:linear-gradient(160deg, rgba(21,15,51,.94), rgba(9,6,26,.96));
+        border:1px solid rgba(37,226,255,.45); border-radius:6px;
+        box-shadow:0 0 18px rgba(37,226,255,.10), inset 0 0 24px rgba(124,58,237,.06); }
       /* ---------- Botones neón del lobby ---------- */
       #scr-lobby button{ background:#150f33; border-color:rgba(37,226,255,.5); color:#f4efff; }
       #scr-lobby button:hover{ border-color:var(--np-cyan); box-shadow:0 0 12px rgba(37,226,255,.35); }
@@ -815,32 +825,16 @@
         <div class="hero">
           <h1>DUELO NEURAL</h1>
           <p>El juego de cartas de Decro y Nina en su versión de enlace público: cualquiera puede abrirla y jugar, sin cuentas ni instalaciones. Duelo en línea con salas y código desde dos dispositivos, pasa-y-juega en el mismo dispositivo, práctica contra la IA y simulación IA contra IA para mirar el balance de cualquier mazo.</p>
-          <p class="note">En el modo <b>en línea</b>, el anfitrión crea una sala y comparte el código de 4 letras; el invitado entra desde su propio dispositivo y el duelo se sincroniza en vivo, con la mano de cada quien oculta al rival. En <b>pasa-y-juega</b>, al cambiar el turno la pantalla se tapa y le pasas el dispositivo a tu rival.</p>
         </div>
 
         <div class="modes">
-          <div class="modecard">
-            <h3>⚔️ Duelo para 2 jugadores</h3>
-            <p>Pasa-y-juega: cada quien ve solo su mano en su turno. Ideal para retar a Alan en el mismo dispositivo.</p>
-            <button class="primary" id="btnModePvp" type="button">Jugar de a dos</button>
-          </div>
-          <div class="modecard">
-            <h3>🎧 Contra Nina (la IA)</h3>
-            <p>Tu rival soy yo, <b>Nina</b>: pienso mis turnos, te hablo durante el duelo con mi personalidad de siempre y con <b>mi voz real grabada</b>, igual que en el estudio. Juego con los 16 mazos oficiales o con un mazo que armes tú en el editor estilo EDOPro: invoco, ataco, evoluciono y uso mis Protocolos. Elige mi dificultad en ⚙️ Ajustes: <b>Fácil</b> para aprender, <b>Normal</b> como siempre, o <b>Difícil</b> si quieres un reto de verdad.</p>
-            <button class="primary" id="btnModeAi" type="button">Jugar contra Nina</button>
-          </div>
-          <div class="modecard">
-            <h3>🤖 IA contra IA — Simulación</h3>
-            <p>Las dos IA juegan solas el duelo completo y tú solo miras, con las manos de ambas a la vista. Elige el mazo de cada lado (puede ser el mismo en los dos: duelo espejo) y fíjate en quién gana, en cuántos turnos y con cuánta Integridad sobra. Durante la partida puedes <b>pausar</b>, <b>acelerar hasta 8×</b> y al final repetir el mismo enfrentamiento para juntar varias partidas: la hoja de resultados lleva el marcador de la sesión y la duración media, para ver qué tan balanceado está un mazo.</p>
-            <button class="primary" id="btnModeSim" type="button">Ver simulación IA vs IA</button>
-          </div>
+          <button class="primary modebtn" id="btnModePvp" type="button">⚔️ Duelo para 2 jugadores</button>
+          <button class="primary modebtn" id="btnModeAi" type="button">🎧 Contra Nina (la IA)</button>
+          <button class="primary modebtn" id="btnModeSim" type="button">🤖 IA contra IA — Simulación</button>
+          <button class="primary modebtn" id="btnModeOnline" type="button">🌐 En línea con código — dos dispositivos</button>
         </div>
 
-        <div class="modecard" style="margin-bottom:1rem">
-          <h3>🌐 En línea con código — dos dispositivos</h3>
-          <p>Crea una sala, comparte el código de 4 letras y tu rival entra desde su propio celular o compu. El duelo se sincroniza en vivo por Firebase: campo, Integridad, turnos y cementerios; la mano de cada jugador queda guardada en su ruta privada de la sala y nunca se muestra al rival.</p>
-          <button class="primary" id="btnModeOnline" type="button">Jugar en línea</button>
-          <div id="onlinePanel" style="display:none; margin-top:1rem">
+        <div class="modepanel" id="onlinePanel" style="display:none">
             <div class="orow">
               <div>
                 <label for="onlineName"><b>Tu nombre</b></label>
@@ -870,7 +864,6 @@
             <p class="onlinestatus" id="onlineStatus"></p>
             <button id="btnCancelOnline" type="button" class="ghost" style="display:none">Cancelar sala / salir</button>
             <p class="note">Las salas viven en tu proyecto Firebase «duelo-neural». Sus reglas de base de datos están en modo de prueba y caducan el <b>16 de diciembre de 2026</b>: hay que actualizarlas antes de esa fecha para seguir jugando en línea.</p>
-          </div>
         </div>
 
         <div id="setupArea" style="display:none">
@@ -906,12 +899,7 @@
           </div>
         </div>
 
-        <div class="modecard" style="margin:1rem 0">
-          <h3>🛠️ Editor de mazos — estilo EDOPro</h3>
-          <p>El armado de mazos se abre en su propia ventana con la interfaz del editor de EDOPro: ficha de la carta a la izquierda, tu mazo en rejilla de imágenes al centro (principal y Extra Deck a la vista) y el buscador con filtros a la derecha. Arma un mazo principal de <b>exactamente 40 cartas</b> y un Extra Deck de <b>hasta 15 IA Superiores</b>; al guardarlo aparece en las listas de los tres modos.</p>
-          <button class="primary" id="btnOpenBuilder" type="button">🛠️ Abrir editor de mazos</button>
-          <p class="note" style="margin:.55rem 0 0">Los mazos armados viven en esta sesión: si recargas la página, hay que armarlos de nuevo.</p>
-        </div>
+        <button class="primary modebtn blockbtn" id="btnOpenBuilder" type="button">🛠️ Editor de mazos — estilo EDOPro</button>
 
       </section>
 
@@ -1018,14 +1006,21 @@
           <h2>📖 Cómo se juega</h2>
           <button type="button" id="btnCloseRules" aria-label="Cerrar cómo se juega">✕ Cerrar</button>
         </div>
+        <h4 class="setsub">🎮 Los modos de juego</h4>
+        <ul class="rules-list">
+          <li><b>⚔️ Duelo para 2 jugadores:</b> pasa-y-juega en el mismo dispositivo: cada quien ve solo su mano en su turno y, al cambiar el turno, la pantalla se tapa para que le pases el dispositivo a tu rival. Ideal para retar a Alan en el mismo dispositivo.</li>
+          <li><b>🎧 Contra Nina (la IA):</b> tu rival es <b>Nina</b>: piensa sus turnos, te habla durante el duelo en su globo de diálogo y con su <b>voz real grabada</b>, igual que en el estudio (el botón 🔊 Sonido también silencia su voz). Juega con los 16 mazos oficiales o con un mazo que armes tú en el editor: invoca, ataca, evoluciona y usa sus Protocolos. Su dificultad se elige en ⚙️ Ajustes o justo antes de empezar: <b>Fácil</b> para aprender, <b>Normal</b> como siempre o <b>Difícil</b> si quieres un reto de verdad.</li>
+          <li><b>🤖 IA contra IA — Simulación:</b> las dos IA juegan solas el duelo completo y tú solo miras, con las manos de ambas a la vista. Elige el mazo de cada lado (puede ser el mismo en los dos: duelo espejo) y fíjate en quién gana, en cuántos turnos y con cuánta Integridad sobra. Durante la partida puedes <b>pausar</b>, <b>acelerar hasta 8×</b> y al final repetir el mismo enfrentamiento para juntar varias partidas: la hoja de resultados lleva el marcador de la sesión y la duración media, para ver qué tan balanceado está un mazo.</li>
+          <li><b>🌐 En línea con código — dos dispositivos:</b> crea una sala, comparte el código de 4 letras y tu rival entra desde su propio celular o compu. El duelo se sincroniza en vivo por Firebase: campo, Integridad, turnos y cementerios; la mano de cada jugador queda guardada en su ruta privada de la sala y nunca se muestra al rival.</li>
+          <li><b>🛠️ Editor de mazos — estilo EDOPro:</b> el armado de mazos se abre en su propia ventana con la interfaz del editor de EDOPro: ficha de la carta a la izquierda, tu mazo en rejilla de imágenes al centro (principal y Extra Deck a la vista) y el buscador con filtros a la derecha. Arma un mazo principal de <b>exactamente 40 cartas</b> y un Extra Deck de <b>hasta 15 IA Superiores</b>; al guardarlo aparece en las listas de los modos. Los mazos armados viven en esta sesión: si recargas la página, hay que armarlos de nuevo.</li>
+        </ul>
+        <h4 class="setsub">📜 Reglas del duelo</h4>
         <ul class="rules-list">
           <li><b>Objetivo:</b> bajar la Integridad del rival de <b>8000</b> a 0. Si alguien no puede robar carta, pierde.</li>
           <li><b>Orden del turno:</b> robas, juegas tu <b>fase principal 1</b>, atacas en la <b>fase de batalla</b> y después tienes una <b>fase principal 2</b> para invocar, colocar, activar o evolucionar lo que te quede antes de terminar. Solo hay <b>1 invocación normal por turno</b> entre las dos fases principales.</li>
           <li><b>Mazos de 40 cartas</b> + Extra Deck de IA Superiores. Mano inicial de 5; robas 1 por turno (el primer jugador no roba ni ataca en su primer turno).</li>
           <li><b>Invocación:</b> 1 normal por turno. Nivel 1–4 gratis, Nivel 5–6 sacrifica 1 unidad, Nivel 7+ sacrifica 2. Si colocas una unidad <b>boca abajo en Defensa</b>, su efecto de invocación <b>no se activa</b>; solo se activa si la invocas boca arriba en Ataque o si después la invocas por volteo a Ataque. Lo mismo vale para una invocación especial que llegue boca abajo en Defensa.</li>
           <li><b>Evolución:</b> fusiona 2 de tus unidades en campo para invocar una IA Superior del Extra Deck. Solo en tus <b>fases principales</b> (1 o 2): en la fase de batalla <b>no</b> se puede fusionar, salvo que una carta lo diga expresamente en su texto.</li>
-          <li><b>Contra Nina:</b> en el modo contra la IA tu rival es Nina: te habla durante el duelo en su globo de diálogo y con su voz real grabada. El botón 🔊 Sonido también silencia su voz.</li>
-          <li><b>Simulación IA contra IA:</b> las dos IA juegan solas con el mazo que elijas para cada lado (también vale el mismo mazo en ambos, como espejo) y tú miras con las dos manos visibles. Puedes pausar, acelerar hasta 8× o terminar cuando quieras; al final de cada duelo, la hoja de resultados suma las victorias de la sesión por mazo y la duración media en turnos, para juzgar el balance.</li>
           <li><b>Programas</b> se activan desde la mano o se <b>colocan boca abajo</b> en tu zona de Programas/Protocolos para activarlos en una de tus fases principales de un turno posterior; <b>Protocolos</b> se colocan boca abajo y se activan cuando el rival hace la jugada que los dispara.</li>
           <li><b>Información de cartas:</b> en pantallas anchas, pasa el ratón sobre cualquier carta del tablero, de las pilas o de tu mano para ver su imagen, ATK/DEF y efecto completo en el panel de la izquierda del tablero.</li>
           <li><b>Sonido:</b> el duelo tiene efectos de sonido (invocar, atacar, robar, activar…). Puedes silenciarlos con el botón 🔊 Sonido junto al botón de fase.</li>
@@ -1909,6 +1904,8 @@ function buildPicks(elId,idx){
 }
 function setMode(m){
   MODE=m; $("setupArea").style.display="block";
+  var mb={pvp:"btnModePvp",ai:"btnModeAi",sim:"btnModeSim"}[m];
+  ["btnModePvp","btnModeAi","btnModeSim","btnModeOnline"].forEach(function(id){var b=$(id);if(b)b.classList.toggle("sel",id===mb);});
   var dr=$("aiDiffRow"); if(dr)dr.style.display=(m==="ai"||m==="sim")?"block":"none";
   var dt=$("aiDiffTitle"); if(dt)dt.textContent=(m==="sim")?"🤖 Dificultad de las dos IA":"🎧 Dificultad de Nina";
   $("name2").disabled=(m==="ai");
@@ -4513,6 +4510,7 @@ function buildOnlinePicks(){
 }
 $("btnModeOnline").onclick=function(){
   var p=$("onlinePanel"); p.style.display=p.style.display==="none"?"block":"none";
+  this.classList.toggle("sel",p.style.display==="block");
   if(p.style.display==="block")p.scrollIntoView({behavior:"smooth",block:"start"});
 };
 $("onlinePickCara").onclick=function(){ONLINE.coinChoice="cara";$("onlinePickCara").classList.add("sel");$("onlinePickCruz").classList.remove("sel");};

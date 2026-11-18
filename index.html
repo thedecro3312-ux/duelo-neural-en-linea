@@ -780,6 +780,26 @@
         #scr-lobby .hero h1{ font-size:clamp(1.7rem,6vw,2.4rem); }
         #scr-lobby .hero::after{ margin-top:.55rem; }
       }
+      /* ---------- Esquina superior derecha del lobby: «Cómo se juega» + icono de Ajustes ----------
+         Los Ajustes dejan de ser una tarjeta más de la pantalla principal: quedan como un
+         icono pequeño arriba a la derecha, con el botón de las reglas justo a su lado.
+         El héroe gana un poco de aire arriba para que la esquina no pise el título. */
+      #scr-lobby{ position:relative; }
+      #scr-lobby .hero{ padding-top:3.05rem; }
+      .lobby-corner{ position:absolute; top:.1rem; right:0; z-index:40; display:flex; gap:.45rem; align-items:center; }
+      .lobby-corner .iconbtn{ width:42px; height:42px; padding:0; display:inline-flex; align-items:center; justify-content:center;
+        font-size:1.2rem; line-height:1; border-radius:10px; }
+      .lobby-corner .rulesbtn{ height:42px; padding:0 .8rem; display:inline-flex; align-items:center; gap:.4rem;
+        font-size:.95rem; border-radius:10px; white-space:nowrap; }
+      @media (max-width:820px){
+        .lobby-corner .iconbtn{ width:38px; height:38px; font-size:1.08rem; }
+        .lobby-corner .rulesbtn{ height:38px; padding:0 .6rem; font-size:.88rem; }
+      }
+      /* ---------- Ventana «Cómo se juega»: las reglas viven en su propia ventana
+         (reutiliza la ventana de Ajustes) y ya no ocupan espacio en el lobby ---------- */
+      .rules-overlay .rules-list{ margin:.35rem 0 0; padding-left:1.25rem; }
+      .rules-overlay .rules-list li{ margin:.35rem 0; color:var(--ink-dim); }
+      .rules-overlay .rules-list li b{ color:var(--ink); }
     </style>
   </head>
   <body>
@@ -788,6 +808,10 @@
 
       <!-- ============ LOBBY / SETUP ============ -->
       <section id="scr-lobby" class="screen on">
+        <div class="lobby-corner">
+          <button type="button" class="rulesbtn" id="btnOpenRules" aria-label="Abrir cómo se juega">📖 Cómo se juega</button>
+          <button type="button" class="iconbtn" id="btnOpenSettings" aria-label="Ajustes" title="Ajustes">⚙️</button>
+        </div>
         <div class="hero">
           <h1>DUELO NEURAL</h1>
           <p>El juego de cartas de Decro y Nina en su versión de enlace público: cualquiera puede abrirla y jugar, sin cuentas ni instalaciones. Duelo en línea con salas y código desde dos dispositivos, pasa-y-juega en el mismo dispositivo, práctica contra la IA y simulación IA contra IA para mirar el balance de cualquier mazo.</p>
@@ -883,36 +907,12 @@
         </div>
 
         <div class="modecard" style="margin:1rem 0">
-          <h3>⚙️ Ajustes</h3>
-          <p>El color de la interfaz, la dificultad de la IA y el sonido se cambian en su propia ventana, desde aquí, en la pantalla principal. Cuando la partida empieza, el tablero queda limpio: sin opciones de color ni de ajustes a la vista.</p>
-          <button class="primary" id="btnOpenSettings" type="button">⚙️ Abrir ajustes</button>
-        </div>
-
-        <div class="modecard" style="margin:1rem 0">
           <h3>🛠️ Editor de mazos — estilo EDOPro</h3>
           <p>El armado de mazos se abre en su propia ventana con la interfaz del editor de EDOPro: ficha de la carta a la izquierda, tu mazo en rejilla de imágenes al centro (principal y Extra Deck a la vista) y el buscador con filtros a la derecha. Arma un mazo principal de <b>exactamente 40 cartas</b> y un Extra Deck de <b>hasta 15 IA Superiores</b>; al guardarlo aparece en las listas de los tres modos.</p>
           <button class="primary" id="btnOpenBuilder" type="button">🛠️ Abrir editor de mazos</button>
           <p class="note" style="margin:.55rem 0 0">Los mazos armados viven en esta sesión: si recargas la página, hay que armarlos de nuevo.</p>
         </div>
 
-        <div class="rules">
-          <h3>Reglas rápidas</h3>
-          <ul>
-            <li><b>Objetivo:</b> bajar la Integridad del rival de <b>8000</b> a 0. Si alguien no puede robar carta, pierde.</li>
-            <li><b>Orden del turno:</b> robas, juegas tu <b>fase principal 1</b>, atacas en la <b>fase de batalla</b> y después tienes una <b>fase principal 2</b> para invocar, colocar, activar o evolucionar lo que te quede antes de terminar. Solo hay <b>1 invocación normal por turno</b> entre las dos fases principales.</li>
-            <li><b>Mazos de 40 cartas</b> + Extra Deck de IA Superiores. Mano inicial de 5; robas 1 por turno (el primer jugador no roba ni ataca en su primer turno).</li>
-            <li><b>Invocación:</b> 1 normal por turno. Nivel 1–4 gratis, Nivel 5–6 sacrifica 1 unidad, Nivel 7+ sacrifica 2. Si colocas una unidad <b>boca abajo en Defensa</b>, su efecto de invocación <b>no se activa</b>; solo se activa si la invocas boca arriba en Ataque o si después la invocas por volteo a Ataque. Lo mismo vale para una invocación especial que llegue boca abajo en Defensa.</li>
-            <li><b>Evolución:</b> fusiona 2 de tus unidades en campo para invocar una IA Superior del Extra Deck. Solo en tus <b>fases principales</b> (1 o 2): en la fase de batalla <b>no</b> se puede fusionar, salvo que una carta lo diga expresamente en su texto.</li>
-            <li><b>Contra Nina:</b> en el modo contra la IA tu rival es Nina: te habla durante el duelo en su globo de diálogo y con su voz real grabada. El botón 🔊 Sonido también silencia su voz.</li>
-            <li><b>Simulación IA contra IA:</b> las dos IA juegan solas con el mazo que elijas para cada lado (también vale el mismo mazo en ambos, como espejo) y tú miras con las dos manos visibles. Puedes pausar, acelerar hasta 8× o terminar cuando quieras; al final de cada duelo, la hoja de resultados suma las victorias de la sesión por mazo y la duración media en turnos, para juzgar el balance.</li>
-            <li><b>Programas</b> se activan desde la mano o se <b>colocan boca abajo</b> en tu zona de Programas/Protocolos para activarlos en una de tus fases principales de un turno posterior; <b>Protocolos</b> se colocan boca abajo y se activan cuando el rival hace la jugada que los dispara.</li>
-            <li><b>Información de cartas:</b> en pantallas anchas, pasa el ratón sobre cualquier carta del tablero, de las pilas o de tu mano para ver su imagen, ATK/DEF y efecto completo en el panel de la izquierda del tablero.</li>
-            <li><b>Sonido:</b> el duelo tiene efectos de sonido (invocar, atacar, robar, activar…). Puedes silenciarlos con el botón 🔊 Sonido junto al botón de fase.</li>
-            <li><b>Corrupción (Virus):</b> una unidad con 3 contadores de Corrupción se destruye al final del turno.</li>
-            <li><b>Los 16 mazos oficiales:</b> Virus, Algoritmo, Sobrecarga, Enjambre, Espectro, Clon, Cuántico, Sinapsis, Tiempo, Ping, Battle Royale, RPG, VHS y Hacker, más los híbridos Virus + Sobrecarga y VHS + Espectro.</li>
-            <li><b>Palabras clave:</b> <b>Eco</b> (Espectro: efecto al ir al cementerio), <b>Respawn</b> (Battle Royale: vuelve con −500 ATK), <b>Nivel</b> (RPG: +300 ATK al destruir en batalla), <b>Congelar</b> (Ping y Tiempo: la unidad no ataca en su próximo turno), <b>Copia</b> (Clon), <b>Superposición</b> (Cuántico: elige 1 de 2 efectos), <b>Interferencia</b> (VHS: apaga los efectos de 1 unidad rival al invocar) y <b>Hackeo</b> (Hacker: roba el control de 1 unidad rival hasta el final del turno).</li>
-          </ul>
-        </div>
       </section>
 
       <!-- ============ DUEL ============ -->
@@ -1007,6 +1007,34 @@
 
         <div style="margin-top:1.1rem; text-align:right">
           <button class="primary" type="button" id="btnCloseSettings2">Listo, cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ CÓMO SE JUEGA (ventana aparte, solo desde la pantalla principal) ============ -->
+    <div class="settings-overlay rules-overlay" id="rulesOverlay" role="dialog" aria-modal="true" aria-label="Cómo se juega">
+      <div class="settings-window">
+        <div class="settings-head">
+          <h2>📖 Cómo se juega</h2>
+          <button type="button" id="btnCloseRules" aria-label="Cerrar cómo se juega">✕ Cerrar</button>
+        </div>
+        <ul class="rules-list">
+          <li><b>Objetivo:</b> bajar la Integridad del rival de <b>8000</b> a 0. Si alguien no puede robar carta, pierde.</li>
+          <li><b>Orden del turno:</b> robas, juegas tu <b>fase principal 1</b>, atacas en la <b>fase de batalla</b> y después tienes una <b>fase principal 2</b> para invocar, colocar, activar o evolucionar lo que te quede antes de terminar. Solo hay <b>1 invocación normal por turno</b> entre las dos fases principales.</li>
+          <li><b>Mazos de 40 cartas</b> + Extra Deck de IA Superiores. Mano inicial de 5; robas 1 por turno (el primer jugador no roba ni ataca en su primer turno).</li>
+          <li><b>Invocación:</b> 1 normal por turno. Nivel 1–4 gratis, Nivel 5–6 sacrifica 1 unidad, Nivel 7+ sacrifica 2. Si colocas una unidad <b>boca abajo en Defensa</b>, su efecto de invocación <b>no se activa</b>; solo se activa si la invocas boca arriba en Ataque o si después la invocas por volteo a Ataque. Lo mismo vale para una invocación especial que llegue boca abajo en Defensa.</li>
+          <li><b>Evolución:</b> fusiona 2 de tus unidades en campo para invocar una IA Superior del Extra Deck. Solo en tus <b>fases principales</b> (1 o 2): en la fase de batalla <b>no</b> se puede fusionar, salvo que una carta lo diga expresamente en su texto.</li>
+          <li><b>Contra Nina:</b> en el modo contra la IA tu rival es Nina: te habla durante el duelo en su globo de diálogo y con su voz real grabada. El botón 🔊 Sonido también silencia su voz.</li>
+          <li><b>Simulación IA contra IA:</b> las dos IA juegan solas con el mazo que elijas para cada lado (también vale el mismo mazo en ambos, como espejo) y tú miras con las dos manos visibles. Puedes pausar, acelerar hasta 8× o terminar cuando quieras; al final de cada duelo, la hoja de resultados suma las victorias de la sesión por mazo y la duración media en turnos, para juzgar el balance.</li>
+          <li><b>Programas</b> se activan desde la mano o se <b>colocan boca abajo</b> en tu zona de Programas/Protocolos para activarlos en una de tus fases principales de un turno posterior; <b>Protocolos</b> se colocan boca abajo y se activan cuando el rival hace la jugada que los dispara.</li>
+          <li><b>Información de cartas:</b> en pantallas anchas, pasa el ratón sobre cualquier carta del tablero, de las pilas o de tu mano para ver su imagen, ATK/DEF y efecto completo en el panel de la izquierda del tablero.</li>
+          <li><b>Sonido:</b> el duelo tiene efectos de sonido (invocar, atacar, robar, activar…). Puedes silenciarlos con el botón 🔊 Sonido junto al botón de fase.</li>
+          <li><b>Corrupción (Virus):</b> una unidad con 3 contadores de Corrupción se destruye al final del turno.</li>
+          <li><b>Los 16 mazos oficiales:</b> Virus, Algoritmo, Sobrecarga, Enjambre, Espectro, Clon, Cuántico, Sinapsis, Tiempo, Ping, Battle Royale, RPG, VHS y Hacker, más los híbridos Virus + Sobrecarga y VHS + Espectro.</li>
+          <li><b>Palabras clave:</b> <b>Eco</b> (Espectro: efecto al ir al cementerio), <b>Respawn</b> (Battle Royale: vuelve con −500 ATK), <b>Nivel</b> (RPG: +300 ATK al destruir en batalla), <b>Congelar</b> (Ping y Tiempo: la unidad no ataca en su próximo turno), <b>Copia</b> (Clon), <b>Superposición</b> (Cuántico: elige 1 de 2 efectos), <b>Interferencia</b> (VHS: apaga los efectos de 1 unidad rival al invocar) y <b>Hackeo</b> (Hacker: roba el control de 1 unidad rival hasta el final del turno).</li>
+        </ul>
+        <div style="margin-top:1.1rem; text-align:right">
+          <button class="primary" type="button" id="btnCloseRules2">¡Entendido!</button>
         </div>
       </div>
     </div>
@@ -1997,6 +2025,26 @@ function closeSettings(){
   var c2=$("btnCloseSettings2"); if(c2)c2.onclick=closeSettings;
   var ov=$("settingsOverlay"); if(ov)ov.addEventListener("click",function(ev){ if(ev.target===ov)closeSettings(); });
   document.addEventListener("keydown",function(ev){ var o=$("settingsOverlay"); if(ev.key==="Escape"&&o&&o.classList.contains("on"))closeSettings(); });
+})();
+
+/* ---------- «Cómo se juega» en ventana aparte: las reglas ya no ocupan un bloque
+   largo al final de la pantalla principal; se abren desde el botón junto al icono
+   de Ajustes, en la esquina superior derecha del lobby ---------- */
+function openRules(){
+  var o=$("rulesOverlay"); if(o)o.classList.add("on");
+  document.body.classList.add("settings-open");
+}
+function closeRules(){
+  var o=$("rulesOverlay"); if(o)o.classList.remove("on");
+  var s=$("settingsOverlay");
+  if(!s||!s.classList.contains("on"))document.body.classList.remove("settings-open");
+}
+(function(){
+  var b=$("btnOpenRules"); if(b)b.onclick=openRules;
+  var c=$("btnCloseRules"); if(c)c.onclick=closeRules;
+  var c2=$("btnCloseRules2"); if(c2)c2.onclick=closeRules;
+  var ov=$("rulesOverlay"); if(ov)ov.addEventListener("click",function(ev){ if(ev.target===ov)closeRules(); });
+  document.addEventListener("keydown",function(ev){ var o=$("rulesOverlay"); if(ev.key==="Escape"&&o&&o.classList.contains("on"))closeRules(); });
 })();
 
 function doCoin(choice){

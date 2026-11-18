@@ -222,7 +222,7 @@
         border:1px solid rgba(var(--th-rgb,56,80,126),.65); box-shadow:inset 0 0 0 3px rgba(var(--th-rgb,216,183,106),.16), inset 0 0 42px rgba(var(--th-rgb,55,200,255),.06), 0 10px 30px rgba(2,6,18,.35);
         border-radius:18px; padding:.38rem; color:#e8efff; }
       .boardwrap{ display:flex; gap:.7rem; align-items:flex-start; justify-content:center; }
-      .boardwrap .board{ flex:1 1 auto; min-width:0; max-width:860px; }
+      .boardwrap .board{ flex:1 1 auto; min-width:0; max-width:960px; }
       .cardinfo{ flex:0 0 190px; width:190px; position:sticky; top:.6rem; background:var(--panel);
         border:1px solid var(--line); border-color:rgba(var(--th-rgb,120,160,255),.38); box-shadow:0 0 22px rgba(var(--th-rgb,55,200,255),.13);
         border-radius:16px; padding:.6rem; color:var(--ink); }
@@ -250,21 +250,59 @@
         font-family:"Orbitron"; font-size:.5rem; letter-spacing:.06em; padding:.08rem .3rem; border-radius:5px; z-index:3; }
       .pilecount{ position:absolute; bottom:3px; right:3px; background:rgba(3,6,14,.88); color:#fff; border:1px solid rgba(255,255,255,.35);
         font-family:"Orbitron"; font-size:.62rem; padding:.08rem .38rem; border-radius:999px; z-index:3; }
-      /* Celda del cementerio con la mini-pila de DESTIERRO pegada a un costado,
-         como el icono ✕ del campo estilo VRAINS: el destierro vive junto al
-         cementerio y nunca ocupa el hueco de la ZONA DE CAMPO, que conserva
-         su sitio y su tamaño al otro extremo de la fila de monstruos. */
-      .pilecell{ position:relative; aspect-ratio:177/254; }
-      .pilecell>.pile{ width:100%; height:100%; }
-      .pile.miniban{ position:absolute; width:54%; aspect-ratio:177/254; z-index:6; }
-      .pile.miniban.mbl{ left:0; bottom:0; }
-      .pile.miniban.mbr{ right:0; top:0; }
-      .pile.miniban .card{ box-shadow:2px 2px 0 rgba(0,0,0,.5), 0 0 0 2px rgba(167,139,250,.55); }
-      .pile.miniban.empty{ background:rgba(8,10,24,.85); }
-      .miniban .mbx{ position:absolute; top:2px; left:2px; z-index:3; background:rgba(3,6,14,.88); color:#c4b5fd;
+      /* Contador GRANDE de la pila CEMENTERIO, como el «15» dorado de la
+         imagen de referencia: número grande y bien legible sobre la pila,
+         tanto vacío (0) como con cartas. Su especificidad (.pilecount.big)
+         gana a los ajustes compactos de las vistas anchas. */
+      .pilecount.big{ font-size:1.3rem; font-weight:900; line-height:1.1; padding:.1rem .5rem; bottom:4px; right:4px;
+        background:rgba(3,6,14,.92); border-color:rgba(255,255,255,.5); text-shadow:0 1px 3px rgba(0,0,0,.85); }
+      /* El cementerio vacío se dibuja como pila de dorso de carta (la misma
+         imagen de reverso que el MAZO), un poco atenuada para que se note
+         que aún no tiene cartas, con su etiqueta y su contador grande. */
+      .pile.gy .card.gyback{ opacity:.5; filter:saturate(.55); }
+      /* ZONA DE CAMPO: celda propia, del tamaño de una pila, en el extremo
+         de la fila de unidades opuesto al CEMENTERIO (rival a la derecha,
+         jugador a la izquierda), como en el tapete clásico: un marco con el
+         yin-yang al centro y su etiqueta. Es decorativa, sin clic. */
+      .pile.fieldzone{ display:flex; align-items:center; justify-content:center;
+        border:1.5px solid rgba(var(--th-rgb,216,183,106),.45); border-radius:8px; background:rgba(8,10,24,.85); }
+      .fieldzone .mfyy{ font-size:1.7rem; line-height:1; color:rgba(232,239,255,.9); }
+      /* DESTIERRO: pila HORIZONTAL (apaisada) en los costados de la banda
+         central, como el BANISHED del tapete clásico (rival a la izquierda,
+         jugador a la derecha): la carta de arriba se ve girada 90° dentro
+         del marco apaisado y la pila conserva su ✕, su contador y su toque,
+         que abre la hoja del destierro (boca arriba se ve su ficha; boca
+         abajo solo el reverso y la hoja muestra «???»). */
+      .pile.banh{ aspect-ratio:254/177; }
+      .pile.banh .card{ position:absolute; top:50%; left:50%; height:100%; width:auto; margin:0;
+        transform:translate(-50%,-50%) rotate(90deg);
+        box-shadow:2px 2px 0 rgba(0,0,0,.5), 0 0 0 2px rgba(167,139,250,.55); }
+      .banh .mbx{ position:absolute; top:2px; left:2px; z-index:3; background:rgba(3,6,14,.88); color:#c4b5fd;
         border:1px solid rgba(167,139,250,.65); border-radius:4px; font-family:"Orbitron"; font-size:.52rem; line-height:1.25; padding:0 .16rem; }
-      .pile.miniban.empty .mbx{ position:static; background:none; border:none; font-size:.85rem; color:rgba(196,181,253,.75); padding:0; }
-      .miniban .pilecount{ font-size:.5rem; padding:.02rem .26rem; bottom:2px; right:2px; }
+      .pile.banh.empty{ background:rgba(8,10,24,.85); }
+      .pile.banh.empty .mbx{ position:static; background:none; border:none; font-size:1.1rem; color:rgba(196,181,253,.85); padding:0; }
+      .banh .pilecount{ font-size:.55rem; padding:.04rem .3rem; }
+      /* Banda central del tapete: DESTIERRO — ZONA DE MONSTRUO EXTRA —
+         centro (texto de turno, píldora de fase, «Turno N» y botones) —
+         ZONA DE MONSTRUO EXTRA — DESTIERRO. Las zonas de monstruo extra
+         son de tamaño completo y solo se ven en las vistas anchas (ver el
+         bloque «vistas anchas» más abajo); en vertical la banda conserva
+         su acomodo compacto, sin zonas extra anchas. */
+      .midban{ display:flex; align-items:center; }
+      .midban .pile.banh{ width:108px; flex:0 0 auto; }
+      .midcenter{ display:flex; align-items:center; justify-content:center; gap:.5rem; flex-wrap:wrap; min-width:0; }
+      .midbtns{ display:inline-flex; align-items:center; gap:.35rem; flex-wrap:wrap; justify-content:center; }
+      .xzone{ display:none; }
+      /* Zona Extra ocupada o elegible: se ve aunque la vista sea estrecha
+         (en ancha ya se ve por el bloque «vistas anchas»). */
+      .xzone.filled{ display:block; flex:0 0 auto; height:100%; aspect-ratio:177/254; border-radius:6px; }
+      .xzone.filled .card{ width:100%; height:100%; }
+      .xzone.pickable{ display:block; flex:0 0 auto; height:100%; aspect-ratio:177/254; border-radius:6px;
+        border:2px dashed var(--gold); background:rgba(255,217,77,.14); cursor:pointer; animation:pulse 1s infinite; }
+      .xzone-pick{ display:flex; align-items:center; justify-content:center; height:100%; text-align:center;
+        font-family:"Orbitron"; font-size:.58rem; line-height:1.5; color:var(--gold); }
+      .zone.pickable{ outline:2px dashed var(--gold); outline-offset:-2px; cursor:pointer; animation:pulse 1s infinite; }
+      .zone.pickable .zonelab{ font-family:"Orbitron"; font-size:.55rem; color:var(--gold); text-align:center; }
       .midrow{ display:flex; gap:.5rem; align-items:center; justify-content:space-between; flex-wrap:wrap;
         padding:.2rem .15rem; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:.18rem 0; }
       .phase{ font-family:"Orbitron"; font-size:.9rem; color:var(--neon); }
@@ -313,7 +351,8 @@
       .zone>.card{ box-shadow:0 0 13px rgba(var(--th-rgb,55,200,255),.22), 0 3px 8px rgba(0,0,0,.4); }
       .handrow .card.tappable:hover{ transform:translateY(-9px); }
       @media (prefers-reduced-motion: reduce){ .handrow .card{ transition:none; } .handrow .card.tappable:hover{ transform:none; } }
-      @media (max-width:640px){ :root{ --card-w:19.5vw; } .zonerow{ gap:.14rem; } .card .stchip{ font-size:.42rem; left:.08rem; right:.08rem; bottom:.08rem; } }
+      @media (max-width:640px){ :root{ --card-w:19.5vw; } .zonerow{ gap:.14rem; } .card .stchip{ font-size:.42rem; left:.08rem; right:.08rem; bottom:.08rem; }
+        .pilecount.big{ font-size:.92rem; padding:.05rem .32rem; bottom:2px; right:2px; } #scr-duel .midban .pile.banh{ width:74px; } }
       .logbox{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:.5rem .8rem;
         max-height:84px; overflow:auto; font-size:.9rem; color:var(--ink-dim); margin-top:.4rem; }
       /* ---------- Nina, tu rival contra la IA: su globo de diálogo con su voz ---------- */
@@ -442,6 +481,7 @@
         .midrow{ padding:.09rem .06rem; margin:.09rem 0; gap:.3rem; }
         .phase{ font-size:.77rem; } .turntag{ font-size:.71rem; padding:.09rem .42rem; }
         .midrow button{ padding:.28rem .52rem; font-size:.87rem; }
+        .midban .pile.banh{ width:84px; }
         .pilelab{ font-size:.4rem; top:2px; left:2px; padding:.04rem .2rem; }
         .pilecount{ font-size:.5rem; bottom:2px; right:2px; padding:.04rem .26rem; }
         .pile.empty{ font-size:.4rem; }
@@ -576,6 +616,7 @@
         .midrow button{ padding:.24rem .46rem; font-size:.84rem; white-space:nowrap; min-height:0; }
         .pilelab{ font-size:.38rem; top:2px; left:2px; padding:.03rem .18rem; }
         .pilecount{ font-size:.48rem; bottom:2px; right:2px; padding:.03rem .24rem; }
+        .pilecount.big{ font-size:.98rem; padding:.05rem .34rem; bottom:2px; right:2px; }
         .pile.empty{ font-size:.38rem; }
         .counters{ font-size:.54rem; top:-6px; right:-4px; padding:.02rem .32rem; }
         .card .stchip{ font-size:.34rem; }
@@ -696,6 +737,33 @@
       .card.defpos.anim-destroy{ animation-name:animDestroyOutDef; }
       @media (prefers-reduced-motion: reduce){
         .anim-summon,.anim-draw,.anim-lunge-me,.anim-lunge-opp,.anim-hit,.anim-destroy,.anim-evolve,.anim-hurt,.anim-shake,.anim-win{ animation:none; }
+      }
+
+      /* ---------- Vistas anchas del duelo (escritorio y Android horizontal):
+         el tapete clásico PLANO y simétrico de la imagen de referencia ----------
+         - Sin perspectiva de mesa: nada de escalas por fila ni trapezoide;
+           las dos mitades del campo miden exactamente lo mismo y el tablero
+           conserva su tamaño total, con las 5 zonas de cada fila intactas.
+         - La banda central es una fila más del tapete, un poco más alta que
+           las filas de cartas para que el centro respire: DESTIERRO apaisado
+           del rival a la izquierda, una ZONA DE MONSTRUO EXTRA de tamaño
+           completo (como las zonas de las filas), el centro con la píldora
+           de fase MP1/BATALLA/MP2, el contador «Turno N» y el texto
+           «Turno de …» junto a los botones, la otra ZONA DE MONSTRUO EXTRA
+           y el DESTIERRO apaisado del jugador a la derecha. El contador
+           vive aquí, en el centro: ya no hay cuadro de turno abajo a la
+           derecha.
+         En celular vertical nada de esto aplica: la banda central conserva
+         su acomodo compacto, sin zonas de monstruo extra anchas. */
+      @media (max-width:1280px) and (max-height:700px) and (orientation:landscape) and (hover:none) and (pointer:coarse),
+             (min-width:900px) and (min-height:520px) and (hover:hover) and (pointer:fine){
+        #scr-duel .midrow{ flex:1.2 1 0; min-height:0; flex-wrap:nowrap; align-items:stretch; }
+        .xzone{ display:block; flex:0 0 auto; height:100%; aspect-ratio:177/254; border-radius:6px;
+          border:1.5px solid rgba(148,163,184,.55); background:linear-gradient(145deg, rgba(148,163,184,.32), rgba(71,85,105,.32));
+          box-shadow:inset 0 0 10px rgba(0,0,0,.35); }
+        .midban{ align-items:stretch; }
+        .midban .pile.banh{ height:100%; width:auto; }
+        .midcenter{ align-content:center; }
       }
     </style>
     <style>
@@ -1322,15 +1390,21 @@
           <div class="zonerow" id="oppBack"></div>
           <div class="zonerow" id="oppField"></div>
           <div class="midrow">
-            <span class="turntag" id="turnTag">Tu turno</span>
-            <span class="phase" id="phaseTag">Fase principal</span>
-            <span class="counts" id="midCounts"></span>
-            <span>
-              <button id="btnPhase" type="button" class="primary">A batalla ⚔️</button>
-              <button id="btnSound" type="button" class="ghost" title="Activar o silenciar los efectos de sonido">🔊 Sonido</button>
-              <button id="btnLog" type="button" class="ghost">Registro</button>
-              <button id="btnLeaveOnline" type="button" class="danger" style="display:none">Abandonar</button>
-            </span>
+            <div class="midban" id="banOpp" aria-label="Destierro del rival"></div>
+            <span class="xzone" id="xzoneOpp" aria-hidden="true"></span>
+            <div class="midcenter">
+              <span class="turntag" id="turnTag">Tu turno</span>
+              <span class="phase" id="phaseTag">Fase principal</span>
+              <span class="counts" id="midCounts"></span>
+              <span class="midbtns">
+                <button id="btnPhase" type="button" class="primary">A batalla ⚔️</button>
+                <button id="btnSound" type="button" class="ghost" title="Activar o silenciar los efectos de sonido">🔊 Sonido</button>
+                <button id="btnLog" type="button" class="ghost">Registro</button>
+                <button id="btnLeaveOnline" type="button" class="danger" style="display:none">Abandonar</button>
+              </span>
+            </div>
+            <span class="xzone" id="xzoneMe" aria-hidden="true"></span>
+            <div class="midban" id="banMe" aria-label="Tu destierro"></div>
           </div>
           <div class="zonerow" id="myField"></div>
           <div class="zonerow" id="myBack"></div>
@@ -1399,8 +1473,9 @@
           <li><b>Objetivo:</b> bajar la Integridad del rival de <b>8000</b> a 0. Si alguien no puede robar carta, pierde.</li>
           <li><b>Orden del turno:</b> robas, juegas tu <b>fase principal 1</b>, atacas en la <b>fase de batalla</b> y después tienes una <b>fase principal 2</b> para invocar, colocar, activar o evolucionar lo que te quede antes de terminar. Solo hay <b>1 invocación normal por turno</b> entre las dos fases principales.</li>
           <li><b>Mazos de 40 cartas</b> + Extra Deck de IA Superiores. Mano inicial de 5; robas 1 por turno (el primer jugador no roba ni ataca en su primer turno).</li>
-          <li><b>Invocación:</b> 1 normal por turno. Nivel 1–4 gratis, Nivel 5–6 sacrifica 1 unidad, Nivel 7+ sacrifica 2. Si colocas una unidad <b>boca abajo en Defensa</b>, su efecto de invocación <b>no se activa</b>; solo se activa si la invocas boca arriba en Ataque o si después la invocas por volteo a Ataque. Lo mismo vale para una invocación especial que llegue boca abajo en Defensa.</li>
-          <li><b>Evolución:</b> fusiona 2 de tus unidades en campo para invocar una IA Superior del Extra Deck. Solo en tus <b>fases principales</b> (1 o 2): en la fase de batalla <b>no</b> se puede fusionar, salvo que una carta lo diga expresamente en su texto.</li>
+          <li><b>Invocación:</b> 1 normal por turno. Nivel 1–4 gratis, Nivel 5–6 sacrifica 1 unidad, Nivel 7+ sacrifica 2. Al invocar por Sacrificio, eliges en qué zona de unidad libre la colocas (solo entre tus 5 zonas de unidad). Si colocas una unidad <b>boca abajo en Defensa</b>, su efecto de invocación <b>no se activa</b>; solo se activa si la invocas boca arriba en Ataque o si después la invocas por volteo a Ataque. Lo mismo vale para una invocación especial que llegue boca abajo en Defensa.</li>
+          <li><b>Evolución:</b> fusiona 2 de tus unidades en campo para invocar una IA Superior del Extra Deck. Al fusionar eliges dónde colocarla: una de tus 5 zonas de unidad o tu Zona Extra, si está libre. Solo en tus <b>fases principales</b> (1 o 2): en la fase de batalla <b>no</b> se puede fusionar, salvo que una carta lo diga expresamente en su texto.</li>
+          <li><b>Zona de Monstruo Extra:</b> cada jugador tiene <b>1 Zona Extra</b> en la banda central (la de su lado: izquierda la del rival, derecha la tuya). Solo se ocupa al <b>fusionar (Evolución)</b>: es la única invocación que puede ir ahí. La unidad de la Zona Extra ataca, es atacada y recibe efectos como cualquier unidad del campo; cuando sale del campo (destruida, devuelta o desterrada), la zona queda libre otra vez.</li>
           <li><b>Programas</b> se activan desde la mano o se <b>colocan boca abajo</b> en tu zona de Programas/Protocolos para activarlos en una de tus fases principales de un turno posterior; <b>Protocolos</b> se colocan boca abajo y se activan cuando el rival hace la jugada que los dispara.</li>
           <li><b>Información de cartas:</b> en pantallas anchas, pasa el ratón sobre cualquier carta del tablero, de las pilas o de tu mano para ver su imagen, ATK/DEF y efecto completo en el panel de la izquierda del tablero.</li>
           <li><b>Sonido:</b> el duelo tiene efectos de sonido (invocar, atacar, robar, activar…). Puedes silenciarlos con el botón 🔊 Sonido junto al botón de fase.</li>
@@ -2051,6 +2126,7 @@ document.addEventListener("click",function(e){ var t=e.target; if(t&&t.closest&&
 var ANIM={prev:null,marks:{}};
 function animSideOf(P){ try{ return (typeof viewer==="function"&&P===viewer())?"me":"opp"; }catch(e){ return "opp"; } }
 function animZoneCard(side,zone){
+  if(zone===5){var xz=document.querySelector(side==="me"?"#xzoneMe .card":"#xzoneOpp .card");return xz||null;}
   var row=$(side==="me"?"myField":"oppField"); if(!row)return null;
   var zones=row.querySelectorAll(".zone.mon"); if(!zones[zone])return null;
   return zones[zone].querySelector(".card");
@@ -2736,7 +2812,7 @@ function buildDeckList(def){var list=[];def.main.forEach(function(e){for(var i=0
 function buildDeck(key){return buildDeckList(deckDef(key));}
 function newPlayer(name,deckKey,isAI,customDef){
   var def=customDef||deckDef(deckKey);
-  return {name:name,deckKey:deckKey,ai:!!isAI,hp:8000,deck:buildDeckList(def),hand:[],field:[null,null,null,null,null],back:[null,null,null,null,null],gy:[],banished:[],extra:(def.extra||[]).slice(),normalUsed:false,compUsed:false,summonLocked:false,programLocked:false,spellLock:false,trollTaunt:false,haterLockTurn:0,protectUntil:0,protectArch:null,curseTurn:null,airdropTurn:0};
+  return {name:name,deckKey:deckKey,ai:!!isAI,hp:8000,deck:buildDeckList(def),hand:[],field:[null,null,null,null,null,null],back:[null,null,null,null,null] /* campo: zonas 0-4 + 5 = Zona de Monstruo Extra */,gy:[],banished:[],extra:(def.extra||[]).slice(),normalUsed:false,compUsed:false,summonLocked:false,programLocked:false,spellLock:false,trollTaunt:false,haterLockTurn:0,protectUntil:0,protectArch:null,curseTurn:null,airdropTurn:0};
 }
 function startDuel(){
   if(typeof closeBuilder==="function")closeBuilder();
@@ -2836,6 +2912,31 @@ function checkAlive(){return !G.over;}
 </script>
 <script>
 "use strict";
+/* ---------- Zona de Monstruo Extra ----------
+   El campo de cada jugador tiene 6 huecos: las zonas 0-4 son las 5 zonas
+   de unidad de su fila y la zona 5 es su Zona de Monstruo Extra (la de su
+   lado de la banda central). Solo las fusiones (Evoluciones) pueden
+   ocupar la Zona Extra; las invocaciones normales, por Sacrificio y todas
+   las especiales usan solo las zonas 0-4. Como la unidad extra vive en
+   P.field[5], el resto del motor (auras, conteos, objetivos, ataques,
+   efectos) la trata como una unidad normal del campo sin más cambios. */
+var XZONE=5;
+function firstFreeNormal(P){for(var i=0;i<5;i++)if(!P.field[i])return i;return -1;}
+function freeNormalZones(P){var out=[];for(var i=0;i<5;i++)if(!P.field[i])out.push(i);return out;}
+function freePlaceZones(P,allowExtra){var out=freeNormalZones(P);if(allowExtra&&!P.field[XZONE])out.push(XZONE);return out;}
+function autoPlaceZone(P,allowExtra){if(allowExtra&&!P.field[XZONE])return XZONE;return firstFreeNormal(P);}
+/* Selector de zona: el jugador toca la zona en el tablero (las zonas
+   libres brillan; en la Evolución también brilla la Zona Extra). Sin
+   cancelar: es parte obligatoria de la invocación, como hasta ahora. */
+function openZonePick(P,valid,label,cb){
+  G.zonePick={owner:P,valid:valid.slice(),cb:cb}; G.busy=true;
+  toast(label,4500); render();
+}
+function zonePickClick(zone){
+  var zp=G.zonePick; if(!zp)return;
+  if(zp.valid.indexOf(zone)<0){toast("Esa zona no está libre.");return;}
+  var cb=zp.cb; G.zonePick=null; G.busy=false; cb(zone);
+}
 /* ---------- rendering ---------- */
 function stars(lv){var s="";for(var i=0;i<lv;i++)s+="★";return s;}
 function cardTile(P,u,side,zone){
@@ -2879,30 +2980,36 @@ function pileHTML(P,kind,side){
     return "<div class='pile extra"+(side==="me"?" tappable":"")+"'"+clickE+"><div class='card cardback'><img class='art' src='"+CARD_BACK+"' alt='Reverso de carta DUELO NEURAL'></div><span class='pilelab'>EXTRA</span><span class='pilecount'>"+P.extra.length+"</span></div>";
   }
   if(kind==="gy"){
-    var gyPile;
-    if(!P.gy.length)gyPile="<div class='pile empty tappable' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><span>CEMENTERIO<br>vacío</span></div>";
-    else{
-      var top=P.gy[P.gy.length-1];
-      gyPile="<div class='pile tappable' data-hov='"+top+"' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><div class='card'><img class='art' src='"+cardImg(top)+"' alt='Cementerio: "+esc(CARDS[top].n)+"' loading='lazy'></div><span class='pilelab'>CEMENTERIO</span><span class='pilecount'>"+P.gy.length+"</span></div>";
-    }
-    /* La pila de destierro va como mini-pila pegada a un costado del cementerio
-       (el icono ✕ del campo estilo VRAINS), nunca en el hueco de la zona de campo. */
-    return "<div class='pilecell'>"+gyPile+pileHTML(P,"banished",side)+"</div>";
+    /* El CEMENTERIO va solo, en el extremo de la fila de UNIDADES (rival a
+       la izquierda, jugador a la derecha), como en el tapete clásico.
+       Se ve siempre como una pila de cartas con su contador GRANDE, como el
+       MAZO: vacío es una pila de dorso de carta (el mismo reverso que el
+       MAZO, atenuado) con la etiqueta y el 0 grande; con cartas se ve la de
+       arriba (el hover la muestra en el panel) y el contador grande se
+       mantiene. El clic sigue abriendo la hoja del cementerio. */
+    if(!P.gy.length)return "<div class='pile gy tappable' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><div class='card cardback gyback'><img class='art' src='"+CARD_BACK+"' alt='Reverso de carta DUELO NEURAL'></div><span class='pilelab'>CEMENTERIO</span><span class='pilecount big'>0</span></div>";
+    var top=P.gy[P.gy.length-1];
+    return "<div class='pile gy tappable' data-hov='"+top+"' role='button' data-call='pileClick(\"gy\",\""+side+"\")'><div class='card'><img class='art' src='"+cardImg(top)+"' alt='Cementerio: "+esc(CARDS[top].n)+"' loading='lazy'></div><span class='pilelab'>CEMENTERIO</span><span class='pilecount big'>"+P.gy.length+"</span></div>";
   }
   if(kind==="banished"){
-    /* Mini-pila de destierro: vive dentro de la celda del cementerio, en su
-       esquina exterior (abajo a la izquierda la del rival, arriba a la derecha
-       la del jugador), con su contador y su toque que abre la hoja del destierro. */
-    var mbCls=side==="me"?"mbr":"mbl";
-    if(!P.banished.length)return "<div class='pile miniban "+mbCls+" empty tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><span class='mbx'>✕</span></div>";
+    /* Pila de DESTIERRO horizontal (apaisada) de la banda central, como el
+       BANISHED del tapete clásico (rival a la izquierda, jugador a la
+       derecha): la carta de arriba se ve girada 90° dentro del marco
+       apaisado (la gira el CSS de .banh), con su ✕, su contador y su
+       toque, que abre la hoja del destierro (boca arriba se ve su ficha;
+       boca abajo solo el reverso y la hoja muestra «???»). */
+    if(!P.banished.length)return "<div class='pile banh empty tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><span class='mbx'>✕</span><span class='pilecount'>0</span></div>";
     var bt=P.banished[P.banished.length-1];
-    if(bt.fd)return "<div class='pile miniban "+mbCls+" tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><div class='card cardback'><img class='art' src='"+CARD_BACK+"' alt='Destierro: carta boca abajo'></div><span class='mbx'>✕</span><span class='pilecount'>"+P.banished.length+"</span></div>";
-    return "<div class='pile miniban "+mbCls+" tappable' data-hov='"+bt.id+"' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><div class='card'><img class='art' src='"+cardImg(bt.id)+"' alt='Destierro: "+esc(CARDS[bt.id].n)+"' loading='lazy'></div><span class='mbx'>✕</span><span class='pilecount'>"+P.banished.length+"</span></div>";
+    if(bt.fd)return "<div class='pile banh tappable' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><div class='card cardback'><img class='art' src='"+CARD_BACK+"' alt='Destierro: carta boca abajo'></div><span class='mbx'>✕</span><span class='pilelab'>DESTIERRO</span><span class='pilecount'>"+P.banished.length+"</span></div>";
+    return "<div class='pile banh tappable' data-hov='"+bt.id+"' role='button' data-call='pileClick(\"banished\",\""+side+"\")' title='Destierro'><div class='card'><img class='art' src='"+cardImg(bt.id)+"' alt='Destierro: "+esc(CARDS[bt.id].n)+"' loading='lazy'></div><span class='mbx'>✕</span><span class='pilelab'>DESTIERRO</span><span class='pilecount'>"+P.banished.length+"</span></div>";
   }
   if(kind==="field"){
-    /* Hueco decorativo de la ZONA DE CAMPO: su sitio original es el extremo
-       exterior de la fila de monstruos, con el mismo tamaño de siempre. */
-    return "<div class='pile empty'><span>ZONA<br>DE CAMPO</span></div>";
+    /* ZONA DE CAMPO sola, en su propia celda del tamaño de una pila, en el
+       extremo de la fila de unidades opuesto al CEMENTERIO (rival a la
+       derecha, jugador a la izquierda), como en el tapete clásico: un
+       marco con el yin-yang al centro y su etiqueta. Es decorativa, sin
+       clic; el DESTIERRO ya no vive aquí, sino en la banda central. */
+    return "<div class='pile fieldzone' title='Zona de campo'><span class='mfyy'>☯</span><span class='pilelab'>CAMPO</span></div>";
   }
   return "<div class='pile empty'><span>ZONA<br>DE CAMPO</span></div>";
 }
@@ -3010,17 +3117,51 @@ function render(){
   $("myHpFill").className="hpfill"+(me.hp<=2000?" low":""); $("oppHpFill").className="hpfill"+(op.hp<=2000?" low":"");
   $("myCounts").textContent="Mazo "+me.deck.length+" · Cementerio "+me.gy.length+" · Destierro "+me.banished.length+" · Extra "+me.extra.length;
   $("oppCounts").textContent="Mano "+op.hand.length+" · Mazo "+op.deck.length+" · Cementerio "+op.gy.length+" · Destierro "+op.banished.length+" · Extra "+op.extra.length+(spyOn?" · 👁️ Mano visible (Spyware)":"");
-  $("midCounts").textContent="Turno "+G.turnNo;
+  $("midCounts").textContent="Turno "+G.turnNo; /* el contador vive en el centro de la banda central, junto a la píldora de fase */
   var myTurn=(viewer()===cur());
   $("turnTag").textContent=myTurn?"Turno de "+cur().name:"Turno de "+cur().name;
   $("turnTag").className="turntag"+(myTurn?"":" opp");
   $("phaseTag").textContent=G.phase==="main"?"MP1":G.phase==="battle"?"BATALLA":"MP2";
   $("btnPhase").textContent=G.phase==="main"?"A batalla ⚔️":G.phase==="battle"?"A fase principal 2 ▶️":"Terminar turno ⏭️";
   $("btnPhase").disabled=!myTurn||G.busy||G.over||cur().ai;
+  /* Acomodo del tapete clásico (plano y simétrico), como la imagen de
+     referencia: cada fila tiene pila + 5 zonas + pila. Rival arriba:
+     MAZO + Programas/Protocolos + EXTRA y CEMENTERIO + unidades + ZONA
+     DE CAMPO. Jugador abajo, en espejo: EXTRA + Programas/Protocolos +
+     MAZO y ZONA DE CAMPO + unidades + CEMENTERIO. Los DESTIERROS van
+     apaisados en los costados de la banda central. */
   $("oppBack").innerHTML=pileHTML(op,"deck","opp")+op.back.map(function(b,i){return "<div class='zone backz'>"+backTile(op,b,"opp",i)+"</div>";}).join("")+pileHTML(op,"extra","opp");
-  $("oppField").innerHTML=pileHTML(op,"gy","opp")+op.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(op,u,"opp",i):"")+"</div>";}).join("")+pileHTML(op,"field","opp");
-  $("myField").innerHTML=pileHTML(me,"field","me")+me.field.map(function(u,i){return "<div class='zone mon'>"+(u?cardTile(me,u,"me",i):"")+"</div>";}).join("")+pileHTML(me,"gy","me");
+  $("oppField").innerHTML=pileHTML(op,"gy","opp")+op.field.slice(0,5).map(function(u,i){var pk=!!(G.zonePick&&G.zonePick.owner===op&&G.zonePick.valid.indexOf(i)>=0);return "<div class='zone mon"+(pk?" pickable":"")+"'"+(pk?" role='button' data-call='zonePickClick("+i+")'":"")+">"+(u?cardTile(op,u,"opp",i):(pk?"<span class='zonelab'>Zona "+(i+1)+"</span>":""))+"</div>";}).join("")+pileHTML(op,"field","opp");
+  $("myField").innerHTML=pileHTML(me,"field","me")+me.field.slice(0,5).map(function(u,i){var pk=!!(G.zonePick&&G.zonePick.owner===me&&G.zonePick.valid.indexOf(i)>=0);return "<div class='zone mon"+(pk?" pickable":"")+"'"+(pk?" role='button' data-call='zonePickClick("+i+")'":"")+">"+(u?cardTile(me,u,"me",i):(pk?"<span class='zonelab'>Zona "+(i+1)+"</span>":""))+"</div>";}).join("")+pileHTML(me,"gy","me");
   $("myBack").innerHTML=pileHTML(me,"extra","me")+me.back.map(function(b,i){return "<div class='zone backz'>"+backTile(me,b,"me",i)+"</div>";}).join("")+pileHTML(me,"deck","me");
+  $("banOpp").innerHTML=pileHTML(op,"banished","opp");
+  $("banMe").innerHTML=pileHTML(me,"banished","me");
+  /* Zonas de Monstruo Extra de la banda central (índice 5 del campo):
+     izquierda = rival, derecha = jugador. Vacías se ven como el hueco
+     decorativo de siempre; ocupadas muestran la carta como una zona
+     normal (clicable, atacable, objetivo de efectos). */
+  (function(){
+    function xhtml(P,side){
+      var u=P.field[XZONE];
+      if(u)return cardTile(P,u,side,XZONE);
+      if(G.zonePick&&G.zonePick.owner===P&&G.zonePick.valid.indexOf(XZONE)>=0)
+        return "<div class='xzone-pick' role='button' aria-label='Zona Extra' data-call='zonePickClick("+XZONE+")'>✦<br>ZONA<br>EXTRA</div>";
+      return "";
+    }
+    var xo=$("xzoneOpp"),xm=$("xzoneMe");
+    /* El aria-hidden del HTML solo vale para el hueco vacío y decorativo:
+       ocupada o elegible, la Zona Extra es contenido interactivo (la carta
+       se puede tocar y, al fusionar, la zona se toca para elegirla) y debe
+       quedar visible para lectores de pantalla y controles táctiles. */
+    function xstate(el,P){
+      var active=!!P.field[XZONE]||!!(G.zonePick&&G.zonePick.owner===P&&G.zonePick.valid.indexOf(XZONE)>=0);
+      el.classList.toggle("filled",!!P.field[XZONE]);
+      el.classList.toggle("pickable",!!(G.zonePick&&G.zonePick.owner===P&&G.zonePick.valid.indexOf(XZONE)>=0));
+      if(active)el.removeAttribute("aria-hidden"); else el.setAttribute("aria-hidden","true");
+    }
+    if(xo){xo.innerHTML=xhtml(op,"opp");xstate(xo,op);}
+    if(xm){xm.innerHTML=xhtml(me,"me");xstate(xm,me);}
+  })();
   $("myHand").innerHTML=me.hand.map(function(id,i){return handTile(me,id,i);}).join("");
   $("oppHand").className="opphand"+(seeOppHand?" revealed":"");
   $("oppHand").setAttribute("aria-label",seeOppHand?(spyOn?"Mano del rival (visible por Spyware Ojo Oculto)":"Mano de la IA 2 (visible en la simulación)"):"Mano del rival (boca abajo)");
@@ -3139,14 +3280,14 @@ function endTurn(){
   var P=cur();
   /* corrupción: 3+ contadores = destruida al final del turno */
   G.players.forEach(function(X){
-    for(var i=0;i<5;i++){var u=X.field[i];if(u&&u.counters>=3){log("☣ "+CARDS[u.id].n+" tenía 3 contadores de Corrupción y se destruye.");destroyUnit(X,i,false);}}
+    for(var i=0;i<6;i++){var u=X.field[i];if(u&&u.counters>=3){log("☣ "+CARDS[u.id].n+" tenía 3 contadores de Corrupción y se destruye.");destroyUnit(X,i,false);}}
   });
   G.players.forEach(function(X){X.field.forEach(function(u){if(u){u.temp=0;u.defCopy=null;u.copiedId=null;}});});
   /* La Cinta Maldita: a los 7 turnos de la maldición, el jugador maldito pierde todo su campo */
   G.players.forEach(function(X){
     if(X.curseTurn!=null&&G.turnNo-X.curseTurn>=7){
       X.curseTurn=null;
-      for(var ci=4;ci>=0;ci--){if(X.field[ci])destroyUnit(X,ci,false);}
+      for(var ci=5;ci>=0;ci--){if(X.field[ci])destroyUnit(X,ci,false);}
       for(var cbk=4;cbk>=0;cbk--){var bb2=X.back[cbk];if(bb2){X.back[cbk]=null;X.gy.push(bb2.id);triggerEco(X,CARDS[bb2.id]);}}
       log("📼💥 ¡La maldición de La Cinta Maldita se cumple! Todas las cartas que "+X.name+" tenía en el campo se destruyen.");
     }
@@ -3155,7 +3296,7 @@ function endTurn(){
   for(var sz=0;sz<5;sz++){var su=P.field[sz];
     if(su&&su.stolenFrom!=null&&!su.stolenPerm){
       var owner=G.players[su.stolenFrom]; P.field[sz]=null;
-      var oz=owner.field.indexOf(null);
+      var oz=firstFreeNormal(owner);
       if(oz>=0){su.stolenFrom=null;su.atkUsed=true;owner.field[oz]=su;log("↩️ "+CARDS[su.id].n+" vuelve con "+owner.name+" (fin del Hackeo).");}
       else {owner.gy.push(su.id);triggerEco(owner,CARDS[su.id]);log("↩️ "+CARDS[su.id].n+" no tiene espacio al volver y va al cementerio de "+owner.name+".");}
     }
@@ -3202,7 +3343,7 @@ function summonNamedFromDeck(P,name,n,pos){
   var put=0, placed=[];
   for(var i=P.deck.length-1;i>=0&&put<n;i--){
     if(CARDS[P.deck[i]]&&CARDS[P.deck[i]].n===name){
-      var z=P.field.indexOf(null); if(z<0)break;
+      var z=firstFreeNormal(P); if(z<0)break;
       var id=P.deck.splice(i,1)[0]; var nu=mkUnit(id,pos||"atk"); P.field[z]=nu; put++;
       placed.push([nu,z]);
       log("🐣 "+P.name+" invoca de modo especial "+CARDS[id].n+" desde su mazo.");
@@ -3215,7 +3356,7 @@ function summonNamedFromDeck(P,name,n,pos){
 function summonArchFromDeck(P,a,cap,n,pos){
   var put=0, placed=[];
   while(put<n){
-    var z=P.field.indexOf(null); if(z<0)break;
+    var z=firstFreeNormal(P); if(z<0)break;
     var best=-1,bestAtk=-1;
     P.deck.forEach(function(id,i){var cc=CARDS[id];if(cc&&cc.t==="U"&&cc.a===a&&(cc.lv||99)<=cap&&cc.atk>bestAtk){bestAtk=cc.atk;best=i;}});
     if(best<0)break;
@@ -3228,7 +3369,7 @@ function summonArchFromDeck(P,a,cap,n,pos){
   return put;
 }
 function reviveFromGY(P,a,cap,pos,name){
-  var z=P.field.indexOf(null); if(z<0)return null;
+  var z=firstFreeNormal(P); if(z<0)return null;
   var gi=-1,bestAtk=-1;
   P.gy.forEach(function(id,i){var cc=CARDS[id];if(cc&&cc.t==="U"&&cc.a===a&&(cc.lv||99)<=cap&&(!name||cc.n===name)&&cc.atk>bestAtk){bestAtk=cc.atk;gi=i;}});
   if(gi<0)return null;
@@ -3244,7 +3385,7 @@ function bounceUnit(O,zone,toDeckTop){
   else {O.hand.push(u.id);log("↩️ "+CARDS[u.id].n+" vuelve a la mano de "+O.name+".");}
 }
 function stealUnit(P,O,zone,perm){
-  var z=P.field.indexOf(null); if(z<0)return false;
+  var z=firstFreeNormal(P); if(z<0)return false;
   var u=O.field[zone]; if(!u)return false;
   O.field[zone]=null; u.stolenFrom=G.players.indexOf(O); u.stolenPerm=!!perm; u.atkUsed=false;
   P.field[z]=u;
@@ -3316,8 +3457,8 @@ function destroyUnit(P,zone,byBattle){
   if(c.fx==="bateria")damage(G.players[1-G.players.indexOf(P)],500,"Batería Inestable explotó");
   if(c.fx==="condensador")heal(P,500);
   if(c.fx==="adware"){
-    var free=P.field.filter(function(x){return !x;}).length, put=0;
-    for(var i=P.deck.length-1;i>=0&&put<2&&put<free;i--){ if(P.deck[i]==="adware"){ P.deck.splice(i,1); var z=P.field.indexOf(null); P.field[z]={uid:uid(),id:"adware",pos:"atk",counters:0,perm:0,temp:0,atkUsed:false,fxUsed:false,justTurn:G.turnNo}; put++; } }
+    var free=freeNormalZones(P).length, put=0;
+    for(var i=P.deck.length-1;i>=0&&put<2&&put<free;i--){ if(P.deck[i]==="adware"){ P.deck.splice(i,1); var z=firstFreeNormal(P); if(z<0)break; P.field[z]={uid:uid(),id:"adware",pos:"atk",counters:0,perm:0,temp:0,atkUsed:false,fxUsed:false,justTurn:G.turnNo}; put++; } }
     if(put)log("🐛 Adware Plaga Emergente se multiplica: "+put+" copia(s) llegan del mazo.");
     shuffle(P.deck);
   }
@@ -3354,7 +3495,7 @@ function destroyUnit(P,zone,byBattle){
   if(u.id==="c900001305"){var sz2=-1,sa=-1;OO.field.forEach(function(x,i){if(x&&effAtk(OO,x)>sa){sa=effAtk(OO,x);sz2=i;}});if(sz2>=0)stealUnit(owner,OO,sz2,false);}
   triggerEco(owner,c);
   if(c.fx2==="respawn"){
-    var rz=owner.field.indexOf(null);
+    var rz=firstFreeNormal(owner);
     if(rz>=0){var nu2=mkUnit(u.id,"atk");nu2.perm=u.perm-500;nu2.respawnN=(u.respawnN||0)+1;owner.field[rz]=nu2;log("🎮 ¡Respawn! "+c.n+" vuelve al campo de "+owner.name+" con 500 ATK menos (ATK "+effAtk(owner,nu2)+").");fireSummonFx(owner,nu2,rz);}
   }
   render(); return u;
@@ -3375,7 +3516,7 @@ function servidorPick(pos){
    mantienen la resolución automática de siempre. */
 function canChoose(P){ return !!P&&!P.ai&&P===viewer()&&!G.over; }
 function doReviveAt(P,gi,pos){
-  var z=P.field.indexOf(null); if(z<0)return null;
+  var z=firstFreeNormal(P); if(z<0)return null;
   var id=P.gy.splice(gi,1)[0]; var nu=mkUnit(id,pos||"atk"); P.field[z]=nu;
   log("👻 "+P.name+" invoca de modo especial "+CARDS[id].n+" desde su cementerio.");
   return nu;
@@ -3386,7 +3527,7 @@ function reviveCandidates(P,a,cap,name){
 function chooseRevive(P,a,cap,pos,name,done){
   done=done||function(){};
   var cands=reviveCandidates(P,a,cap,name);
-  if(!cands.length||P.field.indexOf(null)<0){done(null);return;}
+  if(!cands.length||firstFreeNormal(P)<0){done(null);return;}
   if(!canChoose(P)||cands.length===1){done(reviveFromGY(P,a,cap,pos,name));return;}
   G.pendingChoice={owner:P,cands:cands,pos:pos,done:done};
   showSheet("<h2>🪦 Elige qué invocar de tu cementerio</h2><p>Se invocará de modo especial en posición de "+(pos==="def"?"Defensa":"Ataque")+".</p><div class='picklist'>"+cands.map(function(gi,k){return pickBtn(P.gy[gi],"choiceRevivePick("+k+")");}).join("")+"</div>",true);
@@ -3465,9 +3606,9 @@ function foeDiscardChoice(O,why,done){
 function chooseSummonFromHand(P,filterFn,label,done){
   done=done||function(){};
   var cands=[]; P.hand.forEach(function(h,i){if(filterFn(h,i))cands.push(i);});
-  if(!cands.length||P.field.indexOf(null)<0){done(null);return;}
+  if(!cands.length||firstFreeNormal(P)<0){done(null);return;}
   if(!canChoose(P)||cands.length===1){
-    var hid=P.hand.splice(cands[0],1)[0]; var hz=P.field.indexOf(null); var nu=mkUnit(hid,"atk"); P.field[hz]=nu;
+    var hid=P.hand.splice(cands[0],1)[0]; var hz=firstFreeNormal(P); var nu=mkUnit(hid,"atk"); P.field[hz]=nu;
     log("🐣 "+P.name+" invoca de modo especial "+CARDS[hid].n+" desde su mano.");
     fireSummonFx(P,nu,hz);
     done(nu); return;
@@ -3479,8 +3620,8 @@ function choiceHandSummonPick(k){
   var pend=G.pendingChoice; if(!pend||!pend.done)return;
   G.pendingChoice=null;
   var P=pend.owner;
-  if(P.field.indexOf(null)<0){closeSheet();render();pend.done(null);return;}
-  var hid=P.hand.splice(pend.cands[k],1)[0]; var hz=P.field.indexOf(null); var nu=mkUnit(hid,"atk"); P.field[hz]=nu;
+  if(firstFreeNormal(P)<0){closeSheet();render();pend.done(null);return;}
+  var hid=P.hand.splice(pend.cands[k],1)[0]; var hz=firstFreeNormal(P); var nu=mkUnit(hid,"atk"); P.field[hz]=nu;
   log("🐣 "+P.name+" invoca de modo especial "+CARDS[hid].n+" desde su mano.");
   closeSheet(); render(); fireSummonFx(P,nu,hz); pend.done(nu);
 }
@@ -3559,7 +3700,7 @@ function openDetail(c,u,id){
 "use strict";
 /* ---------- hand & summoning ---------- */
 function handClick(idx){
-  if(!G||G.over||G.busy||G.targeting)return;
+  if(!G||G.over||G.busy||G.targeting||G.zonePick)return;
   var me=viewer(); if(me!==cur()||me.ai)return;
   var id=me.hand[idx], c=CARDS[id];
   var btns="";
@@ -3568,7 +3709,7 @@ function handClick(idx){
     if(!me.normalUsed&&isMainPhase()&&!me.summonLocked){
       var need=c.lv>=7?2:c.lv>=5?1:0;
       var have=me.field.filter(Boolean).length;
-      if(have>=need&&me.field.indexOf(null)>=0||(need>0&&have>=need))
+      if(have>=need&&firstFreeNormal(me)>=0||(need>0&&have>=need))
         btns+="<button class='primary' id='actSummon'>Invocar en Ataque"+(need?" (sacrifica "+need+")":"")+"</button> <button id='actSet'>Colocar en Defensa</button> <p class='note'>Al colocarla en Defensa queda boca abajo y su efecto de invocación no se activa.</p>";
       else if(need>0&&have<need)uNote="<p class='note'>Para invocarla necesitas sacrificar "+need+" unidad(es) y solo tienes "+have+" en tu campo.</p>";
       else uNote="<p class='note'>No tienes una zona de unidad libre para invocarla.</p>";
@@ -3631,18 +3772,28 @@ function beginSummon(handIdx,pos){
 }
 function doSummon(P,handIdx,pos,tributes){
   var id=P.hand[handIdx], c=CARDS[id];
+  /* Sin zonas normales libres no hay invocación: si se sacrifica solo la
+     Zona Extra (con las 5 zonas llenas) no queda zona normal libre y la
+     invocación por Sacrificio no puede usar la Zona Extra (solo fusiones). */
+  var freeAfter=freeNormalZones(P).length+tributes.filter(function(z){return z<5;}).length;
+  if(freeAfter<=0){toast("No tienes zonas de unidad libres para invocar a "+c.n+".",3000);render();return;}
   tributes.slice().sort(function(a,b){return b-a;}).forEach(function(z){var u=P.field[z];P.field[z]=null;P.gy.push(u.id);log("⚰️ "+P.name+" sacrifica "+CARDS[u.id].n+".");triggerEco(P,CARDS[u.id]);});
   P.hand.splice(handIdx,1);
-  var zone=P.field.indexOf(null);
   var unit={uid:uid(),id:id,pos:pos,counters:0,perm:0,temp:0,atkUsed:false,fxUsed:false,justTurn:G.turnNo,posChanged:false,faceDown:(pos==="def")};
-  P.field[zone]=unit; P.normalUsed=true; sfx(pos==="def"?"set":"summon");
-  if(pos==="def")log("🂠 "+P.name+" coloca "+c.n+" boca abajo en Defensa (DEF "+c.def+"). Su efecto de invocación no se activa al estar boca abajo.");
-  else log("✨ "+P.name+" invoca "+c.n+" (Ataque ATK "+c.atk+").");
-  render();
-  respondToSummon(P,unit,zone,function(){
-    if(P.field[zone]===unit&&!unit.faceDown&&!fxBlocked(P,unit))onSummonFx(P,unit,zone);
+  function placeSummon(zone){
+    P.field[zone]=unit; P.normalUsed=true; sfx(pos==="def"?"set":"summon");
+    if(pos==="def")log("🂠 "+P.name+" coloca "+c.n+" boca abajo en Defensa (DEF "+c.def+"). Su efecto de invocación no se activa al estar boca abajo.");
+    else log("✨ "+P.name+" invoca "+c.n+" (Ataque ATK "+c.atk+").");
     render();
-  });
+    respondToSummon(P,unit,zone,function(){
+      if(P.field[zone]===unit&&!unit.faceDown&&!fxBlocked(P,unit))onSummonFx(P,unit,zone);
+      render();
+    });
+  }
+  if(P.ai||!canChoose(P)){placeSummon(firstFreeNormal(P));return;}
+  /* Invocación normal o por Sacrificio: el jugador elige la zona solo
+     entre sus 5 zonas de unidad libres; la Zona Extra es solo para fusiones. */
+  openZonePick(P,freeNormalZones(P),"Toca una zona libre de tu campo para colocar a "+c.n+" ("+(pos==="def"?"boca abajo en Defensa":"en Ataque")+").",placeSummon);
 }
 function onSummonFx(P,unit,zone){
   if(!unit||unit.faceDown)return; /* boca abajo: ningún efecto de invocación se dispara */
@@ -3699,7 +3850,7 @@ function onSummonFx(P,unit,zone){
       if(!summonNamedFromDeck(P,c.sName,1,"atk")){
         if(!reviveFromGY(P,c.a,99,"atk",c.sName)){
           var hi=P.hand.findIndex(function(h){return CARDS[h].n===c.sName;});
-          if(hi>=0&&P.field.indexOf(null)>=0){var hid=P.hand.splice(hi,1)[0];var hz=P.field.indexOf(null);P.field[hz]=mkUnit(hid,"atk");log("🐣 "+P.name+" invoca de modo especial "+CARDS[hid].n+" desde su mano.");}
+          if(hi>=0&&firstFreeNormal(P)>=0){var hid=P.hand.splice(hi,1)[0];var hz=firstFreeNormal(P);P.field[hz]=mkUnit(hid,"atk");log("🐣 "+P.name+" invoca de modo especial "+CARDS[hid].n+" desde su mano.");}
         }
       }
       break;
@@ -3750,7 +3901,7 @@ function onSummonFx(P,unit,zone){
     case "choiceSearchSummon": /* Onda de Probabilidad: buscar O invocar Cuántico Nv. 2 o menor */
       var csSearch=function(){searchDeck(P,function(x){return CARDS[x].a===c.a;},"Elige 1 carta "+ARCH[c.a].name+" de tu mazo");};
       var csSummon=function(){summonArchFromDeck(P,c.a,c.cap||2,1,"atk");render();};
-      if(P.ai){ if(P.field.indexOf(null)>=0&&countArchUnits(P,c.a)<3&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a===c.a&&(CARDS[x].lv||99)<=(c.cap||2);}))csSummon(); else csSearch(); }
+      if(P.ai){ if(firstFreeNormal(P)>=0&&countArchUnits(P,c.a)<3&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a===c.a&&(CARDS[x].lv||99)<=(c.cap||2);}))csSummon(); else csSearch(); }
       else{ G._choice={main:csSearch,alt:csSummon};
         showSheet("<h2>🌀 "+esc(c.n)+"</h2><p>Superposición: elige 1 de los 2 efectos.</p><button class='primary' id='chA'>Añadir 1 carta Cuántico de tu mazo a tu mano</button> <button id='chB'>Invocar de modo especial 1 Cuántico de Nivel "+(c.cap||2)+" o menor desde tu mazo</button>",true);
         sheetBtn("chA",function(){var f=G._choice.main;G._choice=null;closeSheet();f();});
@@ -3763,13 +3914,13 @@ function onSummonFx(P,unit,zone){
     case "freezeAllSummon": O.field.forEach(function(x){if(x)freezeUnit(x);}); log("🧊 "+c.n+" congela a todas las unidades de "+O.name+"."); break;
     case "bounceSummon": bounceTargets(P,c.amt||1,false); break;
     case "bounceDrawSummon": bounceTargets(P,1,false); drawCard(P); break;
-    case "bounceAllSummon": for(var ba=4;ba>=0;ba--){if(O.field[ba])bounceUnit(O,ba,false);} break;
+    case "bounceAllSummon": for(var ba=5;ba>=0;ba--){if(O.field[ba])bounceUnit(O,ba,false);} break;
     case "destroyOneSummon": destroyOppTarget(P,function(){return true;},"Elige la carta rival a destruir con "+c.n); break;
     case "destroyAllBelowAtkSummon":
-      for(var db2=4;db2>=0;db2--){var du=O.field[db2];if(du&&effAtk(O,du)<c.atk)destroyUnit(O,db2,false);}
+      for(var db2=5;db2>=0;db2--){var du=O.field[db2];if(du&&effAtk(O,du)<c.atk)destroyUnit(O,db2,false);}
       log("💥 "+c.n+" destruye las unidades rivales con ATK menor que ella."); break;
     case "destroyAllLowLevelSummon":
-      for(var dl=4;dl>=0;dl--){var du2=O.field[dl];if(du2&&(CARDS[du2.id].lv||99)<=(c.cap||4))destroyUnit(O,dl,false);}
+      for(var dl=5;dl>=0;dl--){var du2=O.field[dl];if(du2&&(CARDS[du2.id].lv||99)<=(c.cap||4))destroyUnit(O,dl,false);}
       log("💥 "+c.n+" destruye las unidades rivales de Nivel "+(c.cap||4)+" o menor."); break;
     case "destroyCardsPerAllySummon":
       var ndc=countArchUnits(P,c.a);
@@ -3824,7 +3975,7 @@ function onSummonFx(P,unit,zone){
       log("🗑️ "+c.n+": "+O.name+" manda "+(c.amt||3)+" cartas de su mazo al cementerio."); break;
     case "programLockSummon": O.programLocked=true; log("⏳ "+c.n+": "+O.name+" no podrá activar Programas en su próximo turno."); break;
     case "controlAllSummon":
-      for(var ca2=4;ca2>=0;ca2--){if(O.field[ca2]&&P.field.indexOf(null)>=0)stealUnit(P,O,ca2,false);}
+      for(var ca2=5;ca2>=0;ca2--){if(O.field[ca2]&&firstFreeNormal(P)>=0)stealUnit(P,O,ca2,false);}
       break;
     case "controlPermSummon":
       var pz=-1,pa=-1; O.field.forEach(function(x,i){if(x&&effAtk(O,x)>pa){pa=effAtk(O,x);pz=i;}});
@@ -3846,7 +3997,7 @@ function onSummonFx(P,unit,zone){
     if(sz3>=0){O.field[sz3].silencedTurn=G.turnNo;log("📺 Interferencia: "+CARDS[O.field[sz3].id].n+" no puede activar efectos este turno.");}
   }
   if(c.fx2==="drawSummon"){drawCard(P);log("🃏 "+c.n+": "+P.name+" roba 1 carta.");}
-  if(c.fx2==="hackeo"&&O.field.some(Boolean)&&P.field.indexOf(null)>=0){
+  if(c.fx2==="hackeo"&&O.field.some(Boolean)&&firstFreeNormal(P)>=0){
     if(P.ai){var hz2=-1,ha=-1;O.field.forEach(function(x,i){if(x&&effAtk(O,x)>ha){ha=effAtk(O,x);hz2=i;}});if(hz2>=0)stealUnit(P,O,hz2,false);}
     else startTargeting("💻 Hackeo: elige la unidad rival que controlas este turno",O.field.map(function(x,i){return x?{side:"opp",zone:i,kind:"unit"}:null;}).filter(Boolean),function(sel){stealUnit(P,sel.player,sel.zone,false);render();});
   }
@@ -3909,9 +4060,9 @@ function onFlipFx(P,unit,zone){
 function summonFromHandFaceDown(P,filterFn,label,done){
   done=done||function(){};
   var cands=[]; P.hand.forEach(function(h,i){if(filterFn(h,i))cands.push(i);});
-  if(!cands.length||P.field.indexOf(null)<0){done(null);return;}
+  if(!cands.length||firstFreeNormal(P)<0){done(null);return;}
   if(!canChoose(P)||cands.length===1){
-    var hid=P.hand.splice(cands[0],1)[0]; var hz=P.field.indexOf(null); var nu=mkUnit(hid,"def"); P.field[hz]=nu;
+    var hid=P.hand.splice(cands[0],1)[0]; var hz=firstFreeNormal(P); var nu=mkUnit(hid,"def"); P.field[hz]=nu;
     log("🐣 "+P.name+" invoca de modo especial "+CARDS[hid].n+" desde su mano, boca abajo en Defensa.");
     done(nu); return;
   }
@@ -3922,8 +4073,8 @@ function choiceHandSetPick(k){
   var pend=G.pendingChoice; if(!pend||!pend.done)return;
   G.pendingChoice=null;
   var P=pend.owner;
-  if(P.field.indexOf(null)<0){closeSheet();render();pend.done(null);return;}
-  var hid=P.hand.splice(pend.cands[k],1)[0]; var hz=P.field.indexOf(null); var nu=mkUnit(hid,"def"); P.field[hz]=nu;
+  if(firstFreeNormal(P)<0){closeSheet();render();pend.done(null);return;}
+  var hid=P.hand.splice(pend.cands[k],1)[0]; var hz=firstFreeNormal(P); var nu=mkUnit(hid,"def"); P.field[hz]=nu;
   log("🐣 "+P.name+" invoca de modo especial "+CARDS[hid].n+" desde su mano, boca abajo en Defensa.");
   closeSheet(); render(); pend.done(nu);
 }
@@ -4080,7 +4231,7 @@ function choiceSummonFx(P,unit,c){
   function doDraw(){for(var i=0;i<(c.amt||2);i++)drawCard(P);log("🃏 "+c.n+": "+P.name+" roba "+(c.amt||2)+" cartas.");render();}
   function doBurn(){damage(O,c.amt||800,c.n);render();}
   function doCalc(){lookTop(P,3,true);}
-  function doDestroyAllLow(){for(var i=4;i>=0;i--){var u=O.field[i];if(u&&effAtk(O,u)<=(c.cap||2000))destroyUnit(O,i,false);}log("💥 "+c.n+" destruye las unidades rivales de ATK "+(c.cap||2000)+" o menor.");render();}
+  function doDestroyAllLow(){for(var i=5;i>=0;i--){var u=O.field[i];if(u&&effAtk(O,u)<=(c.cap||2000))destroyUnit(O,i,false);}log("💥 "+c.n+" destruye las unidades rivales de ATK "+(c.cap||2000)+" o menor.");render();}
   var altLabel=c.fx==="choiceDestroyDraw"?"Robar "+(c.amt||2)+" cartas":c.fx==="choiceDestroyBurn"?"Hacer "+(c.amt||800)+" de daño directo":c.fx==="choiceDestroyCalc"?"Mirar las 3 cartas superiores de tu mazo":"Robar "+(c.amt||2)+" cartas";
   var mainLabel=c.fx==="destroyAllLowOrDraw"?"Destruir las unidades rivales de ATK "+(c.cap||2000)+" o menor":"Destruir 1 unidad rival";
   if(P.ai){
@@ -4157,7 +4308,7 @@ function applyAttackTrap(D,bi,atkP,atkU,atkZone){
       if(rz2>=0){var ru=D.field[rz2];ru.faceDown=false;G._atkRedirect=rz2;log("🐹 "+c.n+": "+CARDS[ru.id].n+" sale de su madriguera y recibe el ataque en su lugar.");if(!fxBlocked(D,ru))onFlipFx(D,ru,rz2);}
       break;
     case "progDestroyAllCond":
-      if(countArchUnits(D,c.a)>=(c.amt||3)){for(var i=4;i>=0;i--){if(atkP.field[i])destroyUnit(atkP,i,false);}log("💥 "+c.n+" destruye todas las unidades de "+atkP.name+".");}
+      if(countArchUnits(D,c.a)>=(c.amt||3)){for(var i=5;i>=0;i--){if(atkP.field[i])destroyUnit(atkP,i,false);}log("💥 "+c.n+" destruye todas las unidades de "+atkP.name+".");}
       break;
     case "progDiscardAllCond":
       if(countArchUnits(D,c.a)>=(c.amt||3)){while(atkP.hand.length){var dh=atkP.hand.pop();atkP.gy.push(dh);triggerEco(atkP,CARDS[dh]);}log("💥 "+c.n+": "+atkP.name+" descarta toda su mano.");}
@@ -4205,31 +4356,31 @@ function programValid(P,id){
     case "progDestroy": return P.hp>(c.cost||0)&&O.field.some(function(u){return u&&(!c.cap||effAtk(O,u)<=c.cap);});
     case "progSearch": return P.deck.some(function(x){return CARDS[x].a===c.a;});
     case "progSearchUnit": return P.deck.some(function(x){return CARDS[x].a===c.a&&CARDS[x].t==="U";});
-    case "progSummonDeck": return P.field.indexOf(null)>=0&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a===c.a&&(CARDS[x].lv||99)<=(c.cap||99);});
-    case "progSummonHandMulti": return P.field.indexOf(null)>=0&&P.hand.some(function(x){return x!==id&&CARDS[x].t==="U"&&CARDS[x].a===c.a&&(CARDS[x].lv||99)<=(c.cap||99);});
-    case "progRevive": case "progReviveMulti": return P.field.indexOf(null)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===c.a&&(!c.cap||(CARDS[g].lv||99)<=c.cap);});
+    case "progSummonDeck": return firstFreeNormal(P)>=0&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a===c.a&&(CARDS[x].lv||99)<=(c.cap||99);});
+    case "progSummonHandMulti": return firstFreeNormal(P)>=0&&P.hand.some(function(x){return x!==id&&CARDS[x].t==="U"&&CARDS[x].a===c.a&&(CARDS[x].lv||99)<=(c.cap||99);});
+    case "progRevive": case "progReviveMulti": return firstFreeNormal(P)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===c.a&&(!c.cap||(CARDS[g].lv||99)<=c.cap);});
     case "progGraveToHand": return P.gy.some(function(g){return CARDS[g].a===c.a;});
     case "progGraveCardDraw": return P.gy.some(function(g){return CARDS[g].a===c.a;});
     case "progBounce": case "progBounceDeck": return O.field.some(Boolean);
     case "progFreezeAll": return O.field.some(Boolean);
     case "progDejaVu": return P.gy.some(function(g){return CARDS[g].a===c.a;});
-    case "progDuplicacion": return !P.compUsed&&P.field.indexOf(null)>=0&&P.hand.filter(function(x){return CARDS[x].a==="enjambre";}).length>=2&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a==="enjambre"&&(CARDS[x].lv||99)<=2;});
+    case "progDuplicacion": return !P.compUsed&&firstFreeNormal(P)>=0&&P.hand.filter(function(x){return CARDS[x].a==="enjambre";}).length>=2&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a==="enjambre"&&(CARDS[x].lv||99)<=2;});
     case "progNodoDeckDraw": return P.gy.some(function(g){return CARDS[g].n==="Nodo Enjambre";});
     case "progDrawDiscard": return (!c.cap||countArchUnits(P,c.a)>=c.cap)&&P.hand.length>=2;
     case "progChoiceDD": return P.deck.length>=2||O.field.some(function(u){return u&&effAtk(O,u)<=(c.cap||2000);});
-    case "progChoiceSalto": return (P.field.indexOf(null)>=0&&P.hand.some(function(x){return x!==id&&CARDS[x].t==="U"&&CARDS[x].a===c.a;}))||O.field.some(Boolean);
+    case "progChoiceSalto": return (firstFreeNormal(P)>=0&&P.hand.some(function(x){return x!==id&&CARDS[x].t==="U"&&CARDS[x].a===c.a;}))||O.field.some(Boolean);
     case "progChoiceTunel": return P.gy.some(function(g){return CARDS[g].a===c.a;});
     case "progSwapAtk": return P.field.some(function(u){return u&&CARDS[u.id].a===c.a;})&&O.field.some(Boolean);
     case "progEquip": return P.field.some(function(u){return u&&CARDS[u.id].a===c.a;});
     case "progProtect": return P.field.some(function(u){return u&&CARDS[u.id].a===c.a;});
     case "progBuffAll": return P.field.some(function(u){return u&&CARDS[u.id].a===c.a;});
-    case "progControl": return P.field.indexOf(null)>=0&&O.field.some(Boolean);
+    case "progControl": return firstFreeNormal(P)>=0&&O.field.some(Boolean);
     case "progStealDiscard": return O.hand.length>0;
     case "progCopyEffect": return P.field.some(function(u){return u&&CARDS[u.id].a==="clon";})&&O.field.some(Boolean);
     case "progDestroyBackrowAll": return O.back.some(Boolean);
     case "progSummonLock": return true;
     case "progFlipAll": return P.field.some(function(u){return u&&u.faceDown&&CARDS[u.id].a===c.a;});
-    case "progSummonDeckDef": return P.field.indexOf(null)>=0&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a===c.a;});
+    case "progSummonDeckDef": return firstFreeNormal(P)>=0&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a===c.a;});
     case "progDestroyCond": return O.field.some(Boolean);
     case "trollCeboPerfecto": return P.field.some(function(u){return u&&CARDS[u.id].a==="troll";});
     case "trollTormenta": return totalPolem()>=2&&(O.field.some(Boolean)||O.back.some(Boolean));
@@ -4304,7 +4455,7 @@ function resolveProgram(P,handIdx){
     case "propagacion": O.field.forEach(function(u){if(u)u.counters+=1;}); log("☣ Propagación Masiva: +1 contador a todas las unidades de "+O.name+"."); toGY(); break;
     case "reinicio":
       var destroyed=0;
-      G.players.forEach(function(X){for(var i=0;i<5;i++){if(X.field[i]&&X.field[i].counters>=3){destroyUnit(X,i,false);destroyed++;}}});
+      G.players.forEach(function(X){for(var i=0;i<6;i++){if(X.field[i]&&X.field[i].counters>=3){destroyUnit(X,i,false);destroyed++;}}});
       log("🔄 Reinicio Forzado destruye "+destroyed+" carta(s) corrompida(s).");
       toGY(); for(var d=0;d<destroyed;d++)drawCard(P); break;
     case "corrupersist":
@@ -4435,7 +4586,7 @@ function resolveProgram(P,handIdx){
       }
       return;
     case "progChoiceSalto":
-      if(P.ai){ toGY(); var hi5=P.hand.findIndex(function(h){return CARDS[h].t==="U"&&CARDS[h].a===c.a;}); if(hi5>=0&&P.field.indexOf(null)>=0){var hid5=P.hand.splice(hi5,1)[0];var hz5=P.field.indexOf(null);P.field[hz5]=mkUnit(hid5,"atk");log("🐣 "+P.name+" invoca de modo especial "+CARDS[hid5].n+".");} else bounceTargets(P,1,false); }
+      if(P.ai){ toGY(); var hi5=P.hand.findIndex(function(h){return CARDS[h].t==="U"&&CARDS[h].a===c.a;}); if(hi5>=0&&firstFreeNormal(P)>=0){var hid5=P.hand.splice(hi5,1)[0];var hz5=firstFreeNormal(P);P.field[hz5]=mkUnit(hid5,"atk");log("🐣 "+P.name+" invoca de modo especial "+CARDS[hid5].n+".");} else bounceTargets(P,1,false); }
       else{
         G._choiceProg={owner:P,id:id};
         showSheet("<h2>🌀 "+esc(c.n)+"</h2><p>Elige 1 de los 2 efectos:</p><button class='primary' id='cpA'>Invocar de modo especial 1 unidad "+ARCH[c.a].name+" de tu mano</button> <button id='cpB'>Devolver 1 unidad rival a la mano</button>",true);
@@ -4445,7 +4596,7 @@ function resolveProgram(P,handIdx){
       return;
     case "progChoiceTunel":
       toGY();
-      if(P.field.indexOf(null)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===c.a&&(CARDS[g].lv||99)<=(c.cap||4);}))chooseRevive(P,c.a,c.cap||4,"atk",null,function(){render();});
+      if(firstFreeNormal(P)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===c.a&&(CARDS[g].lv||99)<=(c.cap||4);}))chooseRevive(P,c.a,c.cap||4,"atk",null,function(){render();});
       else chooseGraveToHand(P,function(g){return CARDS[g].a===c.a;},c.n+": elige 1 carta "+ARCH[c.a].name+" de tu cementerio",function(){render();});
       break;
     case "progSwapAtk":
@@ -4602,10 +4753,10 @@ function unitFxAvailable(P,u){
         if(c.cond==="atkLess")return effAtk(O,x)<effAtk(P,u);
         if(c.cond==="defLess")return CARDS[x.id].def<effAtk(P,u);
         return true; });
-    case "summonNamedTurn": return P.field.indexOf(null)>=0&&(c.cond==="grave"?P.gy.some(function(g){return CARDS[g].n===c.sName;}):P.deck.some(function(g){return CARDS[g].n===c.sName;}));
-    case "auraPerNodo": return P.field.indexOf(null)>=0&&P.deck.some(function(g){return CARDS[g].n==="Nodo Enjambre";});
-    case "summonHandTurn": return P.field.indexOf(null)>=0&&P.hand.some(function(h){return CARDS[h].t==="U"&&CARDS[h].a===c.a&&(CARDS[h].lv||99)<=(c.cap||99);});
-    case "reviveTurn": return P.field.indexOf(null)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===c.a;});
+    case "summonNamedTurn": return firstFreeNormal(P)>=0&&(c.cond==="grave"?P.gy.some(function(g){return CARDS[g].n===c.sName;}):P.deck.some(function(g){return CARDS[g].n===c.sName;}));
+    case "auraPerNodo": return firstFreeNormal(P)>=0&&P.deck.some(function(g){return CARDS[g].n==="Nodo Enjambre";});
+    case "summonHandTurn": return firstFreeNormal(P)>=0&&P.hand.some(function(h){return CARDS[h].t==="U"&&CARDS[h].a===c.a&&(CARDS[h].lv||99)<=(c.cap||99);});
+    case "reviveTurn": return firstFreeNormal(P)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===c.a;});
     case "freezeTurn": return O.field.some(Boolean);
     case "bouncePay": return O.field.some(Boolean);
     case "swapAtkDefTurn": return O.field.some(Boolean);
@@ -4688,7 +4839,7 @@ function activateUnitFx(P,u,zone){
       var needRm=3;
       var remFrom=function(pl){ pl.field.forEach(function(x){ if(needRm>0&&x&&(x.polem||0)>0){ var take=Math.min(needRm,x.polem); x.polem-=take; needRm-=take; } }); };
       remFrom(P); if(needRm>0)remFrom(O);
-      for(var wz2=4;wz2>=0;wz2--){var wu=O.field[wz2];if(wu&&(wu.polem||0)>0)destroyUnit(O,wz2,false);}
+      for(var wz2=5;wz2>=0;wz2--){var wu=O.field[wz2];if(wu&&(wu.polem||0)>0)destroyUnit(O,wz2,false);}
       log("👑 El Troll Supremo retira 3 contadores de Polémica y destruye todas las unidades de "+O.name+" que tenían contadores de Polémica.");
       break;
     case "selfSet": /* Jerbo Veloz: se vuelve a esconder en su madriguera */
@@ -4782,24 +4933,37 @@ function doEvolution(eid){
   me.extra.splice(me.extra.indexOf(eid),1);
   /* La zona de la IA Superior se elige DESPUÉS de resolver el Eco de los materiales:
      un Eco puede invocar una unidad en la zona recién liberada y no debe ser pisada. */
-  var zone=mats[0];
-  if(me.field[zone])zone=mats[1];
-  if(me.field[zone])zone=me.field.indexOf(null);
-  if(zone<0){var occ=me.field[mats[0]];me.field[mats[0]]=null;me.gy.push(occ.id);triggerEco(me,CARDS[occ.id]);zone=mats[0];}
   var unit={uid:uid(),id:eid,pos:"atk",counters:0,perm:0,temp:0,atkUsed:false,fxUsed:false,justTurn:G.turnNo,posChanged:false,faceDown:false};
-  me.field[zone]=unit; sfx("evolve"); animMark(animSideOf(me),zone,"anim-evolve");
-  log("🌟 ¡"+me.name+" evoluciona a "+CARDS[eid].n+"! ATK "+CARDS[eid].atk+" / DEF "+CARDS[eid].def+".");
-  if(MODE==="ai"&&me===G.players[0])ninaSay("playerEvolved"); /* Nina reacciona a tu Evolución con su voz */
-  var O=opp();
-  if(CARDS[eid].fx==="kernel"){O.field.forEach(function(u){if(u)u.counters+=2;});log("☣ "+CARDS[eid].n+" pone 2 contadores de Corrupción en todas las unidades de "+O.name+".");}
-  if(CARDS[eid].fx==="errorcrit"){for(var i=0;i<5;i++){if(O.field[i]&&O.field[i].counters>=3)destroyUnit(O,i,false);}log("💥 Error Crítico destruye las cartas rivales con 3+ contadores.");}
-  if(CARDS[eid].fx==="mentemaestra"){drawCard(me);drawCard(me);log("🧠 Mente Maestra Artificial: "+me.name+" roba 2 cartas.");}
-  /* La IA Superior invocada por Evolución también dispara su efecto de
-     «al ser invocado» completo (antes solo lo hacía una lista parcial). */
-  fireSummonFx(me,unit,zone);
-  render();
+  function placeEvo(zone){
+    me.field[zone]=unit; sfx("evolve"); animMark(animSideOf(me),zone,"anim-evolve");
+    log("🌟 ¡"+me.name+" evoluciona a "+CARDS[eid].n+"! ATK "+CARDS[eid].atk+" / DEF "+CARDS[eid].def+".");
+    if(MODE==="ai"&&me===G.players[0])ninaSay("playerEvolved"); /* Nina reacciona a tu Evolución con su voz */
+    var O=opp();
+    if(CARDS[eid].fx==="kernel"){O.field.forEach(function(u){if(u)u.counters+=2;});log("☣ "+CARDS[eid].n+" pone 2 contadores de Corrupción en todas las unidades de "+O.name+".");}
+    if(CARDS[eid].fx==="errorcrit"){for(var i=0;i<6;i++){if(O.field[i]&&O.field[i].counters>=3)destroyUnit(O,i,false);}log("💥 Error Crítico destruye las cartas rivales con 3+ contadores.");}
+    if(CARDS[eid].fx==="mentemaestra"){drawCard(me);drawCard(me);log("🧠 Mente Maestra Artificial: "+me.name+" roba 2 cartas.");}
+    /* La IA Superior invocada por Evolución también dispara su efecto de
+       «al ser invocado» completo (antes solo lo hacía una lista parcial). */
+    fireSummonFx(me,unit,zone);
+    render();
+  }
+  if(me.ai||!canChoose(me)){
+    /* La IA prefiere su Zona Extra para las Evoluciones (jefes); si está
+       ocupada, la primera zona de unidad libre. */
+    var az=autoPlaceZone(me,true);
+    if(az<0){ /* caso límite: el Eco de un material llenó todo; se libera la zona del primer material, como antes */
+      var occ=me.field[mats[0]];me.field[mats[0]]=null;me.gy.push(occ.id);triggerEco(me,CARDS[occ.id]);az=mats[0];
+    }
+    placeEvo(az); return;
+  }
+  /* Fusión: el jugador elige la zona entre sus 5 zonas de unidad libres
+     MÁS su Zona Extra si está libre (la única invocación que puede usarla). */
+  var valid=freePlaceZones(me,true);
+  if(!valid.length){
+    var occ2=me.field[mats[0]];me.field[mats[0]]=null;me.gy.push(occ2.id);triggerEco(me,CARDS[occ2.id]);valid=[mats[0]];
+  }
+  openZonePick(me,valid,"🧬 Toca una zona libre de tu campo — o tu Zona Extra — para colocar a "+CARDS[eid].n+".",placeEvo);
 }
-
 /* ---------- battle ---------- */
 function beginAttack(zone){
   var me=cur(), op=opp(), u=me.field[zone];
@@ -4833,7 +4997,7 @@ function respondToAttack(atkP,atkU,atkZone,tgtZone,done){
   var traps=[];
   D.back.forEach(function(b,i){if(b&&b.faceDown&&!D.spellLock&&trapTrigger(CARDS[b.id])==="attack")traps.push(i);});
   var hasFw=D.field.some(function(u){return u&&CARDS[u.id].fx==="firewall"&&!u.fxUsed;})&&D.hand.length>0;
-  var hasBee=D.field.some(function(u){return u&&u.id==="c900000119";})&&D.field.indexOf(null)>=0&&D.deck.some(function(x){return CARDS[x]&&CARDS[x].n==="Nodo Enjambre";});
+  var hasBee=D.field.some(function(u){return u&&u.id==="c900000119";})&&firstFreeNormal(D)>=0&&D.deck.some(function(x){return CARDS[x]&&CARDS[x].n==="Nodo Enjambre";});
   var guardZ=D.field.findIndex(function(u){return u&&u.id==="c900000708";});
   var hasGuard=guardZ>=0;
   function incertAuto(){ if(tgtZone===null)return effAtk(atkP,atkU)>=1500; var tu=D.field[tgtZone]; if(!tu)return false; return tu.pos==="atk"?effAtk(atkP,atkU)>effAtk(D,tu):effAtk(atkP,atkU)>effDef(D,tu); }
@@ -5109,7 +5273,7 @@ function aiSetProtocolsStep(){
    disparan su efecto de invocación y, si son Roedor, su Madriguera. */
 function aiFlipStep(){
   var P=cur();
-  for(var z=0;z<5;z++){
+  for(var z=0;z<6;z++){
     var u=P.field[z];
     if(!u||!u.faceDown||u.justTurn===G.turnNo)continue;
     u.faceDown=false; u.pos="atk"; u.justTurn=G.turnNo;
@@ -5121,7 +5285,7 @@ function aiSummonStep(){
   var P=cur(); if(P.normalUsed||P.summonLocked)return;
   var units=P.hand.map(function(id,i){return {id:id,i:i,c:CARDS[id]};}).filter(function(x){return x.c.t==="U";});
   if(!units.length)return;
-  var fieldCount=P.field.filter(Boolean).length, free=P.field.indexOf(null)>=0, best=null;
+  var fieldCount=P.field.filter(Boolean).length, free=firstFreeNormal(P)>=0, best=null;
   units.forEach(function(x){var need=x.c.lv>=7?2:x.c.lv>=5?1:0;
     if(need<=fieldCount&&(free||need>0)){if(!best||x.c.atk>best.x.c.atk)best={x:x,need:need};}});
   if(!best&&AI_DIFF==="dificil"&&free){
@@ -5192,7 +5356,7 @@ function aiToMain2Step(){ if(!G.over){G.phase="main2";log("↩️ "+cur().name+"
 function aiAttackStep(){
   var P=cur(), O=opp();
   if(G.over||G.turnNo<=1)return;
-  for(var z=0;z<5;z++){
+  for(var z=0;z<6;z++){
     var u=P.field[z];
     if(!u||u.pos!=="atk"||u.atkUsed||u.faceDown)continue;
     if(AI_DIFF==="facil"&&Math.random()<0.3){u.atkUsed=true;continue;} /* Fácil: a veces se guarda un ataque que podía hacer */
@@ -5452,6 +5616,12 @@ function arr5(v){
   if(v)Object.keys(v).forEach(function(k){ var i=+k; if(i>=0&&i<5)out[i]=v[k]; });
   return out;
 }
+function arr6(v){
+  /* El campo viaja con 6 huecos: zonas 0-4 + 5 = Zona de Monstruo Extra. */
+  var out=[null,null,null,null,null,null];
+  if(v)Object.keys(v).forEach(function(k){ var i=+k; if(i>=0&&i<6)out[i]=v[k]; });
+  return out;
+}
 function applyRemoteState(s,hands,decks){
   if(!s)return;
   if(!G){
@@ -5468,7 +5638,7 @@ function applyRemoteState(s,hands,decks){
     var P=G.players[i]; if(!P)return;
     P.name=sp.name; P.deckKey=sp.deckKey; P.hp=sp.hp;
     P.gy=toArr(sp.gy); P.extra=toArr(sp.extra); P.banished=toArr(sp.banished);
-    P.field=arr5(sp.field); P.back=arr5(sp.back);
+    P.field=arr6(sp.field); P.back=arr5(sp.back);
     P.normalUsed=!!sp.normalUsed; P.compUsed=!!sp.compUsed;
     P.summonLocked=!!sp.summonLocked; P.programLocked=!!sp.programLocked; P.spellLock=!!sp.spellLock; P.trollTaunt=!!sp.trollTaunt; P.haterLockTurn=sp.haterLockTurn||0;
     P.protectUntil=sp.protectUntil||0; P.protectArch=sp.protectArch||null;
@@ -5633,7 +5803,7 @@ function onlineCleanup(removeRoom){
    muertas al clic y no se podía colocar nada. Este listener recibe el clic
    por delegación y llama a la misma función de siempre. */
 (function(){
-  var CALLS={handClick:handClick,zoneClick:zoneClick,pileClick:pileClick,lookMove:lookMove,
+  var CALLS={handClick:handClick,zoneClick:zoneClick,zonePickClick:zonePickClick,pileClick:pileClick,lookMove:lookMove,
     searchPick:searchPick,doEvolution:doEvolution,servidorPick:servidorPick,
     choiceRevivePick:choiceRevivePick,choiceGraveCustomPick:choiceGraveCustomPick,
     choiceDiscardPick:choiceDiscardPick,choiceHandSummonPick:choiceHandSummonPick,

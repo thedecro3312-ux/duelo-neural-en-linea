@@ -317,6 +317,13 @@
         background:rgba(3,6,14,.86); color:#fff; border:1px solid rgba(255,255,255,.28); border-radius:6px;
         font-family:"Orbitron"; font-size:.48rem; letter-spacing:0; padding:.12rem .05rem; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .card.defpos{ transform:rotate(90deg) scale(.68); }
+      /* Cartas del rival en el campo: giradas 180° (de cabeza), como vistas
+         desde el otro lado de la mesa. La rotación va en la propia ficha:
+         los clics y el hover (data-hov) siguen funcionando igual, y el panel
+         de información NO se gira (vive fuera de la ficha). Una unidad rival
+         en Defensa compone su giro de 90° con el de 180° (270°). */
+      .card.oppflip{ transform:rotate(180deg); }
+      .card.oppflip.defpos{ transform:rotate(270deg) scale(.68); }
       .card.cardback{ background:#0a1327; border-color:var(--gold); }
       .detailimg{ width:min(228px,68vw); aspect-ratio:177/254; object-fit:cover; background:#0a1327; border-radius:10px;
         border:1px solid var(--line); display:block; margin:0 auto .8rem; box-shadow:0 8px 24px rgba(2,6,18,.4); }
@@ -378,6 +385,13 @@
         padding:.6rem .8rem; margin:.7rem 0; text-align:left; }
       .simstats h3{ margin:.1rem 0 .4rem; }
       .simstats p{ margin:.25rem 0; }
+      .simtable{ width:100%; border-collapse:collapse; margin:.5rem 0 .15rem; font-size:.92rem; }
+      .simtable th,.simtable td{ padding:.3rem .45rem; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; }
+      .simtable th:first-child,.simtable td:first-child{ text-align:left; white-space:normal; }
+      .simtable thead th{ color:var(--ink-dim); font-weight:600; }
+      .simtable td.pct{ font-weight:700; }
+      .simtable tr.simtop td{ background:rgba(var(--th-rgb,55,200,255),.16); }
+      .simtable tr.simlow td{ background:rgba(var(--th2-rgb,255,93,162),.15); }
       .logbox div:last-child{ color:var(--ink); }
       .actions{ display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin-top:.5rem; }
 
@@ -735,6 +749,22 @@
       .card.defpos.anim-hit{ animation-name:animHitShakeDef; }
       @keyframes animDestroyOutDef{ 0%{ opacity:1; transform:rotate(90deg) scale(.68); filter:brightness(1); } 25%{ opacity:1; transform:rotate(85deg) scale(.7); filter:brightness(1.8); } 50%{ transform:rotate(95deg) scale(.66); } 75%{ opacity:.45; transform:rotate(88deg) scale(.61); filter:brightness(.7); } 100%{ opacity:0; transform:rotate(90deg) scale(.54); filter:brightness(.4); } }
       .card.defpos.anim-destroy{ animation-name:animDestroyOutDef; }
+      /* Variantes para las cartas del rival (giradas 180°): mantienen el giro
+         durante la animación para no «desgirarse» ni un instante. */
+      @keyframes animSummonInFlip{ 0%{ opacity:0; transform:rotate(180deg) translateY(-14px) scale(.55); } 60%{ opacity:1; transform:rotate(180deg) translateY(2px) scale(1.06); } 100%{ opacity:1; transform:rotate(180deg) translateY(0) scale(1); } }
+      .card.oppflip.anim-summon{ animation-name:animSummonInFlip; }
+      @keyframes animHitShakeFlip{ 0%,100%{ transform:rotate(180deg); filter:brightness(1); } 20%{ transform:rotate(176deg); filter:brightness(1.9) saturate(1.6); } 45%{ transform:rotate(184deg); filter:brightness(1.4); } 70%{ transform:rotate(178deg); filter:brightness(1.15); } }
+      .card.oppflip.anim-hit{ animation-name:animHitShakeFlip; }
+      @keyframes animDestroyOutFlip{ 0%{ opacity:1; transform:rotate(180deg) scale(1); filter:brightness(1); } 25%{ opacity:1; transform:rotate(175deg) scale(1.02); filter:brightness(1.8); } 50%{ transform:rotate(185deg) scale(.97); } 75%{ opacity:.45; transform:rotate(178deg) scale(.9); filter:brightness(.7); } 100%{ opacity:0; transform:rotate(180deg) translateY(-8px) scale(.8); filter:brightness(.4); } }
+      .card.oppflip.anim-destroy{ animation-name:animDestroyOutFlip; }
+      @keyframes animLungeOppFlip{ 0%{ transform:rotate(180deg) translateY(0); } 35%{ transform:rotate(180deg) translateY(-16px) scale(1.07); } 100%{ transform:rotate(180deg) translateY(0); } }
+      .card.oppflip.anim-lunge-opp{ animation-name:animLungeOppFlip; }
+      @keyframes animSummonInFlipDef{ 0%{ opacity:0; transform:rotate(270deg) scale(.35); } 60%{ opacity:1; transform:rotate(270deg) scale(.74); } 100%{ opacity:1; transform:rotate(270deg) scale(.68); } }
+      .card.oppflip.defpos.anim-summon{ animation-name:animSummonInFlipDef; }
+      @keyframes animHitShakeFlipDef{ 0%,100%{ transform:rotate(270deg) scale(.68); filter:brightness(1); } 20%{ transform:rotate(266deg) scale(.68); filter:brightness(1.9) saturate(1.6); } 45%{ transform:rotate(274deg) scale(.68); filter:brightness(1.4); } 70%{ transform:rotate(268deg) scale(.68); filter:brightness(1.15); } }
+      .card.oppflip.defpos.anim-hit{ animation-name:animHitShakeFlipDef; }
+      @keyframes animDestroyOutFlipDef{ 0%{ opacity:1; transform:rotate(270deg) scale(.68); filter:brightness(1); } 25%{ opacity:1; transform:rotate(265deg) scale(.7); filter:brightness(1.8); } 50%{ transform:rotate(275deg) scale(.66); } 75%{ opacity:.45; transform:rotate(268deg) scale(.61); filter:brightness(.7); } 100%{ opacity:0; transform:rotate(270deg) scale(.54); filter:brightness(.4); } }
+      .card.oppflip.defpos.anim-destroy{ animation-name:animDestroyOutFlipDef; }
       @media (prefers-reduced-motion: reduce){
         .anim-summon,.anim-draw,.anim-lunge-me,.anim-lunge-opp,.anim-hit,.anim-destroy,.anim-evolve,.anim-hurt,.anim-shake,.anim-win{ animation:none; }
       }
@@ -2461,12 +2491,41 @@ $("btnBackOnline").onclick=function(){
    dividen entre SIM_SPEED) y terminar. El marcador de la sesión vive en
    memoria, como los mazos personalizados. */
 var SIM_SPEED=1, SIM_PAUSED=false;
-var SIM_STATS={wins:{},duels:0,turns:0};
+var SIM_STATS={wins:{},played:{},duels:0,turns:0};
+/* Porcentaje de victorias de un mazo en la sesión: victorias / duelos
+   jugados. Devuelve null si el mazo aún no ha jugado ningún duelo. */
+function simPctVal(k){ var pl=SIM_STATS.played[k]||0; if(!pl)return null; return (SIM_STATS.wins[k]||0)/pl*100; }
+function simPctTxt(k){ var v=simPctVal(k); if(v==null)return "—"; return (Math.round(v*10)/10).toFixed(1).replace(".",",")+"%"; }
+/* Tabla de balance de la sesión: todos los mazos con sus duelos jugados,
+   victorias y % de victorias, ordenada por % de mayor a menor. El mazo de
+   mayor % y el de menor % (entre los que ya jugaron) van resaltados; los
+   que aún no juegan muestran "—" y quedan al final. */
+function simTableHtml(){
+  var rows=allDeckKeys().map(function(k){
+    return {k:k,pl:SIM_STATS.played[k]||0,wn:SIM_STATS.wins[k]||0,pct:simPctVal(k)};
+  });
+  rows.sort(function(a,b){
+    if(a.pct==null&&b.pct==null)return 0;
+    if(a.pct==null)return 1;
+    if(b.pct==null)return -1;
+    if(b.pct!==a.pct)return b.pct-a.pct;
+    return b.wn-a.wn;
+  });
+  var playedRows=rows.filter(function(r){return r.pct!=null;});
+  var topK=playedRows.length?playedRows[0].k:null;
+  var lowK=(playedRows.length>1&&playedRows[playedRows.length-1].k!==topK)?playedRows[playedRows.length-1].k:null;
+  var h="<table class='simtable'><thead><tr><th>Mazo</th><th>Jugados</th><th>Victorias</th><th>% victorias</th></tr></thead><tbody>";
+  rows.forEach(function(r){
+    var cls=(r.k===topK)?" class='simtop'":(r.k===lowK?" class='simlow'":"");
+    h+="<tr"+cls+"><td>"+esc(deckDef(r.k).label.split(" — ")[0])+"</td><td>"+r.pl+"</td><td>"+r.wn+"</td><td class='pct'>"+simPctTxt(r.k)+"</td></tr>";
+  });
+  return h+"</tbody></table>";
+}
 function aiDelay(ms){ return MODE==="sim"?Math.max(70,Math.round(ms/SIM_SPEED)):ms; }
 function simScoreText(){
   if(!G||!G.players)return "";
   var a=G.players[0], b=G.players[1];
-  return "Duelo "+(SIM_STATS.duels+1)+" de la sesión · Victorias: "+deckDef(a.deckKey).label+" "+(SIM_STATS.wins[a.deckKey]||0)+" — "+(SIM_STATS.wins[b.deckKey]||0)+" "+deckDef(b.deckKey).label;
+  return "Duelo "+(SIM_STATS.duels+1)+" de la sesión · Victorias: "+deckDef(a.deckKey).label+" "+(SIM_STATS.wins[a.deckKey]||0)+" ("+simPctTxt(a.deckKey)+") — "+(SIM_STATS.wins[b.deckKey]||0)+" ("+simPctTxt(b.deckKey)+") "+deckDef(b.deckKey).label;
 }
 function updateSimBar(){
   var sb=$("simBar"); if(!sb)return;
@@ -2895,13 +2954,16 @@ function loseGame(P,why){
   if(MODE==="online")onlineOnGameOver();
   var simHtml="", simBtns="";
   if(MODE==="sim"){
-    /* Marcador de balance de la sesión: victorias por mazo y duración media */
+    /* Marcador de balance de la sesión: victorias, duelos jugados y % por mazo */
     SIM_STATS.duels++; SIM_STATS.turns+=G.turnNo;
     SIM_STATS.wins[W.deckKey]=(SIM_STATS.wins[W.deckKey]||0)+1;
+    SIM_STATS.played[W.deckKey]=(SIM_STATS.played[W.deckKey]||0)+1;
+    SIM_STATS.played[P.deckKey]=(SIM_STATS.played[P.deckKey]||0)+1; /* en un duelo espejo el mismo mazo suma 2 jugados y 1 victoria */
     var avg=(Math.round(SIM_STATS.turns/SIM_STATS.duels*10)/10);
     simHtml="<div class='simstats'><h3>📊 Balance de la sesión</h3>"
       +"<p>Este duelo duró <b>"+G.turnNo+" turnos</b>. Integridad final: "+esc(W.name)+" <b>"+W.hp+"</b> — "+P.hp+" "+esc(P.name)+".</p>"
-      +"<p>Victorias: <b>"+esc(deckDef(W.deckKey).label)+": "+(SIM_STATS.wins[W.deckKey]||0)+"</b> · <b>"+esc(deckDef(P.deckKey).label)+": "+(SIM_STATS.wins[P.deckKey]||0)+"</b> en "+SIM_STATS.duels+" duelo(s) simulado(s) · duración media: <b>"+avg+" turnos</b>.</p></div>";
+      +"<p>Victorias: <b>"+esc(deckDef(W.deckKey).label)+": "+(SIM_STATS.wins[W.deckKey]||0)+"</b> · <b>"+esc(deckDef(P.deckKey).label)+": "+(SIM_STATS.wins[P.deckKey]||0)+"</b> en "+SIM_STATS.duels+" duelo(s) simulado(s) · duración media: <b>"+avg+" turnos</b>.</p>"
+      +simTableHtml()+"</div>";
     simBtns=" <button id='btnSimAgain'>🔁 Otra simulación con estos mazos</button>";
   }
   showSheet("<div class='win'>🏆</div><h2>¡"+esc(W.name)+" gana el duelo!</h2><p>"+esc(P.name)+" perdió porque "+esc(why)+".</p>"+simHtml+"<button class='primary' id='btnAgain'>Jugar otra vez</button>"+simBtns);
@@ -2943,9 +3005,20 @@ function cardTile(P,u,side,zone){
   var c=CARDS[u.id];
   var tgt=G.targeting&&G.targeting.valid.some(function(v){return v.side===side&&v.zone===zone&&v.kind==="unit";});
   if(u.faceDown&&side==="opp"){
-    return "<div class='card cardback tappable"+(tgt?" targetable":"")+"' role='button' data-call='zoneClick(\""+side+"\",\"unit\","+zone+")'>"+(u.counters>0?"<span class='counters'>☣ "+u.counters+"</span>":"")+((u.polem||0)>0?"<span class='polemc'>🔥 "+u.polem+"</span>":"")+"<img class='art' src='"+CARD_BACK+"' alt='Reverso de carta DUELO NEURAL'></div>";
+    return "<div class='card cardback oppflip"+(u.pos==="def"?" defpos":"")+" tappable"+(tgt?" targetable":"")+"' role='button' data-call='zoneClick(\""+side+"\",\"unit\","+zone+")'>"+(u.counters>0?"<span class='counters'>☣ "+u.counters+"</span>":"")+((u.polem||0)>0?"<span class='polemc'>🔥 "+u.polem+"</span>":"")+"<img class='art' src='"+CARD_BACK+"' alt='Reverso de carta DUELO NEURAL'></div>";
   }
-  var cls="card "+ARCH[c.a].cls+(c.t==="E"?" evo":"")+(u.pos==="def"?" defpos":"");
+  if(u.faceDown&&side==="me"){
+    /* Tu unidad colocada se ve BOCA ABAJO (el dorso), igual que la ve el
+       rival. Solo tú puedes identificarla: la ficha lleva data-hov con la
+       carta real, así que al pasar el cursor o tocarla el panel de
+       información (que está fuera del campo y no se gira) muestra cuál es.
+       Este branch solo se genera para side="me" (el punto de vista del
+       dueño); para el rival la misma unidad entra en el branch de arriba,
+       sin data-hov: solo ve el dorso. El clic sigue abriendo su hoja
+       (volteo) como hasta ahora. */
+    return "<div class='card cardback"+(u.pos==="def"?" defpos":"")+" tappable"+(tgt?" targetable":"")+"' data-hov='"+u.id+"' data-atk='"+effAtk(P,u)+"' data-def='"+effDef(P,u)+"' role='button' data-call='zoneClick(\""+side+"\",\"unit\","+zone+")' title='"+esc(c.n)+" (boca abajo)'>"+(u.counters>0?"<span class='counters'>☣ "+u.counters+"</span>":"")+((u.polem||0)>0?"<span class='polemc'>🔥 "+u.polem+"</span>":"")+"<img class='art' src='"+CARD_BACK+"' alt='Tu unidad colocada boca abajo'><span class='stchip'>Unidad colocada</span></div>";
+  }
+  var cls="card "+ARCH[c.a].cls+(c.t==="E"?" evo":"")+(u.pos==="def"?" defpos":"")+(side==="opp"?" oppflip":"");
   if(tgt)cls+=" targetable";
   if(G.evoSel&&side==="me"&&G.evoSel.indexOf(zone)>=0)cls+=" selected";
   var html="<div class='"+cls+" tappable' data-hov='"+u.id+"' data-atk='"+effAtk(P,u)+"' data-def='"+effDef(P,u)+"' role='button' data-call='zoneClick(\""+side+"\",\"unit\","+zone+")' title='"+esc(c.n)+"'>";
@@ -2959,8 +3032,8 @@ function backTile(P,b,side,zone){
   if(!b)return "";
   var c=CARDS[b.id];
   var tgt=G.targeting&&G.targeting.valid.some(function(v){return v.side===side&&v.zone===zone&&v.kind==="back";});
-  if(b.faceDown)return "<div class='card cardback tappable"+(tgt?" targetable":"")+"' role='button' data-call='zoneClick(\""+side+"\",\"back\","+zone+")'><img class='art' src='"+CARD_BACK+"' alt='Reverso de carta DUELO NEURAL'>"+(side==="me"?"<span class='stchip'>"+(c.t==="P"?"Programa colocado":"Protocolo")+"</span>":"")+"</div>";
-  return "<div class='card "+ARCH[c.a].cls+" prog tappable"+(tgt?" targetable":"")+"' data-hov='"+b.id+"' role='button' data-call='zoneClick(\""+side+"\",\"back\","+zone+")' title='"+esc(c.n)+"'><img class='art' src='"+cardImg(b.id)+"' alt='"+esc(c.n)+"' loading='lazy'><span class='stchip'>Programa continuo</span></div>";
+  if(b.faceDown)return "<div class='card cardback"+(side==="opp"?" oppflip":"")+" tappable"+(tgt?" targetable":"")+"' role='button' data-call='zoneClick(\""+side+"\",\"back\","+zone+")'><img class='art' src='"+CARD_BACK+"' alt='Reverso de carta DUELO NEURAL'>"+(side==="me"?"<span class='stchip'>"+(c.t==="P"?"Programa colocado":"Protocolo")+"</span>":"")+"</div>";
+  return "<div class='card "+ARCH[c.a].cls+" prog"+(side==="opp"?" oppflip":"")+" tappable"+(tgt?" targetable":"")+"' data-hov='"+b.id+"' role='button' data-call='zoneClick(\""+side+"\",\"back\","+zone+")' title='"+esc(c.n)+"'><img class='art' src='"+cardImg(b.id)+"' alt='"+esc(c.n)+"' loading='lazy'><span class='stchip'>Programa continuo</span></div>";
 }
 function handTile(P,id,idx){
   var c=CARDS[id];

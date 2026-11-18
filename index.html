@@ -899,7 +899,7 @@
           </div>
         </div>
 
-        <button class="primary modebtn blockbtn" id="btnOpenBuilder" type="button">🛠️ Editor de mazos — estilo EDOPro</button>
+        <button class="primary modebtn blockbtn" id="btnOpenBuilder" type="button">🛠️ Editor de mazos</button>
 
       </section>
 
@@ -1012,7 +1012,7 @@
           <li><b>🎧 Contra Nina (la IA):</b> tu rival es <b>Nina</b>: piensa sus turnos, te habla durante el duelo en su globo de diálogo y con su <b>voz real grabada</b>, igual que en el estudio (el botón 🔊 Sonido también silencia su voz). Juega con los 16 mazos oficiales o con un mazo que armes tú en el editor: invoca, ataca, evoluciona y usa sus Protocolos. Su dificultad se elige en ⚙️ Ajustes o justo antes de empezar: <b>Fácil</b> para aprender, <b>Normal</b> como siempre o <b>Difícil</b> si quieres un reto de verdad.</li>
           <li><b>🤖 IA contra IA — Simulación:</b> las dos IA juegan solas el duelo completo y tú solo miras, con las manos de ambas a la vista. Elige el mazo de cada lado (puede ser el mismo en los dos: duelo espejo) y fíjate en quién gana, en cuántos turnos y con cuánta Integridad sobra. Durante la partida puedes <b>pausar</b>, <b>acelerar hasta 8×</b> y al final repetir el mismo enfrentamiento para juntar varias partidas: la hoja de resultados lleva el marcador de la sesión y la duración media, para ver qué tan balanceado está un mazo.</li>
           <li><b>🌐 En línea con código — dos dispositivos:</b> crea una sala, comparte el código de 4 letras y tu rival entra desde su propio celular o compu. El duelo se sincroniza en vivo por Firebase: campo, Integridad, turnos y cementerios; la mano de cada jugador queda guardada en su ruta privada de la sala y nunca se muestra al rival.</li>
-          <li><b>🛠️ Editor de mazos — estilo EDOPro:</b> el armado de mazos se abre en su propia ventana con la interfaz del editor de EDOPro: ficha de la carta a la izquierda, tu mazo en rejilla de imágenes al centro (principal y Extra Deck a la vista) y el buscador con filtros a la derecha. Arma un mazo principal de <b>exactamente 40 cartas</b> y un Extra Deck de <b>hasta 15 IA Superiores</b>; al guardarlo aparece en las listas de los modos. Los mazos armados viven en esta sesión: si recargas la página, hay que armarlos de nuevo.</li>
+          <li><b>🛠️ Editor de mazos:</b> el armado de mazos se abre en su propia ventana, con la ficha de la carta a la izquierda, tu mazo en rejilla de imágenes al centro (principal y Extra Deck a la vista) y el buscador con filtros a la derecha. Arma un mazo principal de <b>exactamente 40 cartas</b> y un Extra Deck de <b>hasta 15 IA Superiores</b>; al guardarlo aparece en las listas de los modos. Los mazos armados viven en esta sesión: si recargas la página, hay que armarlos de nuevo.</li>
         </ul>
         <h4 class="setsub">📜 Reglas del duelo</h4>
         <ul class="rules-list">
@@ -1069,8 +1069,8 @@
               <span class="edo-stats">Solo IA Superiores</span>
             </div>
             <div class="edo-grid" id="bDeckExtra"></div>
-            <div class="edo-empty" id="bExtraEmpty">Sin IA Superiores todavía: al añadirlas desde la búsqueda van aquí solas, como en EDOPro.</div>
-            <p class="edo-deckhint">Como en EDOPro: toca una carta de la lista de búsqueda para añadir una copia (máx. 3 por carta) y toca una carta de tu mazo para quitar una copia. Al pasar el cursor sobre cualquier carta, su ficha completa aparece en el panel de la izquierda.</p>
+            <div class="edo-empty" id="bExtraEmpty">Sin IA Superiores todavía: al añadirlas desde la búsqueda van aquí solas.</div>
+            <p class="edo-deckhint">Toca una carta de la lista de búsqueda para añadir una copia (máx. 3 por carta) y toca una carta de tu mazo para quitar una copia. Al pasar el cursor sobre cualquier carta, su ficha completa aparece en el panel de la izquierda.</p>
           </section>
           <aside class="edo-search" aria-label="Buscar cartas">
             <div class="edo-filters">
@@ -2102,7 +2102,7 @@ function bResRow(id){
 function bPreview(id){
   var el=$("bInfo"); if(!el)return;
   var c=id?CARDS[id]:null;
-  if(!c){ el.innerHTML="<p class='edo-hint'>Pasa el cursor sobre una carta (o tócala) para ver aquí su ficha completa — imagen grande, nivel, ATK/DEF y efecto — como en el panel de información de EDOPro.</p>"; return; }
+  if(!c){ el.innerHTML="<p class='edo-hint'>Pasa el cursor sobre una carta (o tócala) para ver aquí su ficha completa: imagen grande, nivel, ATK/DEF y efecto.</p>"; return; }
   var m=bMapFor(id), n=m[id]||0;
   el.innerHTML="<img class='edo-art' src='"+cardImg(id)+"' alt='"+esc(c.n)+"'>"
     +"<div class='edo-infob'><h3>"+esc(c.n)+"</h3>"

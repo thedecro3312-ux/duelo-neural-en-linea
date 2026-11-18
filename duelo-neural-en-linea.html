@@ -1174,8 +1174,8 @@ var CARDS = {
  "c900000123":{n:"Reina Suprema de la Colmena",a:"enjambre",t:"E",atk:2700,def:2800,fx:"summonNamedDeck",amt:3,sName:"Nodo Enjambre",txt:"Cuando es invocada, invoca de Modo Especial hasta 3 Nodo Enjambre desde tu mazo."},
  "c900000124":{n:"Colmena Infinita",a:"enjambre",t:"E",atk:2600,def:2600,fx:"auraPerNodo",fx2:"summonNamedTurn",amt:300,sName:"Nodo Enjambre",cond:"deck",txt:"Tus unidades Enjambre ganan 300 ATK por cada Nodo Enjambre en tu campo. Una vez por turno, puedes invocar de Modo Especial 1 Nodo Enjambre desde tu mazo."},
  "c900000125":{n:"Retorno a la Colmena",a:"enjambre",t:"P",fx:"progNodoDeckDraw",sName:"Nodo Enjambre",txt:"Devuelve hasta 3 cartas \"Nodo Enjambre\" de tu cementerio a tu deck; luego roba 1 carta."},
- "c900000401":{n:"Eco Eterno, el Fantasma del Sistema",a:"espectro",t:"U",lv:8,atk:2600,def:2400,fx:"summonGraveMulti",eco:"graveCard",amt:2,txt:"Al ser invocado, puedes invocar de modo especial hasta 2 unidades Espectro de tu cementerio. Eco: cuando esta carta va al cementerio, añade 1 carta Espectro de tu cementerio a tu mano."},
- "c900000402":{n:"Alma Perdida",a:"espectro",t:"U",lv:1,atk:300,def:300,eco:"summonNamedDeck",ecoN:1,sName:"Alma Perdida",txt:"Eco: cuando esta carta va al cementerio, invoca de modo especial 1 \"Alma Perdida\" de tu mazo."},
+ "c900000401":{n:"Eco Eterno, el Fantasma del Sistema",a:"espectro",t:"U",lv:8,atk:2600,def:2400,fx:"summonGraveMulti",eco:"graveCard",amt:1,txt:"Al ser invocado, puedes invocar de modo especial 1 unidad Espectro de tu cementerio. Eco: cuando esta carta va al cementerio, añade 1 carta Espectro de tu cementerio a tu mano."},
+ "c900000402":{n:"Alma Perdida",a:"espectro",t:"U",lv:1,atk:300,def:300,eco:"searchNamedDeck",ecoN:1,sName:"Alma Perdida",txt:"Eco: cuando esta carta va al cementerio, añade 1 \"Alma Perdida\" de tu mazo a tu mano."},
  "c900000403":{n:"Susurro Digital",a:"espectro",t:"U",lv:2,atk:800,def:600,fx:"discardDrawSummon",eco:"draw",ecoN:1,txt:"Al ser invocado, puedes descartar 1 carta para robar 1 carta. Eco: cuando va al cementerio, roba 1 carta."},
  "c900000404":{n:"Poltergeist de Datos",a:"espectro",t:"U",lv:4,atk:1700,def:900,fx:"battleRevive",eco:"destroyBackrow",txt:"Cuando destruye una unidad en batalla, invoca de modo especial 1 Espectro de tu cementerio. Eco: cuando va al cementerio, puedes destruir 1 carta Programa o Protocolo boca arriba del rival."},
  "c900000405":{n:"Ectoplasma Digital",a:"espectro",t:"U",lv:3,atk:1200,def:1000,fx:"discardDrawSummon",eco:"summonGrave",ecoN:2,txt:"Cuando esta carta es invocada, puedes descartar 1 carta para robar 1 carta. Eco: cuando va al cementerio, invoca de modo especial 1 Espectro de Nivel 2 o menor de tu cementerio."},
@@ -1185,13 +1185,13 @@ var CARDS = {
  "c900000409":{n:"Alma Gemela",a:"espectro",t:"U",lv:2,atk:600,def:900,fx:"summonNamedDeck",eco:"graveCard",amt:1,sName:"Alma Perdida",txt:"Cuando esta carta es invocada, puedes invocar de modo especial 1 \"Alma Perdida\" de tu mazo. Eco: cuando va al cementerio, añade 1 carta Espectro de tu cementerio a tu mano."},
  "c900000410":{n:"Espectro Lamento del Servidor",a:"espectro",t:"P",fx:"progDrawDiscard",eco:"summonNamedGraveDef",amt:1,sName:"Alma Perdida",txt:"Descarta 1 carta; roba 1 carta. Eco: si controlas una unidad Espectro, cuando esta carta va al cementerio, invoca de modo especial 1 Alma Perdida de Nivel 2 o menor desde tu cementerio en posición de defensa, y no puede atacar este turno. Solo puedes activar 1 por turno."},
  "c900000411":{n:"Aparición del Sistema",a:"espectro",t:"P",fx:"progRevive",eco:"draw",ecoN:1,cap:4,txt:"Invoca de modo especial 1 Espectro de Nivel 4 o menor de tu cementerio. Eco: cuando esta carta va al cementerio, roba 1 carta."},
- "c900000412":{n:"Resonancia Espectral",a:"espectro",t:"P",fx:"progReviveMulti",eco:"graveCard",amt:2,txt:"Descarta 1 carta Espectro; invoca de modo especial hasta 2 Espectro de tu cementerio. Eco: cuando esta carta va al cementerio, añade 1 carta Espectro de tu cementerio a tu mano."},
+ "c900000412":{n:"Resonancia Espectral",a:"espectro",t:"P",fx:"progReviveMulti",eco:"graveCard",amt:1,txt:"Descarta 1 carta Espectro; invoca de modo especial 1 Espectro de tu cementerio. Eco: cuando esta carta va al cementerio, añade 1 carta Espectro de tu cementerio a tu mano."},
  "c900000413":{n:"Despertar Espectral",a:"espectro",t:"P",fx:"progSearch",eco:"summonNamedGrave",sName:"Alma Perdida",txt:"Añade 1 carta Espectro de tu mazo a tu mano. Eco: cuando esta carta va al cementerio, invoca de modo especial 1 \"Alma Perdida\" de tu cementerio."},
  "c900000414":{n:"Muro de Almas",a:"espectro",t:"T",fx:"protoNegateAttack",eco:"summonGraveDef",ecoN:3,txt:"Cuando el rival declara un ataque, niega ese ataque. Eco: cuando esta carta va al cementerio, invoca de modo especial 1 Espectro de Nivel 3 o menor de tu cementerio en posición de defensa."},
  "c900000415":{n:"Cementerio Virtual",a:"espectro",t:"T",fx:"protoSummonGraveDef",eco:"summonNamedGrave",sName:"Alma Perdida",txt:"Cuando el rival invoca una unidad, invoca de modo especial 1 Espectro de tu cementerio en posición de defensa. Eco: cuando va al cementerio, invoca de modo especial 1 \"Alma Perdida\" de tu cementerio."},
  "c900000416":{n:"Tumba de Datos",a:"espectro",t:"T",fx:"protoNegate",eco:"summonNamedGrave",sName:"Alma Perdida",txt:"Cuando el rival activa un Programa o Protocolo, niégalo y destrúyelo. Eco: cuando va al cementerio, invoca de modo especial 1 \"Alma Perdida\" de tu cementerio."},
- "c900000417":{n:"Rey Espectral, Soberano del Sistema",a:"espectro",t:"E",atk:3000,def:2600,fx:"selfPerGrave",eco:"summonGrave",ecoN:0,amt:200,txt:"Gana 200 ATK por cada Espectro en tu cementerio. Eco: cuando va al cementerio, puedes invocar de modo especial 1 Espectro de tu cementerio."},
- "c900000418":{n:"Reina Fantasma, Soberana del Vacío",a:"espectro",t:"E",atk:2800,def:2500,fx:"summonGraveMulti",eco:"foeDiscard",amt:2,txt:"Cuando es invocada, puedes invocar de modo especial hasta 2 Espectro de tu cementerio. Eco: cuando va al cementerio, el rival descarta 1 carta."},
+ "c900000417":{n:"Rey Espectral, Soberano del Sistema",a:"espectro",t:"E",atk:3000,def:2600,fx:"selfPerGrave",eco:"summonGrave",ecoN:0,amt:200,maxBonus:1000,txt:"Gana 200 ATK por cada Espectro en tu cementerio, hasta un máximo de 1000. Eco: cuando va al cementerio, puedes invocar de modo especial 1 Espectro de tu cementerio."},
+ "c900000418":{n:"Reina Fantasma, Soberana del Vacío",a:"espectro",t:"E",atk:2800,def:2500,fx:"summonGraveMulti",eco:"foeDiscard",amt:1,txt:"Cuando es invocada, puedes invocar de modo especial 1 Espectro de tu cementerio. Eco: cuando va al cementerio, el rival descarta 1 carta."},
  "c900000419":{n:"Sombra Eterna, el Eco Primordial",a:"espectro",t:"E",atk:3100,def:2400,fx:"summonGrave",eco:"destroyFoeCard",cap:0,txt:"Al ser invocado, invoca de modo especial 1 unidad Espectro de tu cementerio. Eco: cuando esta carta va al cementerio, destruye 1 carta del rival."},
  "c900000501":{n:"Clon Perfecto, el Doble Digital",a:"clon",t:"U",lv:8,atk:2800,def:2400,txt:"Una vez por turno, elige 1 unidad rival; esta carta copia su ATK y su efecto hasta el final del turno."},
  "c900000502":{n:"Réplica Menor",a:"clon",t:"U",lv:1,atk:300,def:300,fx:"summonNamedDeck",amt:1,sName:"Réplica Menor",txt:"Cuando es invocada, puedes invocar de modo especial 1 \"Réplica Menor\" de tu mazo."},
@@ -2198,7 +2198,7 @@ function effAtk(P,u){
   if(c.fx==="botnet")v+=200*totalCounters();
   if(c.fx==="handatk"||c.fx==="omni")v+=100*P.hand.length;
   if(c.fx==="selfPerAlly")v+=(c.amt||0)*countArchUnits(P,c.a);
-  if(c.fx==="selfPerGrave")v+=(c.amt||0)*P.gy.filter(function(g){return CARDS[g].a===c.a;}).length;
+  if(c.fx==="selfPerGrave"){var spg=(c.amt||0)*P.gy.filter(function(g){return CARDS[g].a===c.a;}).length;if(c.maxBonus!=null)spg=Math.min(spg,c.maxBonus);v+=spg;}
   P.field.forEach(function(x){if(!x)return;var xc=CARDS[x.id];
     if(xc.fx==="amplificador"&&c.a==="sobre")v+=200;
     if(xc.fx==="auraAtk"&&xc.a===c.a)v+=(xc.amt||0);
@@ -2556,6 +2556,17 @@ function fireSummonFx(P,unit,zone){
   if(fxBlocked(P,unit))return;
   onSummonFx(P,unit,zone);
 }
+function addNamedFromDeckToHand(P,name,n){
+  var got=0;
+  for(var i=P.deck.length-1;i>=0&&got<n;i--){
+    if(CARDS[P.deck[i]]&&CARDS[P.deck[i]].n===name){
+      var id=P.deck.splice(i,1)[0]; P.hand.push(id); got++;
+      log("🔊 Eco: "+P.name+" añade "+CARDS[id].n+" de su mazo a su mano.");
+    }
+  }
+  if(got)shuffle(P.deck);
+  return got;
+}
 function summonNamedFromDeck(P,name,n,pos){
   var put=0, placed=[];
   for(var i=P.deck.length-1;i>=0&&put<n;i--){
@@ -2627,6 +2638,7 @@ function triggerEcoInner(P,c){
   switch(c.eco){
     case "draw": for(var i=0;i<(c.ecoN||1);i++)drawCard(P); log("🔊 Eco: "+P.name+" roba "+(c.ecoN||1)+" carta(s)."); break;
     case "summonNamedDeck": summonNamedFromDeck(P,c.sName,c.ecoN||1,"atk"); break;
+    case "searchNamedDeck": addNamedFromDeckToHand(P,c.sName,c.ecoN||1); break;
     case "summonNamedGrave": reviveFromGY(P,c.a,99,"atk",c.sName); break;
     case "summonNamedGraveDef": reviveFromGY(P,c.a,99,"def",c.sName); break;
     case "summonGrave": chooseRevive(P,c.a,c.ecoN?c.ecoN:99,"atk",null,function(){render();}); break;

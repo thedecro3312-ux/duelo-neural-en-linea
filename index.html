@@ -1346,6 +1346,44 @@
         #scr-decks button.primary,#scr-coin button.primary,#scr-online button.primary,
         .settings-overlay button.primary,.builder-overlay button.primary{ animation:none; }
       }
+      /* ---------- Selector de mazos: buscar y favoritos ----------
+         Cada lista de mazos lleva su caja de búsqueda (filtra por nombre al
+         escribir) y una estrella por mazo: los favoritos quedan fijados
+         arriba, en su propia sección «★ Favoritos». */
+      .decksearchwrap{ position:relative; margin:.15rem 0 .4rem; }
+      .decksearchwrap .decksearchicon{ position:absolute; left:.65rem; top:50%; transform:translateY(-50%);
+        font-size:.95rem; opacity:.75; pointer-events:none; z-index:2; }
+      .decksearchwrap input.decksearch{ padding-left:2.2rem; padding-right:2.5rem; }
+      .decksearchclear{ position:absolute; right:.35rem; top:50%; transform:translateY(-50%); z-index:2;
+        width:2rem; height:2rem; min-height:2rem; padding:0; border-radius:999px;
+        background:transparent; border:1px solid transparent; color:inherit; font-size:.9rem; line-height:1; }
+      #scr-decks .decksearchclear,#scr-online .decksearchclear{ background:transparent; border-color:transparent;
+        box-shadow:none; text-shadow:none; animation:none; overflow:visible; }
+      #scr-decks .decksearchclear:hover,#scr-online .decksearchclear:hover{ border-color:currentColor; box-shadow:none; }
+      .deckcount{ margin:.1rem 0 .55rem; font-size:.88rem; color:var(--ink-faint); min-height:1.25em; }
+      #scr-decks .deckcount,#scr-online .deckcount{ color:#8296af; }
+      .deckitem{ position:relative; }
+      .deckitem .deckcard{ height:100%; }
+      #deckPick1 .deckcard,#deckPick2 .deckcard,#deckPickOnline .deckcard{ padding-right:2.9rem; }
+      .favbtn{ position:absolute; top:.4rem; right:.4rem; z-index:3;
+        width:2.3rem; height:2.3rem; min-height:2.3rem; padding:0;
+        display:flex; align-items:center; justify-content:center;
+        font-size:1.3rem; line-height:1; border-radius:999px;
+        background:rgba(10,15,24,.55); border:1px solid rgba(160,185,215,.35); color:#93a7bf; }
+      .favbtn.on{ color:#ffd94d; border-color:rgba(255,217,77,.7); background:rgba(46,36,4,.65);
+        text-shadow:0 0 10px rgba(255,217,77,.85); }
+      #scr-decks .favbtn,#scr-online .favbtn{ background:rgba(10,15,24,.55); border:1px solid rgba(160,185,215,.35);
+        box-shadow:none; text-shadow:none; animation:none; overflow:visible; }
+      #scr-decks .favbtn.on,#scr-online .favbtn.on{ background:rgba(46,36,4,.65); border-color:rgba(255,217,77,.7);
+        color:#ffd94d; text-shadow:0 0 10px rgba(255,217,77,.85); }
+      #scr-decks .favbtn:hover,#scr-online .favbtn:hover{ border-color:#ffd94d; color:#ffd94d;
+        box-shadow:0 0 12px rgba(255,217,77,.35); }
+      .decksec{ font-family:"Orbitron"; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
+        color:var(--gold); margin:.3rem 0 -.1rem; display:flex; align-items:center; gap:.55rem; }
+      .decksec::after{ content:""; flex:1; height:1px; background:currentColor; opacity:.28; }
+      .decksec.restsec{ color:var(--ink-faint); }
+      #scr-decks .decksec.restsec,#scr-online .decksec.restsec{ color:#8296af; }
+      .deckempty{ border:1px dashed var(--line); border-radius:12px; padding:1rem; text-align:center; color:var(--ink-dim); }
     </style>
   </head>
   <body>
@@ -1389,6 +1427,12 @@
               </div>
               <div>
                 <b>Tu mazo</b>
+                <div class="decksearchwrap">
+                  <span class="decksearchicon" aria-hidden="true">🔍</span>
+                  <input type="text" id="deckSearchOnline" class="decksearch" placeholder="Buscar mazo por nombre…" aria-label="Buscar tu mazo por nombre" autocomplete="off" />
+                  <button type="button" class="decksearchclear" id="deckSearchOnlineClear" aria-label="Borrar búsqueda" style="display:none">✕</button>
+                </div>
+                <p class="deckcount" id="deckCountOnline" aria-live="polite"></p>
                 <div class="deckgrid" id="deckPickOnline" style="grid-template-columns:1fr"></div>
               </div>
             </div>
@@ -1428,13 +1472,25 @@
             <div class="setupbox">
               <h3 id="name1Label">Jugador 1</h3>
               <input type="text" id="name1" value="Decro" maxlength="16" />
-              <p class="note">Elige tu mazo:</p>
+              <p class="note">Elige tu mazo: búscalo por nombre o toca la ☆ de un mazo para fijarlo arriba como favorito.</p>
+              <div class="decksearchwrap">
+                <span class="decksearchicon" aria-hidden="true">🔍</span>
+                <input type="text" id="deckSearch1" class="decksearch" placeholder="Buscar mazo por nombre…" aria-label="Buscar tu mazo por nombre" autocomplete="off" />
+                <button type="button" class="decksearchclear" id="deckSearch1Clear" aria-label="Borrar búsqueda" style="display:none">✕</button>
+              </div>
+              <p class="deckcount" id="deckCount1" aria-live="polite"></p>
               <div class="deckgrid" id="deckPick1" style="grid-template-columns:1fr"></div>
             </div>
             <div class="setupbox">
               <h3 id="name2Label">Jugador 2</h3>
               <input type="text" id="name2" value="Alan" maxlength="16" />
-              <p class="note">Elige su mazo:</p>
+              <p class="note">Elige su mazo: búscalo por nombre o toca la ☆ de un mazo para fijarlo arriba como favorito.</p>
+              <div class="decksearchwrap">
+                <span class="decksearchicon" aria-hidden="true">🔍</span>
+                <input type="text" id="deckSearch2" class="decksearch" placeholder="Buscar mazo por nombre…" aria-label="Buscar su mazo por nombre" autocomplete="off" />
+                <button type="button" class="decksearchclear" id="deckSearch2Clear" aria-label="Borrar búsqueda" style="display:none">✕</button>
+              </div>
+              <p class="deckcount" id="deckCount2" aria-live="polite"></p>
               <div class="deckgrid" id="deckPick2" style="grid-template-columns:1fr"></div>
             </div>
           </div>
@@ -2591,16 +2647,91 @@ function deckDef(k){ if(DECKS[k])return DECKS[k]; if(CUSTOM_DECKS[k])return CUST
 function allDeckKeys(){ return Object.keys(DECKS).concat(Object.keys(CUSTOM_DECKS)); }
 function deckCover(k){ return DECKCOVER[k]||(CUSTOM_DECKS[k]&&CUSTOM_DECKS[k].cover)||"glitch"; }
 function deckColor(k){return DECKCOLOR[k]||(CUSTOM_DECKS[k]&&CUSTOM_DECKS[k].color)||(ARCH[k]?ARCH[k].color:"#9db1d8");}
+/* ---------- Selector de mazos: buscar y favoritos ----------
+   Cada lista de mazos (la tuya, la del rival y la del modo en línea) tiene
+   su propia caja de búsqueda, que filtra los mazos por nombre al escribir
+   (sin importar mayúsculas ni acentos), y cada mazo lleva una estrella:
+   los favoritos quedan fijados arriba de la lista, en su propia sección
+   «★ Favoritos». Búsquedas y favoritos viven solo en esta sesión, en
+   memoria, como los mazos personalizados del editor. */
+var FAV_DECKS={}, DECK_SEARCH={p1:"",p2:"",online:""};
+function deckNorm(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+function isFavDeck(k){ return !!FAV_DECKS[k]; }
+function toggleFavDeck(k){
+  if(FAV_DECKS[k])delete FAV_DECKS[k]; else FAV_DECKS[k]=true;
+  buildPicks("deckPick1",0); buildPicks("deckPick2",1); buildOnlinePicks();
+}
+function deckGroups(q){
+  var keys=allDeckKeys().filter(function(k){ return !q||deckNorm(deckDef(k).label).indexOf(deckNorm(q))!==-1; });
+  return { favs:keys.filter(function(k){return isFavDeck(k);}),
+           rest:keys.filter(function(k){return !isFavDeck(k);}),
+           shown:keys.length, total:allDeckKeys().length };
+}
+function deckItemEl(k,selected,onPick){
+  var d=deckDef(k), fav=isFavDeck(k);
+  var item=document.createElement("div"); item.className="deckitem";
+  var b=document.createElement("button");
+  b.type="button"; b.className="deckcard"+(selected?" sel":"");
+  b.style.color=deckColor(k);
+  b.innerHTML="<img class='cover' src='"+cardImg(deckCover(k))+"' alt='Carta insignia del mazo "+esc(d.label)+"' loading='lazy'><span><h4 style='color:"+deckColor(k)+"'>"+esc(d.label)+"</h4><p>"+esc(d.desc)+"</p></span>";
+  b.onclick=onPick;
+  var s=document.createElement("button");
+  s.type="button"; s.className="favbtn"+(fav?" on":"");
+  s.textContent=fav?"★":"☆";
+  s.title=fav?"Quitar de favoritos":"Fijar como favorito: quedará arriba de la lista";
+  s.setAttribute("aria-label",(fav?"Quitar de favoritos: ":"Marcar como favorito: ")+d.label);
+  s.setAttribute("aria-pressed",fav?"true":"false");
+  s.onclick=function(){ toggleFavDeck(k); };
+  item.appendChild(b); item.appendChild(s);
+  return item;
+}
+function renderDeckList(el,q,selectedKey,onPick,clearFn){
+  el.innerHTML="";
+  var g=deckGroups(q);
+  if(!g.shown){
+    var e=document.createElement("div"); e.className="deckempty";
+    e.innerHTML="<p style='margin:.1rem 0 .55rem'>Ningún mazo coincide con «"+esc(q)+"».</p>";
+    var cb=document.createElement("button"); cb.type="button"; cb.textContent="Borrar búsqueda";
+    cb.onclick=clearFn; e.appendChild(cb); el.appendChild(e);
+    return g;
+  }
+  var both=g.favs.length>0&&g.rest.length>0;
+  function addGroup(title,cls,keys){
+    if(!keys.length)return;
+    if(title){ var h=document.createElement("div"); h.className="decksec"+(cls?" "+cls:""); h.textContent=title; el.appendChild(h); }
+    keys.forEach(function(k){ el.appendChild(deckItemEl(k,selectedKey===k,function(){ onPick(k); })); });
+  }
+  addGroup(both?"★ Favoritos":null,"",g.favs);
+  addGroup(both?"Todos los mazos":null,"restsec",g.rest);
+  return g;
+}
+function deckCountText(countId,g,q){
+  var c=$(countId); if(!c)return;
+  var favs=allDeckKeys().filter(function(k){return isFavDeck(k);}).length;
+  if(q)c.textContent="🔍 "+g.shown+" de "+g.total+" mazos coinciden con «"+q+"»";
+  else c.textContent=g.total+" mazos"+(favs?" · ★ "+favs+(favs===1?" favorito fijado arriba":" favoritos fijados arriba"):" · toca la ☆ de un mazo para fijarlo arriba");
+}
+function setDeckSearch(which,val){
+  DECK_SEARCH[which]=val;
+  var map={p1:["deckSearch1","deckSearch1Clear"],p2:["deckSearch2","deckSearch2Clear"],online:["deckSearchOnline","deckSearchOnlineClear"]};
+  var m=map[which];
+  if(m){ var inp=$(m[0]); if(inp&&inp.value!==val)inp.value=val; var cl=$(m[1]); if(cl)cl.style.display=val?"":"none"; }
+  if(which==="p1")buildPicks("deckPick1",0);
+  else if(which==="p2")buildPicks("deckPick2",1);
+  else buildOnlinePicks();
+}
+function bindDeckSearch(which){
+  var map={p1:["deckSearch1","deckSearch1Clear"],p2:["deckSearch2","deckSearch2Clear"],online:["deckSearchOnline","deckSearchOnlineClear"]};
+  var m=map[which], inp=$(m[0]); if(!inp)return;
+  inp.addEventListener("input",function(){ setDeckSearch(which,this.value); });
+  var cl=$(m[1]); if(cl)cl.onclick=function(){ setDeckSearch(which,""); inp.focus(); };
+}
 function buildPicks(elId,idx){
-  var el=$(elId); el.innerHTML="";
-  allDeckKeys().forEach(function(k){
-    var d=deckDef(k), b=document.createElement("button");
-    b.type="button"; b.className="deckcard"+(pickDeck[idx]===k?" sel":"");
-    b.style.color=deckColor(k);
-    b.innerHTML="<img class='cover' src='"+cardImg(deckCover(k))+"' alt='Carta insignia del mazo "+esc(d.label)+"' loading='lazy'><span><h4 style='color:"+deckColor(k)+"'>"+esc(d.label)+"</h4><p>"+esc(d.desc)+"</p></span>";
-    b.onclick=function(){pickDeck[idx]=k;buildPicks("deckPick1",0);buildPicks("deckPick2",1);};
-    el.appendChild(b);
-  });
+  var el=$(elId); if(!el)return;
+  var q=(idx===0?DECK_SEARCH.p1:DECK_SEARCH.p2)||"";
+  var g=renderDeckList(el,q,pickDeck[idx],function(k){ pickDeck[idx]=k; buildPicks("deckPick1",0); buildPicks("deckPick2",1); },
+    function(){ setDeckSearch(idx===0?"p1":"p2",""); });
+  deckCountText(idx===0?"deckCount1":"deckCount2",g,q);
 }
 /* ---------- Navegación entre pantallas: lobby → mazos → moneda → duelo ----------
    La selección de mazos y la moneda son pantallas propias (.screen): elegir un
@@ -2716,6 +2847,7 @@ $("btnSimPause").onclick=function(){ SIM_PAUSED=!SIM_PAUSED; updateSimBar(); };
 $("btnSimSpeed").onclick=function(){ SIM_SPEED=(SIM_SPEED>=8)?1:SIM_SPEED*2; updateSimBar(); };
 $("btnSimExit").onclick=function(){ exitSim(); };
 buildPicks("deckPick1",0); buildPicks("deckPick2",1);
+bindDeckSearch("p1"); bindDeckSearch("p2");
 
 /* ---------- Ajustes: dificultad de la IA ----------
    facil   = la máquina duda: a veces no activa Programas ni Protocolos, invoca
@@ -5868,15 +6000,11 @@ function roomDeckDef(p){
   return { main:main, extra:p.extra?toArr(p.extra).filter(function(id){return !!CARDS[id];}):[] };
 }
 function buildOnlinePicks(){
-  var el=$("deckPickOnline"); if(!el)return; el.innerHTML="";
-  allDeckKeys().forEach(function(k){
-    var d=deckDef(k), b=document.createElement("button");
-    b.type="button"; b.className="deckcard"+(onlineDeck===k?" sel":"");
-    b.style.color=deckColor(k);
-    b.innerHTML="<img class='cover' src='"+cardImg(deckCover(k))+"' alt='Carta insignia del mazo "+esc(d.label)+"' loading='lazy'><span><h4 style='color:"+deckColor(k)+"'>"+esc(d.label)+"</h4><p>"+esc(d.desc)+"</p></span>";
-    b.onclick=function(){onlineDeck=k;buildOnlinePicks();};
-    el.appendChild(b);
-  });
+  var el=$("deckPickOnline"); if(!el)return;
+  var q=DECK_SEARCH.online||"";
+  var g=renderDeckList(el,q,onlineDeck,function(k){ onlineDeck=k; buildOnlinePicks(); },
+    function(){ setDeckSearch("online",""); });
+  deckCountText("deckCountOnline",g,q);
 }
 $("btnModeOnline").onclick=function(){
   /* El modo en línea también se prepara en su propia pantalla (scr-online):
@@ -5889,6 +6017,7 @@ $("onlinePickCara").onclick=function(){ONLINE.coinChoice="cara";$("onlinePickCar
 $("onlinePickCruz").onclick=function(){ONLINE.coinChoice="cruz";$("onlinePickCruz").classList.add("sel");$("onlinePickCara").classList.remove("sel");};
 $("joinCode").addEventListener("input",function(){ this.value=this.value.toUpperCase().replace(/[^A-Z]/g,""); });
 buildOnlinePicks();
+bindDeckSearch("online");
 
 function genRoomCode(){
   var letters="ABCDEFGHJKMNPQRSTUVWXYZ", s="";

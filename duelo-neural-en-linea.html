@@ -1597,7 +1597,7 @@
             <div class="orow">
               <div>
                 <label for="onlineName"><b>Tu nombre</b></label>
-                <input type="text" id="onlineName" value="Decro" maxlength="16" />
+                <input type="text" id="onlineName" value="Jugador 1" maxlength="16" />
               </div>
               <div>
                 <b>Tu mazo</b>
@@ -1645,7 +1645,7 @@
 <div class="setupgrid">
             <div class="setupbox">
               <h3 id="name1Label">Jugador 1</h3>
-              <input type="text" id="name1" value="Decro" maxlength="16" />
+              <input type="text" id="name1" value="Jugador 1" maxlength="16" />
               <p class="note">Elige tu mazo: búscalo por nombre o toca la ☆ de un mazo para fijarlo arriba como favorito.</p>
               <div class="decksearchwrap">
                 <span class="decksearchicon" aria-hidden="true">🔍</span>
@@ -1657,7 +1657,7 @@
             </div>
             <div class="setupbox">
               <h3 id="name2Label">Jugador 2</h3>
-              <input type="text" id="name2" value="Alan" maxlength="16" />
+              <input type="text" id="name2" value="Jugador 2" maxlength="16" />
               <p class="note">Elige su mazo: búscalo por nombre o toca la ☆ de un mazo para fijarlo arriba como favorito.</p>
               <div class="decksearchwrap">
                 <span class="decksearchicon" aria-hidden="true">🔍</span>
@@ -2754,31 +2754,23 @@ var NINA_VOICE_DATA={
 var NINA_LINES={
   greeting:[{t:"¡Hola! Yo soy Nina y en DUELO NEURAL juego yo contra ti: pienso mis turnos, te hablo durante el duelo y no pienso dejarte ganar fácil. Elige los mazos y ¡a duelar!",f:"greeting-1.mp3"}],
   coinPlayer:[
-    {t:"¡Salió tu lado! Empiezas tú, Decro. ¡A ver qué traes!",f:"coin-player-1.mp3"},
     {t:"¡La moneda te sonríe! Tú abres el duelo, yo te sigo, ¿eh?",f:"coin-player-2.mp3"}],
   coinNina:[
-    {t:"¡Salió mi lado! Empiezo yo… prepárate, Decro.",f:"coin-nina-1.mp3"},
     {t:"¡La moneda es mía! Abro yo el duelo. ¡Que comience la función!",f:"coin-nina-2.mp3"}],
   turn:[
     {t:"Mi turno. A ver qué me sale… ¡esto se pone bueno!",f:"turn-1.mp3"},
-    {t:"Voy yo. Escucha bien, porque mi jugada suena fuerte.",f:"turn-2.mp3"},
-    {t:"Mi turno, Decro. ¡No parpadees!",f:"turn-3.mp3"}],
+    {t:"Voy yo. Escucha bien, porque mi jugada suena fuerte.",f:"turn-2.mp3"}],
   turnEvolve:[
-    {t:"¡Evolución! Mi IA Superior entra en escena. ¿La oyes venir?",f:"turn-evolve-1.mp3"},
-    {t:"¡A evolucionar! Esto sube de nivel, Decro.",f:"turn-evolve-2.mp3"}],
+    {t:"¡Evolución! Mi IA Superior entra en escena. ¿La oyes venir?",f:"turn-evolve-1.mp3"}],
   turnBigHit:[
-    {t:"¡Toma! Ese golpe se escuchó hasta el último asiento.",f:"turn-hit-1.mp3"},
-    {t:"¡Directo y sin escalas! ¿Estás bien, Decro?",f:"turn-hit-2.mp3"}],
+    {t:"¡Toma! Ese golpe se escuchó hasta el último asiento.",f:"turn-hit-1.mp3"}],
   turnBehind:[
     {t:"Voy abajo, pero mi canción aún no termina. ¡Sigo en pie!",f:"turn-behind-1.mp3"}],
   playerEvolved:[
-    {t:"¡Órale! Esa Evolución sí impone. Pero no me quedo atrás, ¿eh?",f:"player-evolved-1.mp3"},
-    {t:"¡Vaya IA Superior! Buena jugada, Decro. Ahora veamos la mía.",f:"player-evolved-2.mp3"}],
+    {t:"¡Órale! Esa Evolución sí impone. Pero no me quedo atrás, ¿eh?",f:"player-evolved-1.mp3"}],
   ninaWon:[
-    {t:"¡Gané yo! Jugaste muy bien, ¿eh? Cuando quieras, la revancha.",f:"won-1.mp3"},
-    {t:"¡Victoria para mí! Gracias por el duelo, Decro. ¿Otra ronda?",f:"won-2.mp3"}],
+    {t:"¡Gané yo! Jugaste muy bien, ¿eh? Cuando quieras, la revancha.",f:"won-1.mp3"}],
   ninaLost:[
-    {t:"¡Me ganaste, Decro! Bien jugado… pero pídeme la revancha y verás.",f:"lost-1.mp3"},
     {t:"¡Tú ganas esta vez! Lo hiciste increíble. La próxima es mía, ¿eh?",f:"lost-2.mp3"}]
 };
 var NinaVoice={buffers:{},loading:{},source:null,el:null,file:null,seq:0,last:{},
@@ -3020,7 +3012,7 @@ var duelLog = [];               /* eventos del duelo en curso */
 var duelLogSeq = 0;             /* nº secuencial (1, 2, 3...) */
 var duelLogTruncated = false;   /* true si se aplico el tope de 500 */
 var duelLogMode = "ai";         /* "ai" | "pvp" | "online" | "sims" */
-var duelLogNames = ["Decro", "Nina"];   /* nombres de actor por lado (0/1) */
+var duelLogNames = ["Jugador 1", "Nina"];   /* nombres de actor por lado (0/1) */
 var duelLogDeckNames = ["", ""];        /* solo nombres de mazo (nunca passcodes) */
 var duelLogTurn = 1;            /* nº de turno actual; lo alimenta setDuelLogTurn() */
 var duelLogs = [];              /* historial cargado de localStorage */
@@ -3688,7 +3680,7 @@ function setMode(m){
     $("name1Label").textContent="IA 1 🤖"; $("name2Label").textContent="IA 2 🤖";
     $("coinPickLabel").textContent="La IA 1 elige:";
   }
-  else{$("name2").value="Alan";$("name2Label").textContent="Jugador 2";$("name1Label").textContent="Jugador 1";$("coinPickLabel").textContent="El Jugador 1 elige:";}
+  else{$("name2").value="Jugador 2";$("name2Label").textContent="Jugador 2";$("name1Label").textContent="Jugador 1";$("coinPickLabel").textContent="El Jugador 1 elige:";}
   var mn=$("decksModeName"); if(mn)mn.textContent={pvp:"⚔️ Duelo para 2 jugadores — pasa-y-juega en este dispositivo",ai:"🎧 Contra Nina (la IA) — ella juega con el mazo que elijas para ella",sim:"🤖 IA contra IA — Simulación: las dos IA juegan solas y tú solo miras"}[m]||"";
   showPrepScreen("scr-decks"); /* paso 1: la selección de mazos, en su propia pantalla */
   if(m==="ai")ninaSay("greeting"); /* Nina se presenta con su voz al elegir el modo */
@@ -3753,7 +3745,7 @@ function torneoBeginRound(n){
   var cr=$("coinResult"); if(cr)cr.textContent="";
   var cf=$("coin"); if(cf)cf.classList.remove("flip");
   var dr=$("aiDiffRow"); if(dr)dr.style.display="none"; /* dificultad fija: no se elige */
-  var n1=$("name1"); if(n1&&(!n1.value||n1.value==="IA 1"||n1.value==="IA 2"))n1.value="Decro";
+  var n1=$("name1"); if(n1&&(!n1.value||n1.value==="IA 1"||n1.value==="IA 2"))n1.value="Jugador 1";
   var n2=$("name2"); if(n2){ n2.value=r.rival; n2.disabled=true; } /* rival fijo, como Nina en el modo IA */
   var n1l=$("name1Label"); if(n1l)n1l.textContent="Jugador 1";
   var n2l=$("name2Label"); if(n2l)n2l.textContent="Tu rival: "+r.rival+" 🏆";

@@ -91,6 +91,21 @@
          su explicación vive en la ventana «Cómo se juega». */
       .modebtn{ font-size:1.08rem; font-weight:700; padding:1rem 1.1rem; width:100%; }
       .modebtn.sel{ outline:2px solid var(--neon); outline-offset:2px; }
+      /* ---------- 🏆 Torneo Neural: cuadro de rondas ---------- */
+      .torneo-intro{ color:var(--ink-dim); max-width:580px; margin:.3rem auto .8rem; text-align:center; }
+      .torneo-champ{ color:var(--gold); font-weight:700; text-align:center; margin:.3rem auto .8rem; }
+      .torneo-rounds{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
+      .torneo-round{ display:flex; justify-content:space-between; align-items:center; gap:1rem; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:.8rem 1rem; }
+      .torneo-round.cur{ border-color:var(--neon); outline:2px solid var(--neon); outline-offset:1px; }
+      .torneo-round.won{ opacity:.85; }
+      .torneo-round.locked{ opacity:.6; }
+      .torneo-rinfo{ display:flex; flex-direction:column; gap:.1rem; }
+      .torneo-rinfo span{ color:var(--ink-dim); font-size:.92rem; }
+      .torneo-tag{ font-style:italic; }
+      .torneo-rstate{ display:flex; align-items:center; gap:.6rem; white-space:nowrap; font-weight:700; }
+      /* 🔒 Columna del rival bloqueada en el Torneo Neural: su mazo no se puede cambiar */
+      .setupbox.lockedbox .deckgrid{ opacity:.55; pointer-events:none; }
+      .setupbox.lockedbox .decksearch{ opacity:.55; }
       .modepanel{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:1.1rem 1.2rem; margin-bottom:1rem; text-align:left; }
       .blockbtn{ display:block; margin:1rem 0; }
       .deckgrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem; }
@@ -669,6 +684,24 @@
           color:var(--ink-dim); font-size:.88rem; line-height:1.35; }
         .rotatehint b{ color:var(--ink); }
       }
+      /* ---------- Zona Extra OCUPADA en VERTICAL (táctil): tamaño de zona
+         normal, no gigante ----------
+         La regla base dimensiona la zona ocupada/elegible con height:100%,
+         pensado para las vistas anchas, donde la banda central tiene un
+         alto definido (fila flexible del tablero). En vertical la banda es
+         una fila flex común, sin alto propio: el porcentaje no tiene contra
+         qué resolverse y la carta acaba mandando con el tamaño intrínseco
+         de su imagen (~177×254), tapando medio campo (así se veía WinZip
+         colocado en la Zona Extra). Aquí la zona se dimensiona por ANCHO
+         — el de una columna de zona normal: las filas reparten el ancho en
+         .64fr + 5×1fr + .64fr = 6.28fr, así que una zona mide ~1/6.28 del
+         ancho interior del tablero (~15%, descontando los huecos) — y el
+         alto sale de su aspect-ratio 177/254, igual que las demás zonas.
+         Solo táctil en vertical: el escritorio (ancho, con ratón) conserva
+         su zona extra de alto completo y el horizontal táctil su 42px. */
+      @media (orientation:portrait) and (hover:none) and (pointer:coarse){
+        .xzone.filled,.xzone.pickable{ height:auto; width:15%; }
+      }
       @media (max-width:1280px) and (max-height:700px) and (orientation:landscape) and (hover:none) and (pointer:coarse){
         :root{ --card-w:42px; }
         body{ font-size:15px; }
@@ -894,6 +927,95 @@
         .midban .pile.banh{ height:100%; width:auto; }
         .midcenter{ align-content:center; }
       }
+
+      /* ---------- Ajustes SOLO para teléfono en horizontal (pantalla baja
+         y ancha, táctil): el panel de información deja de comerse una
+         columna fija y pasa a ser una hoja flotante oculta por defecto;
+         la barra de simulación y la banda central quedan en una sola
+         línea compacta; la mano crece con ATK/DEF legible y el tapete
+         gana contraste. En escritorio nada de esto aplica. ---------- */
+      #btnInfoOpen, #btnInfoClose{ display:none; }
+      @media (max-width:1280px) and (max-height:700px) and (orientation:landscape) and (hover:none) and (pointer:coarse){
+        /* 1 · Panel de información: hoja flotante, oculta por defecto.
+           Se abre con el botón «ℹ️ Info» o al tocar una carta (su ficha
+           se carga igual que siempre) y se cierra con la ✕. */
+        .cardinfo{ position:fixed; left:.45rem; top:.45rem; bottom:.45rem; z-index:45;
+          width:min(252px,76vw); height:auto; max-height:none; overflow-y:auto;
+          padding:.55rem .6rem; border-radius:14px;
+          transform:translateX(calc(-100% - 1rem)); transition:transform .28s ease;
+          box-shadow:0 14px 34px rgba(2,6,18,.55), 0 0 22px rgba(var(--th-rgb,55,200,255),.16); }
+        #scr-duel.ci-open .cardinfo{ transform:translateX(0); }
+        .cardinfo .cihint{ font-size:.85rem; line-height:1.4; }
+        .cardinfo img.ciart{ width:min(148px,100%); }
+        .cardinfo h4{ font-size:1.02rem; }
+        .cardinfo .cimeta{ font-size:.82rem; }
+        .cardinfo .ciatk{ font-size:.92rem; }
+        .cardinfo .citxt{ font-size:.88rem; line-height:1.38; }
+        #btnInfoOpen{ display:inline-flex; align-items:center; gap:.3rem; position:fixed; z-index:44;
+          left:.45rem; top:.45rem; padding:.3rem .6rem; font-size:.85rem; min-height:0;
+          background:var(--panel2); border:1px solid var(--neon); border-radius:999px;
+          box-shadow:0 6px 16px rgba(2,6,18,.5); }
+        #btnInfoClose{ position:fixed; z-index:46; top:.6rem; min-height:0;
+          left:min(218px, calc(76vw - 2.3rem)); width:2rem; height:2rem; padding:0;
+          align-items:center; justify-content:center; border-radius:50%; font-size:.95rem;
+          background:var(--panel2); }
+        #scr-duel.ci-open #btnInfoClose{ display:inline-flex; }
+        /* 2 · Barra de simulación en UNA sola línea, sin envolverse */
+        .simbar{ flex-wrap:nowrap; gap:.4rem; padding:.2rem .5rem; }
+        .simtitle{ font-size:.72rem; }
+        .simscore{ flex:1 1 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:.85rem; }
+        .simbtns{ flex:0 0 auto; flex-wrap:nowrap; gap:.3rem; }
+        .simbar button{ padding:.18rem .42rem; font-size:.78rem; white-space:nowrap; min-height:0; }
+        /* 3 · Mano más grande, con el ATK/DEF legible */
+        .handrow{ margin-top:.14rem; }
+        .handrow .card{ height:min(80px,22dvh); }
+        .handrow .card .stchip{ font-size:.52rem; padding:.14rem .05rem; }
+        /* 4 · Tapete con más contraste: fondo con presencia, bordes de
+           zona marcados, cartas del campo que destacan y huecos vacíos
+           con iconos mucho más tenues */
+        .board{ background:
+            radial-gradient(130% 100% at 50% -10%, rgba(var(--th-rgb,55,200,255),.22), transparent 55%),
+            radial-gradient(120% 90% at 50% 115%, rgba(var(--th2-rgb,255,93,162),.15), transparent 60%),
+            repeating-linear-gradient(0deg, rgba(var(--th-rgb,120,160,255),.05) 0 1px, transparent 1px 34px),
+            repeating-linear-gradient(90deg, rgba(var(--th-rgb,120,160,255),.05) 0 1px, transparent 1px 34px),
+            linear-gradient(180deg, var(--mat1,#101d38), var(--mat2,#0a1327) 55%, var(--mat1,#0d1830));
+          border:1.5px solid rgba(var(--th-rgb,56,80,126),.9);
+          box-shadow:inset 0 0 0 3px rgba(var(--th-rgb,216,183,106),.22), inset 0 0 54px rgba(0,0,0,.5), inset 0 0 42px rgba(var(--th-rgb,55,200,255),.10), 0 12px 32px rgba(2,6,18,.5); }
+        .zone{ border:2px solid rgba(var(--th-rgb,216,183,106),.72); background:rgba(var(--th-rgb,140,175,255),.09);
+          box-shadow:inset 0 0 20px rgba(0,0,0,.45), inset 0 0 14px rgba(var(--th-rgb,55,200,255),.08); }
+        .zone:empty::after{ opacity:.07; font-size:.8rem; }
+        .zone>.card{ box-shadow:0 0 16px rgba(var(--th-rgb,55,200,255),.38), 0 4px 10px rgba(0,0,0,.55); }
+        .pile.empty{ border-color:rgba(var(--th-rgb,216,183,106),.55); }
+        .pile.fieldzone{ border-color:rgba(var(--th-rgb,216,183,106),.72); }
+        /* 5 · Banda central compacta en una sola fila (la fila ya no se
+           estira como una fila de cartas: su alto es el de sus botones) */
+        #scr-duel .midrow{ flex:0 0 auto; flex-wrap:nowrap; gap:.25rem; padding:.06rem .08rem; margin:.05rem 0; }
+        .midcenter{ flex-wrap:nowrap; gap:.28rem; flex:1 1 auto; min-width:0; }
+        .midbtns{ flex-wrap:nowrap; gap:.22rem; }
+        .midrow button{ padding:.16rem .36rem; font-size:.76rem; }
+        .phase{ font-size:.72rem; }
+        .turntag{ font-size:.66rem; padding:.05rem .32rem; }
+        #midCounts{ font-size:.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; flex:0 1 auto; }
+        /* 6 · Zonas de Monstruo Extra compactas en la banda central: con la
+           fila compacta, el height:100% de las vistas anchas no resuelve
+           (la fila mide lo que miden sus botones) y las zonas colapsaban
+           hasta no verse. Aquí tienen un alto fijo, más chicas que las
+           zonas normales, siempre visibles con su marca ✦ ZONA EXTRA;
+           ocupadas muestran la carta y al fusionar brillan y se pueden
+           tocar igual que en escritorio, sin amontonar el centro. */
+        .xzone{ display:block; flex:0 0 auto; height:42px; aspect-ratio:177/254; border-radius:5px;
+          border:1.5px dashed rgba(var(--th-rgb,216,183,106),.55); background:rgba(8,10,24,.45);
+          position:relative; overflow:hidden; }
+        .xzone.filled{ height:42px; border-style:solid; }
+        .xzone.pickable{ height:42px; }
+        .xzone:empty::after{ content:"✦\A ZONA\A EXTRA"; white-space:pre; position:absolute; inset:0;
+          display:flex; align-items:center; justify-content:center; text-align:center;
+          font-family:"Orbitron"; font-size:.4rem; line-height:1.45; color:rgba(var(--th-rgb,216,183,106),.8); }
+        .xzone-pick{ font-size:.44rem; line-height:1.35; }
+      }
+      @media (max-width:1280px) and (max-height:700px) and (orientation:landscape) and (hover:none) and (pointer:coarse) and (prefers-reduced-motion: reduce){
+        .cardinfo{ transition:none; }
+      }
     </style>
     <style>
       /* ================= LOBBY NEÓN CYBERPUNK =================
@@ -1070,6 +1192,11 @@
       @media (max-width:820px){
         .lobby-corner .iconbtn{ width:38px; height:38px; font-size:1.08rem; }
         .lobby-corner .rulesbtn{ height:38px; padding:0 .6rem; font-size:.88rem; }
+      }
+      /* Botón de pantalla completa del lobby: en pantallas estrechas queda solo el icono ⛶
+         para que la esquina (reglas + pantalla completa + ajustes) no se salga del ancho */
+      @media (max-width:560px){
+        .lobby-corner .fsbtn .fstext{ display:none; }
       }
       /* ---------- Ventana «Cómo se juega»: las reglas viven en su propia ventana
          (reutiliza la ventana de Ajustes) y ya no ocupan espacio en el lobby ---------- */
@@ -1423,6 +1550,7 @@
       <section id="scr-lobby" class="screen on">
         <div class="lobby-corner">
           <button type="button" class="rulesbtn" id="btnOpenRules" aria-label="Abrir cómo se juega">📖 Cómo se juega</button>
+          <button type="button" class="rulesbtn fsbtn" id="btnFsLobby" aria-label="Pantalla completa" title="Pantalla completa">⛶ <span class="fstext">Pantalla completa</span></button>
           <button type="button" class="iconbtn" id="btnOpenSettings" aria-label="Ajustes" title="Ajustes">⚙️</button>
         </div>
         <div class="hero">
@@ -1434,6 +1562,7 @@
           <button class="primary modebtn" id="btnModePvp" type="button">⚔️ Duelo para 2 jugadores</button>
           <button class="primary modebtn" id="btnModeAi" type="button">🎧 Contra Nina (la IA)</button>
           <button class="primary modebtn" id="btnModeSim" type="button">🤖 IA contra IA — Simulación</button>
+          <button class="primary modebtn" id="btnModeTorneo" type="button">🏆 Torneo Neural</button>
           <button class="primary modebtn" id="btnModeOnline" type="button">🌐 En línea con código — dos dispositivos</button>
         </div>
 
@@ -1441,6 +1570,20 @@
 
         <button class="modebtn blockbtn" id="btnDuelHistory" type="button">📜 Historial de duelos</button>
 
+      </section>
+
+      <!-- ============ 🏆 TORNEO NEURAL: CUADRO DE RONDAS ============ -->
+      <section id="scr-torneo" class="screen">
+        <div class="prep-head">
+          <p class="prep-step">Modo historia</p>
+          <h2 class="prep-title">🏆 Torneo Neural</h2>
+          <p class="prep-sub">Seis rondas, seis rivales y un solo campeón. Gana la ronda actual para avanzar.</p>
+        </div>
+        <div id="torneoBracket"></div>
+        <div class="prep-nav">
+          <button type="button" class="ghost" id="btnTorneoBack">← Volver a los modos</button>
+          <button type="button" class="ghost" id="btnTorneoReset">🔄 Reiniciar torneo</button>
+        </div>
       </section>
 
       <!-- ============ EN LÍNEA: PANTALLA PROPIA (mazo + sala) ============ -->
@@ -1612,6 +1755,7 @@
                 <button id="btnSound" type="button" class="ghost" title="Activar o silenciar los efectos de sonido">🔊 Sonido</button>
                 <button id="btnLog" type="button" class="ghost">Registro</button>
                 <button id="btnDuelLog" type="button" class="ghost">📜 Registro (<span id="duelLogCount">0</span>)</button>
+                <button id="btnFsDuel" type="button" class="ghost" aria-label="Pantalla completa" title="Pantalla completa">⛶ <span class="fstext">Pantalla completa</span></button>
                 <button id="btnLeaveOnline" type="button" class="danger" style="display:none">Abandonar</button>
               </span>
             </div>
@@ -1636,6 +1780,8 @@
         <div class="handrow" id="myHand"></div>
         <div class="actions" id="actionBar"></div>
         <div class="logbox" id="logBox" style="display:none"></div>
+        <button type="button" id="btnInfoOpen" aria-label="Mostrar la información de la carta">ℹ️ Info</button>
+        <button type="button" id="btnInfoClose" aria-label="Cerrar la información de la carta">✕</button>
       </section>
     </div>
 
@@ -2710,7 +2856,7 @@ var NinaVoice={buffers:{},loading:{},source:null,el:null,file:null,seq:0,last:{}
     self.play(line.f);
   }
 };
-function ninaSay(event){ if(typeof MODE!=="undefined"&&MODE!=="ai")return; try{NinaVoice.say(event);}catch(e){} }
+function ninaSay(event){ if(typeof MODE!=="undefined"&&MODE!=="ai")return; try{NinaVoice.say(event);}catch(e){} } /* la voz y los comentarios de Nina solo suenan en «Contra Nina»: en el Torneo Neural no hay líneas suyas */
 document.addEventListener("pointerdown",function(){ try{NinaVoice.warm();}catch(e){} },false);
 (function(){ var rb=$("btnNinaReplay"); if(rb)rb.onclick=function(){ if(!NinaVoice.file)return; if(SFX.muted){toast("El sonido está silenciado: pulsa 🔊 Sonido en el tablero para escuchar mi voz.");return;} NinaVoice.play(NinaVoice.file); }; })();
 
@@ -2775,6 +2921,17 @@ var FAV_DECKS={}, DECK_SEARCH={p1:"",p2:"",online:""};
    se arranca vacío, como antes. */
 var LS_FAV_KEY="dueloNeural.favorites.v1";
 var LS_CUSTOM_KEY="dueloNeural.customDecks.v1";
+var LS_TORNEO_KEY="dueloNeural.torneo.v1";
+function torneoFresh(){ return {round:1, won:[false,false,false,false,false,false], champion:false, startedAt:null}; }
+var TORNEO=torneoFresh();
+var TORNEO_ROUNDS=[
+  {deck:"roedor", diff:"facil", rival:"Capitán Bigotes", tag:"Se esconde boca abajo y embosca"},
+  {deck:"rar", diff:"facil", rival:"Zip, la Archivadora", tag:"Ordenada: lo comprime todo"},
+  {deck:"aventurero", diff:"normal", rival:"Dado Dorado", tag:"Jugador empedernido, vive del d20"},
+  {deck:"espectro", diff:"normal", rival:"Madame Eco", tag:"Susurra desde el Cementerio"},
+  {deck:"hacker", diff:"dificil", rival:"Root, el Administrador Oculto", tag:"El jefe del mazo Hacker"},
+  {deck:"virus", diff:"dificil", rival:"Glitch Supremo", tag:"El Error Final. El campeón a destronar"}
+];
 function cardExistsInCatalog(id){ return !!(CARDS && CARDS[id]); }
 function validateCustomDeck(d){
   if(!d || typeof d!=="object" || Array.isArray(d)) return null;
@@ -2830,6 +2987,25 @@ function savePersisted(){
     localStorage.setItem(LS_FAV_KEY, JSON.stringify(Object.keys(FAV_DECKS)));
     localStorage.setItem(LS_CUSTOM_KEY, JSON.stringify({ decks:CUSTOM_DECKS, seq:CUSTOM_SEQ }));
   }catch(e){ /* sin almacenamiento o lleno: sigue en sesión */ }
+}
+function loadTorneo(){
+  try{
+    var raw=localStorage.getItem(LS_TORNEO_KEY);
+    if(raw){
+      var p=JSON.parse(raw);
+      if(p&&typeof p==="object"&&!Array.isArray(p)){
+        var r=p.round|0;
+        if(r>=1&&r<=6&&Array.isArray(p.won)&&p.won.length===6){
+          TORNEO={round:r, won:p.won.map(function(w){return !!w;}), champion:!!p.champion, startedAt:(typeof p.startedAt==="number"?p.startedAt:null)};
+          return;
+        }
+      }
+    }
+  }catch(e){ /* corrupto o inválido -> se empieza de cero, como con los favoritos */ }
+  TORNEO=torneoFresh();
+}
+function saveTorneo(){
+  try{ localStorage.setItem(LS_TORNEO_KEY, JSON.stringify(TORNEO)); }catch(e){ /* sin almacenamiento: sigue en sesión */ }
 }
 /* ---------- Registro del duelo (núcleo) ----------
    Registro jugada a jugada del duelo en curso: el texto nace ya
@@ -3318,7 +3494,7 @@ function copyDuelLog(){
   } else { dlCopyFallback(txt); done(); }
 }
 /* ---------- Historial de duelos (últimos 10, en localStorage) ---------- */
-function dlModeLabel(m){ return m==="ai"?"vs IA":m==="pvp"?"2 jugadores":m==="online"?"En línea":m==="sims"?"IA vs IA":(m||"Duelo"); }
+function dlModeLabel(m){ return m==="ai"?"vs IA":m==="pvp"?"2 jugadores":m==="online"?"En línea":m==="sims"?"IA vs IA":m==="torneo"?"Torneo Neural":(m||"Duelo"); }
 function openDuelHistory(){
   loadDuelLogs();
   var html="<h2>📜 Historial de duelos</h2>";
@@ -3460,9 +3636,28 @@ function bindDeckSearch(which){
 function buildPicks(elId,idx){
   var el=$(elId); if(!el)return;
   var q=(idx===0?DECK_SEARCH.p1:DECK_SEARCH.p2)||"";
-  var g=renderDeckList(el,q,pickDeck[idx],function(k){ pickDeck[idx]=k; buildPicks("deckPick1",0); buildPicks("deckPick2",1); },
+  var g=renderDeckList(el,q,pickDeck[idx],function(k){ if(idx===1&&typeof MODE!=="undefined"&&MODE==="torneo")return; /* 🔒 en el torneo el mazo del rival es fijo */ pickDeck[idx]=k; buildPicks("deckPick1",0); buildPicks("deckPick2",1); },
     function(){ setDeckSearch(idx===0?"p1":"p2",""); });
   deckCountText(idx===0?"deckCount1":"deckCount2",g,q);
+}
+/* ---------- 🔒 Bloqueo del mazo rival en el Torneo Neural ----------
+   En el torneo el rival siempre juega con SU mazo: su columna de la
+   pantalla de mazos queda bloqueada (la lista no responde a clics, el
+   buscador se deshabilita y la nota avisa del bloqueo) y buildPicks
+   ignora cualquier intento de cambiar pickDeck[1]. Al salir a otro
+   modo, setMode() la desbloquea. */
+function lockRivalDeckUI(lock){
+  var grid=$("deckPick2"); if(!grid)return;
+  var box=grid.closest?grid.closest(".setupbox"):null;
+  var s2=$("deckSearch2"); if(s2)s2.disabled=!!lock;
+  if(lock){ var c2=$("deckSearch2Clear"); if(c2)c2.style.display="none"; }
+  if(!box)return;
+  box.classList.toggle("lockedbox",!!lock);
+  var note=box.querySelector(".note");
+  if(note){
+    if(lock){ if(!note.getAttribute("data-orig"))note.setAttribute("data-orig",note.textContent); note.textContent="🔒 Mazo fijo del Torneo Neural: el rival siempre juega con su mazo y no se puede cambiar."; }
+    else if(note.getAttribute("data-orig")){ note.textContent=note.getAttribute("data-orig"); }
+  }
 }
 /* ---------- Navegación entre pantallas: lobby → mazos → moneda → duelo ----------
    La selección de mazos y la moneda son pantallas propias (.screen): elegir un
@@ -3470,7 +3665,7 @@ function buildPicks(elId,idx){
    «Continuar» abre la pantalla de la moneda (paso 2), desde donde «¡A duelar!»
    entra al tablero. El modo en línea tiene su propia pantalla (scr-online). */
 function showPrepScreen(id){
-  ["scr-lobby","scr-decks","scr-coin","scr-online","scr-duel"].forEach(function(s){var el=$(s);if(el)el.classList.toggle("on",s===id);});
+  ["scr-lobby","scr-decks","scr-coin","scr-online","scr-torneo","scr-duel"].forEach(function(s){var el=$(s);if(el)el.classList.toggle("on",s===id);});
   window.scrollTo(0,0);
 }
 function setMode(m){
@@ -3481,8 +3676,9 @@ function setMode(m){
   var cr=$("coinResult"); if(cr)cr.textContent="";
   var cf=$("coin"); if(cf)cf.classList.remove("flip");
   var mb={pvp:"btnModePvp",ai:"btnModeAi",sim:"btnModeSim"}[m];
-  ["btnModePvp","btnModeAi","btnModeSim","btnModeOnline"].forEach(function(id){var b=$(id);if(b)b.classList.toggle("sel",id===mb);});
+  ["btnModePvp","btnModeAi","btnModeSim","btnModeOnline","btnModeTorneo"].forEach(function(id){var b=$(id);if(b)b.classList.toggle("sel",id===mb);});
   var dr=$("aiDiffRow"); if(dr)dr.style.display=(m==="ai"||m==="sim")?"block":"none";
+  lockRivalDeckUI(false); /* fuera del torneo, la columna del jugador 2 vuelve a ser editable */
   var dt=$("aiDiffTitle"); if(dt)dt.textContent=(m==="sim")?"🤖 Dificultad de las dos IA":"🎧 Dificultad de Nina";
   $("name2").disabled=(m==="ai");
   if(m==="ai"){$("name2").value="Nina";$("name2Label").textContent="Tu rival: Nina 🎧";$("name1Label").textContent="Jugador 1";$("coinPickLabel").textContent="Tú eliges:";}
@@ -3500,6 +3696,78 @@ function setMode(m){
 $("btnModePvp").onclick=function(){setMode("pvp");};
 $("btnModeAi").onclick=function(){setMode("ai");};
 $("btnModeSim").onclick=function(){setMode("sim");};
+function torneoDiffName(k){ var d=DIFF_LIST.filter(function(x){return x.k===k;})[0]; return d?d.n.replace(/^\S+\s+/,""):"Normal"; }
+function torneoShowBracket(){
+  var box=$("torneoBracket"); if(!box)return;
+  var html="";
+  if(TORNEO.champion)html+="<p class=\"torneo-champ\">🏆 ¡Campeón del Torneo Neural! Glitch Supremo destronado. ¿Otra vuelta, campeón?</p>";
+  else html+="<p class=\"torneo-intro\">Seis rondas, seis rivales y un solo campeón. Gana la ronda actual para avanzar.</p>";
+  html+="<ol class=\"torneo-rounds\">";
+  TORNEO_ROUNDS.forEach(function(r,i){
+    var n=i+1, won=!!TORNEO.won[i], isCur=(n===TORNEO.round&&!TORNEO.champion);
+    var st=won?"✅ Superada":isCur?"▶ Actual":"🔒 Pendiente";
+    html+="<li class=\"torneo-round"+(won?" won":isCur?" cur":" locked")+"\">"
+      +"<div class=\"torneo-rinfo\"><b>Ronda "+n+": "+esc(r.rival)+"</b>"
+      +"<span>"+esc(deckDef(r.deck).label)+" · "+esc(torneoDiffName(r.diff))+"</span>"
+      +"<span class=\"torneo-tag\">"+esc(r.tag)+"</span></div>"
+      +"<div class=\"torneo-rstate\">"+st
+      +(isCur?" <button type=\"button\" class=\"primary\" data-call=\"torneoStartRound("+n+")\">"+(n===1?"▶ Jugar ronda 1":"▶ Continuar: ronda "+n)+"</button>":"")
+      +"</div></li>";
+  });
+  html+="</ol>";
+  box.innerHTML=html;
+}
+function torneoReset(){
+  TORNEO=torneoFresh(); saveTorneo(); torneoShowBracket();
+  var b=$("btnTorneoReset"); if(b)b.textContent="🔄 Reiniciar torneo";
+}
+function setTorneoMode(){
+  MODE="torneo";
+  ["btnModePvp","btnModeAi","btnModeSim","btnModeOnline"].forEach(function(id){var b=$(id);if(b)b.classList.remove("sel");});
+  var bt=$("btnModeTorneo"); if(bt)bt.classList.add("sel");
+  torneoShowBracket();
+  showPrepScreen("scr-torneo");
+}
+/* ----- F2: torneoStartRound va directo al preparativo (sin hoja de presentación) ----- */
+function torneoStartRound(n){
+  n=n|0; if(n<1||n>6)return;
+  var r=TORNEO_ROUNDS[n-1];
+  TORNEO.round=n; saveTorneo();
+  MODE="torneo";
+  AI_DIFF=r.diff; /* la dificultad es fija por ronda: se fija aquí, no en Ajustes */
+  pickDeck[1]=r.deck;
+  torneoBeginRound(n); /* directo a elegir tu mazo: el del rival queda bloqueado */
+}
+function torneoBeginRound(n){
+  n=n|0; if(n<1||n>6)return;
+  var r=TORNEO_ROUNDS[n-1];
+  TORNEO.round=n; saveTorneo();
+  MODE="torneo";
+  AI_DIFF=r.diff;
+  pickDeck[1]=r.deck;
+  buildPicks("deckPick1",0); buildPicks("deckPick2",1);
+  lockRivalDeckUI(true); /* 🔒 el mazo del rival queda fijo: no se puede cambiar antes de la moneda */
+  /* mismo reset de preparación que setMode(): moneda sin lanzar */
+  coinChoice=null; firstPlayer=0;
+  var bs=$("btnStart"); if(bs)bs.disabled=true;
+  var cr=$("coinResult"); if(cr)cr.textContent="";
+  var cf=$("coin"); if(cf)cf.classList.remove("flip");
+  var dr=$("aiDiffRow"); if(dr)dr.style.display="none"; /* dificultad fija: no se elige */
+  var n1=$("name1"); if(n1&&(!n1.value||n1.value==="IA 1"||n1.value==="IA 2"))n1.value="Decro";
+  var n2=$("name2"); if(n2){ n2.value=r.rival; n2.disabled=true; } /* rival fijo, como Nina en el modo IA */
+  var n1l=$("name1Label"); if(n1l)n1l.textContent="Jugador 1";
+  var n2l=$("name2Label"); if(n2l)n2l.textContent="Tu rival: "+r.rival+" 🏆";
+  var cpl=$("coinPickLabel"); if(cpl)cpl.textContent="Tú eliges:";
+  var mn=$("decksModeName"); if(mn)mn.textContent="🏆 Torneo Neural — Ronda "+n+" de 6: "+deckDef(r.deck).label+" ("+torneoDiffName(r.diff)+")";
+  showPrepScreen("scr-decks");
+}
+$("btnModeTorneo").onclick=function(){setTorneoMode();};
+$("btnTorneoBack").onclick=function(){showPrepScreen("scr-lobby");};
+$("btnTorneoReset").onclick=function(){
+  var b=$("btnTorneoReset");
+  if(b&&b.dataset.armed){ delete b.dataset.armed; torneoReset(); return; }
+  if(b){ b.dataset.armed="1"; b.textContent="⚠️ ¿Seguro? Toca otra vez para reiniciar"; }
+};
 /* ---------- Botones de paso entre las pantallas de preparación ---------- */
 $("btnBackDecks").onclick=function(){showPrepScreen("scr-lobby");};
 $("btnToCoin").onclick=function(){
@@ -3556,6 +3824,12 @@ function aiDelay(ms){ return MODE==="sim"?Math.max(70,Math.round(ms/SIM_SPEED)):
 function simScoreText(){
   if(!G||!G.players)return "";
   var a=G.players[0], b=G.players[1];
+  /* En teléfono horizontal la barra va en una sola línea: marcador corto
+     («Duelo 1 · RAR 0 – 0 Aventurero»). Es solo el texto de la barra; en
+     cualquier otra pantalla se muestra el marcador completo de siempre. */
+  if(window.matchMedia&&window.matchMedia("(max-width:1280px) and (max-height:700px) and (orientation:landscape) and (hover:none) and (pointer:coarse)").matches){
+    return "Duelo "+(SIM_STATS.duels+1)+" · "+deckDef(a.deckKey).label.split(" — ")[0]+" "+(SIM_STATS.wins[a.deckKey]||0)+" – "+(SIM_STATS.wins[b.deckKey]||0)+" "+deckDef(b.deckKey).label.split(" — ")[0];
+  }
   return "Duelo "+(SIM_STATS.duels+1)+" de la sesión · Victorias: "+deckDef(a.deckKey).label+" "+(SIM_STATS.wins[a.deckKey]||0)+" ("+simPctTxt(a.deckKey)+") — "+(SIM_STATS.wins[b.deckKey]||0)+" ("+simPctTxt(b.deckKey)+") "+deckDef(b.deckKey).label;
 }
 function updateSimBar(){
@@ -3580,6 +3854,7 @@ $("btnSimLog").onclick=function(){ openDuelLogPanel("all"); };
 $("btnSimSpeed").onclick=function(){ SIM_SPEED=(SIM_SPEED>=8)?1:SIM_SPEED*2; updateSimBar(); };
 $("btnSimExit").onclick=function(){ exitSim(); };
 loadPersisted();
+loadTorneo();
 loadDuelLogs();
 buildPicks("deckPick1",0); buildPicks("deckPick2",1);
 bindDeckSearch("p1"); bindDeckSearch("p2");
@@ -3666,6 +3941,50 @@ function closeRules(){
   document.addEventListener("keydown",function(ev){ var o=$("rulesOverlay"); if(ev.key==="Escape"&&o&&o.classList.contains("on"))closeRules(); });
 })();
 
+/* ---------- Pantalla completa: un botón en la esquina del lobby y otro en la barra
+   del duelo; ambos comparten estado y se actualizan con el evento fullscreenchange
+   (también cuando se sale con Esc o con el gesto del sistema). Usa la Fullscreen API
+   sobre document.documentElement, con los fallbacks con prefijo de cada navegador.
+   Si el navegador no la soporta, los botones se ocultan y nada más cambia. ---------- */
+function fsIsActive(){
+  return !!(document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement);
+}
+function fsSupported(){
+  var el=document.documentElement;
+  return !!(el.requestFullscreen||el.webkitRequestFullscreen||el.mozRequestFullScreen||el.msRequestFullscreen);
+}
+function syncFsBtns(){
+  var on=fsIsActive();
+  var label=on?"Salir de pantalla completa":"Pantalla completa";
+  ["btnFsLobby","btnFsDuel"].forEach(function(id){
+    var b=$(id); if(!b)return;
+    var t=b.querySelector(".fstext"); if(t)t.textContent=label;
+    b.setAttribute("aria-label",label); b.title=label;
+  });
+}
+function toggleFullscreen(){
+  if(fsIsActive()){
+    var ex=document.exitFullscreen||document.webkitExitFullscreen||document.mozCancelFullScreen||document.msExitFullscreen;
+    if(ex){ try{ var px=ex.call(document); if(px&&px.catch)px.catch(function(){}); }catch(e){} }
+  }else{
+    var el=document.documentElement;
+    var rq=el.requestFullscreen||el.webkitRequestFullscreen||el.mozRequestFullScreen||el.msRequestFullscreen;
+    if(rq){ try{ var pr=rq.call(el); if(pr&&pr.catch)pr.catch(function(){}); }catch(e){} }
+  }
+}
+(function(){
+  if(!fsSupported()){
+    ["btnFsLobby","btnFsDuel"].forEach(function(id){ var b=$(id); if(b)b.style.display="none"; });
+    return;
+  }
+  var l=$("btnFsLobby"); if(l)l.onclick=toggleFullscreen;
+  var d=$("btnFsDuel"); if(d)d.onclick=toggleFullscreen;
+  ["fullscreenchange","webkitfullscreenchange","mozfullscreenchange","MSFullscreenChange"].forEach(function(ev){
+    document.addEventListener(ev,syncFsBtns);
+  });
+  syncFsBtns();
+})();
+
 function doCoin(choice){
   coinChoice=choice;
   var result=Math.random()<0.5?"cara":"cruz";
@@ -3679,7 +3998,7 @@ function doCoin(choice){
     DL_PENDING_COIN={winner:p1wins?0:1,starter:firstPlayer}; /* el registro nace en startDuel: la moneda queda pendiente hasta entonces */
     var starterName=(firstPlayer===0?($("name1").value||"Jugador 1"):($("name2").value||"Jugador 2"));
     $("coinResult").textContent="¡Salió "+result.toUpperCase()+"! Empieza "+starterName+".";
-    if(MODE==="ai")ninaSay(p1wins?"coinPlayer":"coinNina"); /* Nina comenta la moneda con su voz */
+    if(MODE==="ai"||MODE==="torneo")ninaSay(p1wins?"coinPlayer":"coinNina"); /* Nina comenta la moneda con su voz */
     $("btnStart").disabled=false;
   },1650);
 }
@@ -3926,10 +4245,10 @@ function startDuel(){
   if(typeof closeSettings==="function")closeSettings();
   NinaVoice.stop();
   var n1=($("name1").value||"Jugador 1").trim(), n2=($("name2").value||"Jugador 2").trim();
-  if(MODE==="ai")n2=n2+" ("+aiDiffName()+")";
+  if(MODE==="ai"||MODE==="torneo")n2=n2+" ("+aiDiffName()+")";
   SIM_PAUSED=false;
-  G={players:[newPlayer(n1,pickDeck[0],MODE==="sim"),newPlayer(n2,pickDeck[1],MODE==="ai"||MODE==="sim")],
-     turn:firstPlayer,turnNo:1,phase:"main",over:false,busy:false,targeting:null,evoSel:null,compSel:null,log:[],aiDiff:(MODE==="ai"||MODE==="sim"?AI_DIFF:null)};
+  G={players:[newPlayer(n1,pickDeck[0],MODE==="sim"),newPlayer(n2,pickDeck[1],MODE==="ai"||MODE==="sim"||MODE==="torneo")],
+     turn:firstPlayer,turnNo:1,phase:"main",over:false,busy:false,targeting:null,evoSel:null,compSel:null,log:[],aiDiff:(MODE==="ai"||MODE==="sim"||MODE==="torneo"?AI_DIFF:null)};
   if(MODE==="sim")DL_PENDING_COIN={winner:firstPlayer,starter:firstPlayer}; /* en la simulación la moneda es un sorteo directo */
   dlBegin(MODE==="sim"?"sims":MODE,
     MODE==="sim"?deckDef(pickDeck[0]).label+" (IA)":G.players[0].name,
@@ -3939,13 +4258,14 @@ function startDuel(){
   showPrepScreen("scr-duel"); /* de la pantalla de la moneda, directo a la batalla */
   log("🪙 El duelo empieza. "+G.players[G.turn].name+" va primero (sin robar ni atacar en el primer turno).");
   if(MODE==="ai")log("🎧 Tu rival es Nina, en dificultad "+aiDiffName()+". "+aiDiffDesc());
+  if(MODE==="torneo"){var _tr=TORNEO_ROUNDS[(TORNEO.round|0)-1]; if(_tr)log("🏆 Torneo Neural — Ronda "+TORNEO.round+" de 6: tu rival es "+_tr.rival+" ("+aiDiffName()+").");}
   if(MODE==="sim")log("🤖 Simulación IA contra IA en dificultad "+aiDiffName()+": "+n1+" juega "+deckDef(pickDeck[0]).label+" y "+n2+" juega "+deckDef(pickDeck[1]).label+". Las dos manos están visibles: a mirar el balance.");
   window.scrollTo(0,0);
   beginTurn(true);
 }
 function cur(){return G.players[G.turn];}
 function opp(){return G.players[1-G.turn];}
-function viewer(){ if(MODE==="ai"||MODE==="sim")return G.players[0]; if(MODE==="online")return G.players[ONLINE.myIdx]; return cur(); }
+function viewer(){ if(MODE==="ai"||MODE==="sim"||MODE==="torneo")return G.players[0]; if(MODE==="online")return G.players[ONLINE.myIdx]; return cur(); }
 function log(msg){G.log.push(msg);if(G.log.length>60)G.log.shift();var b=$("logBox");b.innerHTML=G.log.map(function(l){return "<div>"+esc(l)+"</div>";}).join("");b.scrollTop=b.scrollHeight;}
 $("btnLog").onclick=function(){var b=$("logBox");b.style.display=b.style.display==="none"?"block":"none";};
 $("btnDuelLog").onclick=function(){openDuelLogPanel("all");};
@@ -4154,7 +4474,7 @@ function loseGame(P,why){
   G.winnerIdx=G.players.indexOf(W); G.loseWhy=why;
   dlFinishDuel(G.winnerIdx, (why||"").indexOf("rindió")>=0?"surrender":"integrity", why); /* el registro se cierra y se guarda en el historial, también por rendición */
   sfx(W===viewer()?"win":"lose");
-  if(MODE==="ai")ninaSay(W.ai?"ninaWon":"ninaLost"); /* Nina cierra el duelo con su voz */
+  if(MODE==="ai"||MODE==="torneo")ninaSay(W.ai?"ninaWon":"ninaLost"); /* Nina cierra el duelo con su voz */
   render(); animWinGlow(W);
   if(MODE==="online")onlineOnGameOver();
   var simHtml="", simBtns="";
@@ -4171,11 +4491,42 @@ function loseGame(P,why){
       +simTableHtml()+"</div>";
     simBtns=" <button id='btnSimAgain'>🔁 Otra simulación con estos mazos</button>";
   }
+  if(MODE==="torneo"){ torneoOnDuelEnd(W,P,why); return; } /* fin de duelo propio del torneo: sin hoja genérica ni btnAgain */
   showSheet("<div class='win'>🏆</div><h2>¡"+esc(W.name)+" gana el duelo!</h2><p>"+esc(P.name)+" perdió porque "+esc(why)+".</p>"+simHtml+dlSummaryHTML()+"<button id='btnEndLog'>📜 Ver registro completo</button> <button id='btnEndHist'>📜 Historial</button> <button class='primary' id='btnAgain'>Jugar otra vez</button>"+simBtns);
   sheetBtn("btnEndLog",function(){openDuelLogPanel("all");});
   sheetBtn("btnEndHist",function(){openDuelHistory();});
   sheetBtn("btnAgain",function(){NinaVoice.stop();closeSheet();if(MODE==="online")onlineCleanup(true);showPrepScreen("scr-lobby");$("btnStart").disabled=true;$("coinResult").textContent="";});
   if(MODE==="sim")sheetBtn("btnSimAgain",function(){ closeSheet(); firstPlayer=(Math.random()<0.5?0:1); startDuel(); }); /* la moneda se reparte al azar en la repetición */
+}
+/* ----- F5: fin de duelo del torneo + pantalla de campeón -----
+   Se llama desde loseGame() solo cuando MODE==="torneo", DESPUÉS de
+   dlFinishDuel (el registro ya está guardado: no se vuelve a llamar) y
+   de la línea de voz. El return de loseGame impide la hoja genérica. */
+function torneoOnDuelEnd(W,P,why){
+  var n=TORNEO.round|0; if(n<1||n>6)n=1;
+  var r=TORNEO_ROUNDS[n-1];
+  if(G.winnerIdx===0){ /* ganó el humano (G.players[0]) */
+    TORNEO.won[n-1]=true; saveTorneo();
+    if(n>=6){ TORNEO.champion=true; saveTorneo(); torneoShowChampion(); return; }
+    TORNEO.round=n+1; saveTorneo();
+    showSheet("<div class='win'>🏆</div><h2>¡Ronda "+n+" superada!</h2><p>Has vencido a "+esc(r.rival)+" en la ronda "+n+".</p>"+dlSummaryHTML()+"<button class='primary' id='btnTorneoNext'>▶ Siguiente ronda</button> <button id='btnTorneoLobby'>Volver al lobby</button>");
+    sheetBtn("btnTorneoNext",function(){closeSheet();setTorneoMode();});
+    sheetBtn("btnTorneoLobby",function(){NinaVoice.stop();closeSheet();showPrepScreen("scr-lobby");$("btnStart").disabled=true;$("coinResult").textContent="";});
+    return;
+  }
+  /* perdió el humano (también por rendición: loseGame llega con why="se rindió") */
+  var surrendered=(why||"").indexOf("rindió")>=0;
+  showSheet("<div class='win'>💔</div><h2>"+esc(r.rival)+" gana la ronda "+n+"</h2><p>"+esc(r.rival)+" se lleva la ronda "+n+"."+(surrendered?" Rendirse también pierde la ronda: hay que reintentarla.":"")+" Puedes reintentarla cuando quieras.</p>"+dlSummaryHTML()+"<button class='primary' id='btnTorneoRetry'>🔁 Reintentar ronda "+n+"</button> <button id='btnTorneoBracket'>Ver cuadro</button>");
+  sheetBtn("btnTorneoRetry",function(){closeSheet();torneoStartRound(n);});
+  sheetBtn("btnTorneoBracket",function(){closeSheet();setTorneoMode();});
+}
+function torneoShowChampion(){
+  var me=(typeof G!=="undefined"&&G&&G.players&&G.players[0])?G.players[0].name:"campeón";
+  var list=TORNEO_ROUNDS.map(function(r,i){return (TORNEO.won[i]?"✅":"▫️")+" "+r.rival+" ("+deckDef(r.deck).label+")";}).join("<br>");
+  showSheet("<div class='win'>🏆</div><h2>¡CAMPEÓN DEL TORNEO NEURAL!</h2><p>¡"+esc(me)+" es el campeón del Torneo Neural! Los seis rivales cayeron y Glitch Supremo ya no tiene corona.</p><p>"+list+"</p>"+dlSummaryHTML()+"<button class='primary' id='btnTorneoAgain'>🔄 Jugar otro torneo</button> <button id='btnTorneoChampBracket'>Ver cuadro</button> <button id='btnTorneoChampLobby'>Volver al lobby</button>");
+  sheetBtn("btnTorneoAgain",function(){closeSheet();torneoReset();setTorneoMode();});
+  sheetBtn("btnTorneoChampBracket",function(){closeSheet();setTorneoMode();});
+  sheetBtn("btnTorneoChampLobby",function(){NinaVoice.stop();closeSheet();showPrepScreen("scr-lobby");$("btnStart").disabled=true;$("coinResult").textContent="";});
 }
 function checkAlive(){return !G.over;}
 </script>
@@ -4478,7 +4829,7 @@ function renderActions(){
   addBtn("🪦 Mi cementerio ("+me.gy.length+")",function(){showListSheet("Tu cementerio",me.gy);});
   addBtn("⭐ Mi Extra Deck ("+me.extra.length+")",function(){showListSheet("Tu Extra Deck",me.extra);});
   addBtn("🏳️ Rendirse",function(){
-    showSheet("<h2>¿Rendirse?</h2><p>"+esc(opp().name)+" ganará el duelo.</p><button class='danger' id='btnYes'>Sí, me rindo</button> <button id='btnNo'>Seguir jugando</button>");
+    showSheet("<h2>¿Rendirse?</h2><p>"+esc(opp().name)+" ganará el duelo."+(MODE==="torneo"?" <b>Rendirse pierde la ronda:</b> tendrás que reintentarla.":"")+"</p><button class='danger' id='btnYes'>Sí, me rindo</button> <button id='btnNo'>Seguir jugando</button>");
     sheetBtn("btnYes",function(){closeSheet();loseGame(me,"se rindió");});
     sheetBtn("btnNo",closeSheet);
   },"ghost");
@@ -4546,7 +4897,7 @@ function beginTurn(first){
     return;
   }
   if(P.ai){ startTurn(); return; }
-  if(MODE==="ai"){ startTurn(); return; }
+  if(MODE==="ai"||MODE==="torneo"){ startTurn(); return; }
   showPassSheet("<div class='big'>📱</div><h2>Pásale el dispositivo a "+esc(P.name)+"</h2><p>Es su turno. La pantalla está tapada en negro: no se ve el tablero ni ninguna mano hasta que "+esc(P.name)+" confirme.</p><button class='primary' id='btnIm'>Soy "+esc(P.name)+"</button>");
   sheetBtn("btnIm",function(){closeSheet();startTurn();});
 }
@@ -7408,7 +7759,7 @@ function doEvolution(eid){
     me.field[zone]=unit; sfx("evolve"); animMark(animSideOf(me),zone,"anim-evolve");
     unit._dlEvo=_dlMatNames.join(" + "); /* fireSummonFx lo recoge y lo registra como Evolución con sus materiales */
     log("🌟 ¡"+me.name+" evoluciona a "+CARDS[eid].n+"! ATK "+CARDS[eid].atk+" / DEF "+CARDS[eid].def+".");
-    if(MODE==="ai"&&me===G.players[0])ninaSay("playerEvolved"); /* Nina reacciona a tu Evolución con su voz */
+    if((MODE==="ai"||MODE==="torneo")&&me===G.players[0])ninaSay("playerEvolved"); /* Nina reacciona a tu Evolución con su voz */
     var O=opp();
     if(CARDS[eid].fx==="kernel"){O.field.forEach(function(u){if(u)u.counters+=2;});log("☣ "+CARDS[eid].n+" pone 2 contadores de Corrupción en todas las unidades de "+O.name+".");}
     if(CARDS[eid].fx==="errorcrit"){for(var i=0;i<6;i++){if(O.field[i]&&O.field[i].counters>=3)destroyUnit(O,i,false);}log("💥 Error Crítico destruye las cartas rivales con 3+ contadores.");}
@@ -7745,11 +8096,11 @@ function aiMain(){
   G.busy=true; render();
   /* Foto del duelo al empezar el turno de Nina: al cerrarlo elige su
      comentario con voz según lo que hizo (evolucionar, golpear, ir abajo). */
-  if(MODE==="ai")G._ninaSnap={php:G.players[0].hp,ne:G.players[1].extra.length,pf:G.players[0].field.filter(Boolean).length};
+  if(MODE==="ai"||MODE==="torneo")G._ninaSnap={php:G.players[0].hp,ne:G.players[1].extra.length,pf:G.players[0].field.filter(Boolean).length};
   /* Nina anuncia «Mi turno» AL EMPEZAR su turno (antes lo decía al
      cerrarlo, justo cuando el turno ya pasaba al jugador, y se oía como
      si reclamara el turno del jugador). */
-  if(MODE==="ai")ninaSay("turn");
+  if(MODE==="ai"||MODE==="torneo")ninaSay("turn");
   aiQueue=[aiFieldStep,aiProgramsStep,aiProgramsStep,aiSetProtocolsStep,aiSummonStep,aiFlipStep,aiUnitFxStep,aiEvolutionStep,aiCompressionStep,aiUnitFxStep,aiToBattleStep,aiAttackStep,aiAttackStep,aiAttackStep,aiAttackStep,aiAttackStep,aiToMain2Step,aiFieldStep,aiProgramsStep,aiSetProtocolsStep,aiSummonStep,aiFlipStep,aiUnitFxStep,aiEvolutionStep,aiCompressionStep,aiUnitFxStep];
   setTimeout(aiNext,aiDelay(700));
 }
@@ -7761,7 +8112,7 @@ function aiNext(){
        (evolucionar, golpear fuerte o ir abajo). La línea de «Mi turno»
        ya no va aquí: suena al empezar su turno (en aiMain), porque aquí
        el turno ya está pasando al jugador y se oía fuera de lugar. */
-    if(MODE==="ai"&&!G.over&&G._ninaSnap){
+    if((MODE==="ai"||MODE==="torneo")&&!G.over&&G._ninaSnap){
       var sn=G._ninaSnap,AIp=G.players[1],PLp=G.players[0];
       if(AIp.extra.length<sn.ne)ninaSay("turnEvolve");
       else if(PLp.hp<=sn.php-500||PLp.field.filter(Boolean).length<sn.pf)ninaSay("turnBigHit");
@@ -8028,7 +8379,7 @@ function buildOnlinePicks(){
 $("btnModeOnline").onclick=function(){
   /* El modo en línea también se prepara en su propia pantalla (scr-online):
      ahí se elige el mazo y se crea la sala o se entra con el código. */
-  ["btnModePvp","btnModeAi","btnModeSim"].forEach(function(id){var b=$(id);if(b)b.classList.remove("sel");});
+  ["btnModePvp","btnModeAi","btnModeSim","btnModeTorneo"].forEach(function(id){var b=$(id);if(b)b.classList.remove("sel");});
   this.classList.add("sel");
   showPrepScreen("scr-online");
 };
@@ -8449,7 +8800,7 @@ function onlineCleanup(removeRoom){
     discardDrawPick:discardDrawPick,bansheeDiscard:bansheeDiscard,compilePick:compilePick,
     compilePickInf:compilePickInf,stealDiscardPick:stealDiscardPick,nucleoPick:nucleoPick,
     fwDiscard:fwDiscard,onlineFwPick:onlineFwPick,respaldoGyPick:respaldoGyPick,onlineRespaldoPick:onlineRespaldoPick,
-    verifDiscardPick:verifDiscardPick,onlineVerifPick:onlineVerifPick};
+    verifDiscardPick:verifDiscardPick,onlineVerifPick:onlineVerifPick,torneoStartRound:torneoStartRound};
   document.addEventListener("click",function(ev){
     var t=ev.target&&ev.target.closest?ev.target.closest("[data-call]"):null;
     if(!t||t.disabled)return;
@@ -8461,6 +8812,24 @@ function onlineCleanup(removeRoom){
       var n=parseInt(a,10); return isNaN(n)?a:n;
     });
     CALLS[m[1]].apply(null,args);
+  });
+})();
+</script>
+<script>
+/* Panel de información flotante en teléfono horizontal: el botón «ℹ️ Info»
+   abre y cierra la hoja con la ficha de la carta, y tocar cualquier carta
+   la abre con su imagen, ATK/DEF y efecto (la ficha la carga el código de
+   siempre). En pantallas grandes los botones no se muestran y el panel
+   sigue fijo a la izquierda del tablero, como siempre. */
+(function(){
+  var sec=document.getElementById("scr-duel"), open=document.getElementById("btnInfoOpen"), close=document.getElementById("btnInfoClose");
+  if(!sec||!open||!close)return;
+  var MQ="(max-width:1280px) and (max-height:700px) and (orientation:landscape) and (hover:none) and (pointer:coarse)";
+  open.addEventListener("click",function(){ sec.classList.toggle("ci-open"); });
+  close.addEventListener("click",function(){ sec.classList.remove("ci-open"); });
+  sec.addEventListener("pointerdown",function(ev){
+    var t=ev.target&&ev.target.closest?ev.target.closest("[data-hov]"):null;
+    if(t&&window.matchMedia&&window.matchMedia(MQ).matches)sec.classList.add("ci-open");
   });
 })();
 </script>

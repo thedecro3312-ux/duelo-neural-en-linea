@@ -4543,7 +4543,7 @@ function buildDeckList(def){var list=[];def.main.forEach(function(e){for(var i=0
 function buildDeck(key){return buildDeckList(deckDef(key));}
 function newPlayer(name,deckKey,isAI,customDef){
   var def=customDef||deckDef(deckKey);
-  return {name:name,deckKey:deckKey,ai:!!isAI,hp:8000,deck:buildDeckList(def),hand:[],field:[null,null,null,null,null,null],back:[null,null,null,null,null] /* campo: zonas 0-4 + 5 = Zona de Monstruo Extra */,gy:[],banished:[],extra:(def.extra||[]).slice(),normalUsed:false,compUsed:false,summonLocked:false,programLocked:false,spellLock:false,trollTaunt:false,haterLockTurn:0,protectUntil:0,protectArch:null,curseTurn:null,airdropTurn:0,reinicioUsado:false,fzone:null,fzoneUsed:false};
+  return {name:name,deckKey:deckKey,ai:!!isAI,hp:8000,deck:buildDeckList(def),hand:[],field:[null,null,null,null,null,null],back:[null,null,null,null,null] /* campo: zonas 0-4 + 5 = Zona de Monstruo Extra */,gy:[],banished:[],extra:(def.extra||[]).slice(),normalUsed:false,compUsed:false,bucleUsed:false,dupUsed:false,summonLocked:false,programLocked:false,spellLock:false,trollTaunt:false,haterLockTurn:0,protectUntil:0,protectArch:null,curseTurn:null,airdropTurn:0,reinicioUsado:false,fzone:null,fzoneUsed:false};
 }
 function startDuel(){
   if(typeof closeBuilder==="function")closeBuilder();
@@ -5230,7 +5230,7 @@ function startTurn(){
   setDuelLogTurn(G.turnNo); var _dltk=G.turnNo+"-"+G.turn; if(DL_LAST_TURN_KEY!==_dltk){DL_LAST_TURN_KEY=_dltk; logTurnStart(G.turnNo,G.turn,G.players[0].hp,G.players[1].hp);}
   desconexionReturnCheck(P); /* las cartas desterradas por Desconexión Temporal con 2 turnos cumplidos vuelven al comienzo del turno de su dueño */
   G.startedKey=G.turnNo+"-"+G.turn;
-  P.normalUsed=false; P.compUsed=false; P.fzoneUsed=false; /* el efecto «1 vez por turno» del Campo se renueva al empezar el turno de su dueño */
+  P.normalUsed=false; P.compUsed=false; P.bucleUsed=false; P.dupUsed=false; P.fzoneUsed=false; /* el efecto «1 vez por turno» del Campo se renueva al empezar el turno de su dueño */
   P.field.forEach(function(u){if(u){u.atkUsed=false;u.fxUsed=false;u.posChanged=false;}});
   P.field.forEach(function(u){if(u&&u.frozenTurns>0){u.atkUsed=true;u.fxUsed=true;u.frozenTurns--;log("🧊 "+CARDS[u.id].n+" está congelada: no puede atacar ni activar efectos este turno.");}});
   if(P.haterLockTurn===G.turnNo){P.programLocked=true;P.spellLock=true;} /* Cebo de Troll Hater: sin Programas ni Protocolos en este turno */
@@ -6066,14 +6066,21 @@ function destroyUnit(P,zone,byBattle){
     shuffle(P.deck);
   }
   if(c.fx==="servidor"){
-    var idx=P.gy.map(function(id,i){return CARDS[id].a==="algo"?i:-1;}).filter(function(i){return i>=0;});
-    var others=idx.filter(function(i){return P.gy[i]!=="servidor";});
+    /* Solo se excluye la copia que acaba de destruirse (la última
+       «servidor» del cementerio de su dueño); otra copia de Servidor de
+       Respaldo que ya estuviera en el cementerio SÍ es una carta
+       Algoritmo válida para recuperar. Antes se excluían TODAS las
+       copias y el efecto no hacía nada cuando solo había Servidores. */
+    var sGy=owner.gy, sHand=owner.hand;
+    var idx=sGy.map(function(id,i){return CARDS[id].a==="algo"?i:-1;}).filter(function(i){return i>=0;});
+    var selfIdx=-1; for(var si=sGy.length-1;si>=0;si--){if(sGy[si]==="servidor"){selfIdx=si;break;}}
+    var others=idx.filter(function(i){return i!==selfIdx;});
     if(others.length){
-      if(P.ai){var g=P.gy.splice(others[0],1)[0];P.hand.push(g);log("💾 Servidor de Respaldo recupera "+CARDS[g].n+" del cementerio.");}
-      else if(P===viewer()){
-        G.pendingServidor={owner:P,indices:others};
-        showSheet("<h2>Servidor de Respaldo</h2><p>Elige 1 carta Algoritmo de tu cementerio para añadirla a tu mano:</p><div class='picklist'>"+others.map(function(gi,pos){return pickBtn(P.gy[gi],"servidorPick("+pos+")");}).join("")+"</div>",true);
-      } else { var g2=P.gy.splice(others[0],1)[0]; P.hand.push(g2); }
+      if(owner.ai){var g=sGy.splice(others[0],1)[0];sHand.push(g);log("💾 Servidor de Respaldo recupera "+CARDS[g].n+" del cementerio.");}
+      else if(owner===viewer()){
+        G.pendingServidor={owner:owner,indices:others};
+        showSheet("<h2>Servidor de Respaldo</h2><p>Elige 1 carta Algoritmo de tu cementerio para añadirla a tu mano:</p><div class='picklist'>"+others.map(function(gi,pos){return pickBtn(sGy[gi],"servidorPick("+pos+")");}).join("")+"</div>",true);
+      } else { var g2=sGy.splice(others[0],1)[0]; sHand.push(g2); }
     }
   }
   /* efectos genéricos al ser destruida (demás arquetipos) */
@@ -6958,7 +6965,12 @@ function flipAllBurrow(P){
   return flipped.length;
 }
 function lookTop(P,n,canReorder){
-  if(P.ai||P!==viewer()||!P.deck.length){return;}
+  if(!P.deck.length)return;
+  if(P.ai){ /* La IA también usa el Cálculo: si el efecto permite reordenar, deja arriba la carta que más le conviene robar (la unidad más fuerte; si no hay, un Programa o Protocolo). Sin esto, en los duelos contra la IA y en la simulación IA contra IA los efectos de mirar/reordenar de Algoritmo (Sensor, Bit, Núcleo Menor, Omni-Procesador, Servidor Central) no hacían absolutamente nada. */
+    if(canReorder&&P.deck.length>1){var tn=Math.min(n,P.deck.length);var seg=P.deck.slice(P.deck.length-tn);var lval=function(id){var cc=CARDS[id];if(!cc)return 0;return cc.t==="U"?(cc.atk||0):(cc.t==="P"||cc.t==="T")?400:100;};seg.sort(function(a,b){return lval(a)-lval(b);});for(var li=0;li<tn;li++)P.deck[P.deck.length-tn+li]=seg[li];}
+    return;
+  }
+  if(P!==viewer())return;
   var top=[];for(var i=0;i<Math.min(n,P.deck.length);i++)top.push(P.deck[P.deck.length-1-i]);
   var order=top.slice();
   function draw(){
@@ -7017,7 +7029,7 @@ function aiDecideResponse(R,ctx){ return ctx.aiYes?"yes":"no"; }
 function respondToSummon(summoner,unit,zone,done){
   var R=G.players[1-G.players.indexOf(summoner)];
   var avail=[];
-  R.back.forEach(function(b,i){if(b&&b.faceDown&&!R.spellLock){var c=CARDS[b.id];if(trapTrigger(c)==="summon"&&(c.fx!=="antivirus"||CARDS[unit.id].lv>=5))avail.push(i);}});
+  R.back.forEach(function(b,i){if(b&&b.faceDown&&!R.spellLock){var c=CARDS[b.id];if(trapTrigger(c)==="summon"&&(c.fx!=="antivirus"||(CARDS[unit.id].lv||(CARDS[unit.id].t==="E"?8:0))>=5))avail.push(i); /* Antivirus Total: las IA Superiores no llevan lv en su ficha, pero cuentan como Nivel 5 o mayor; sin esto nunca se podía activar contra ellas */}});
   var idx=0;
   function next(){
     if(idx>=avail.length||G.over){done();return;}
@@ -7253,8 +7265,8 @@ function programValid(P,id){
     case "verificacion2Pasos": return P.back.indexOf(null)>=0;
     case "transmisionEnVivo": return P.back.indexOf(null)>=0;
     case "tokenPirata": return P.deck.length>=2; /* si sale cara roba 2: con menos cartas en el mazo se quedaría sin cartas */
-    case "compilacion": return !P.compUsed&&P.deck.length>=1;
-    case "bucle": return !P.compUsed&&P.gy.some(function(g){return CARDS[g].t==="P"&&CARDS[g].a==="algo";});
+    case "compilacion": return (id==="actualizacion"||!P.compUsed)&&P.deck.length>=1; /* Actualización de Sistema no tiene límite de 1 por turno en su texto; el de Compilación Perfecta es solo suyo */
+    case "bucle": return !P.bucleUsed&&P.gy.some(function(g){return CARDS[g].t==="P"&&CARDS[g].a==="algo";}); /* el «1 por turno» de Bucle Infinito es propio: Compilación Perfecta ya no lo bloquea */
     case "reiniciosist": return P.hand.length>1;
     case "descargatotal": return O.field.some(function(u){return u&&effAtk(O,u)<=2000;});
     case "sobrecargatotal": return P.hp>sobreCost(P,800)&&O.field.some(Boolean); /* Central Eléctrica: el costo ya va reducido */
@@ -7272,7 +7284,7 @@ function programValid(P,id){
     case "progBounce": case "progBounceDeck": return O.field.some(Boolean);
     case "progFreezeAll": return O.field.some(Boolean);
     case "progDejaVu": return P.gy.some(function(g){return CARDS[g].a===c.a;});
-    case "progDuplicacion": return !P.compUsed&&firstFreeNormal(P)>=0&&P.hand.filter(function(x){return CARDS[x].a==="enjambre";}).length>=2&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a==="enjambre"&&(CARDS[x].lv||99)<=2;});
+    case "progDuplicacion": return !P.dupUsed&&firstFreeNormal(P)>=0&&P.hand.filter(function(x){return CARDS[x].a==="enjambre";}).length>=2&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a==="enjambre"&&(CARDS[x].lv||99)<=2;});
     case "progNodoDeckDraw": return P.gy.some(function(g){return CARDS[g].n==="Nodo Enjambre";});
     case "progDrawDiscard": return (!c.cap||countArchUnits(P,c.a)>=c.cap)&&P.hand.length>=2;
     case "progChoiceDD": return P.deck.length>=2||O.field.some(function(u){return u&&effAtk(O,u)<=(c.cap||2000);});
@@ -7468,7 +7480,7 @@ function resolveProgram(P,handIdx){
       for(var i=0;i<n;i++)drawCard(P);
       log("🔄 Reinicio del Sistema: "+P.name+" baraja su mano y roba "+n+"."); break;
     case "compilacion":
-      P.compUsed=true; toGY();
+      if(id==="compilacion")P.compUsed=true; toGY(); /* solo Compilación Perfecta gasta su límite de 1 por turno; Actualización de Sistema no lo tiene en su texto */
       var topN=Math.min(3,P.deck.length), seen=[];
       for(var j=0;j<topN;j++)seen.push(P.deck[P.deck.length-1-j]);
       var algoIdx=seen.map(function(x,i){return CARDS[x].a==="algo"?i:-1;}).filter(function(i){return i>=0;});
@@ -7485,7 +7497,7 @@ function resolveProgram(P,handIdx){
       }
       break;
     case "bucle":
-      P.compUsed=true;
+      P.bucleUsed=true;
       var bcands=[]; P.gy.forEach(function(g,i){if(CARDS[g].t==="P"&&CARDS[g].a==="algo")bcands.push(i);});
       if(canChoose(P)&&bcands.length>1){
         showGraveChoice(P,bcands,"♾️ "+c.n,"Elige 1 Programa Algoritmo de tu cementerio: irá al fondo de tu mazo y robarás 1 carta.",function(gi2){
@@ -7561,7 +7573,7 @@ function resolveProgram(P,handIdx){
       });
       break;
     case "progDuplicacion":
-      P.compUsed=true;
+      P.dupUsed=true;
       var dupGo=function(){
         toGY();
         summonArchFromDeck(P,"enjambre",2,1,"atk");
@@ -8125,13 +8137,23 @@ function doEvolution(eid){
     log("🌟 ¡"+me.name+" evoluciona a "+CARDS[eid].n+"! ATK "+CARDS[eid].atk+" / DEF "+CARDS[eid].def+".");
     if((MODE==="ai"||MODE==="torneo")&&me===G.players[0])ninaSay("playerEvolved"); /* Nina reacciona a tu Evolución con su voz */
     var O=opp();
-    if(CARDS[eid].fx==="kernel"){O.field.forEach(function(u){if(u)u.counters+=2;});log("☣ "+CARDS[eid].n+" pone 2 contadores de Corrupción en todas las unidades de "+O.name+".");}
-    if(CARDS[eid].fx==="errorcrit"){for(var i=0;i<6;i++){if(O.field[i]&&O.field[i].counters>=3)destroyUnit(O,i,false);}log("💥 Error Crítico destruye las cartas rivales con 3+ contadores.");}
-    if(CARDS[eid].fx==="mentemaestra"){drawCard(me);drawCard(me);log("🧠 Mente Maestra Artificial: "+me.name+" roba 2 cartas.");}
-    /* La IA Superior invocada por Evolución también dispara su efecto de
-       «al ser invocado» completo (antes solo lo hacía una lista parcial). */
-    fireSummonFx(me,unit,zone);
-    render();
+    /* Ventana de respuesta a la invocación, igual que en una invocación
+       normal: los Protocolos de respuesta a una invocación (Antivirus
+       Total, Pantalla, Cortocircuito…) también responden a una Evolución;
+       antes esta ventana no existía y esos Protocolos nunca se activaban
+       contra una IA Superior. Si la respuesta saca a la unidad del campo
+       (destruida o devuelta), su efecto de invocación no se dispara. */
+    respondToSummon(me,unit,zone,function(){
+      if(me.field[zone]===unit){
+        if(CARDS[eid].fx==="kernel"){O.field.forEach(function(u){if(u)u.counters+=2;});log("☣ "+CARDS[eid].n+" pone 2 contadores de Corrupción en todas las unidades de "+O.name+".");}
+        if(CARDS[eid].fx==="errorcrit"){for(var i=0;i<6;i++){if(O.field[i]&&O.field[i].counters>=3)destroyUnit(O,i,false);}log("💥 Error Crítico destruye las cartas rivales con 3+ contadores.");}
+        if(CARDS[eid].fx==="mentemaestra"){drawCard(me);drawCard(me);log("🧠 Mente Maestra Artificial: "+me.name+" roba 2 cartas.");}
+        /* La IA Superior invocada por Evolución también dispara su efecto de
+           «al ser invocado» completo (antes solo lo hacía una lista parcial). */
+        fireSummonFx(me,unit,zone);
+      }
+      render();
+    });
   }
   if(me.ai||!canChoose(me)){
     /* La IA prefiere su Zona Extra para las Evoluciones (jefes); si está
@@ -8608,7 +8630,7 @@ function aiUnitFxStep(){
   P.field.forEach(function(u,z){
     if(!u||u.fxUsed||u.faceDown||fxBlocked(P,u))return;
     var fx=(u.copiedId?CARDS[u.copiedId]:CARDS[u.id]).fx;
-    if(["subrutina","procinfinito","nucleoq","dinamo"].indexOf(fx)>=0&&unitFxAvailable(P,u))activateUnitFx(P,u,z);
+    if(["subrutina","omni","procinfinito","nucleoq","dinamo"].indexOf(fx)>=0&&unitFxAvailable(P,u))activateUnitFx(P,u,z);
     else if(["healTurn","healTurnPerAlly","summonNamedTurn","auraPerNodo","summonHandTurn","reviveTurn","freezeTurn","bouncePay","swapAtkDefTurn","advIgnite","advLucky"].indexOf(fx)>=0&&unitFxAvailable(P,u))activateUnitFx(P,u,z);
     else if((fx==="boostPay"||fx==="destroyPay")&&unitFxAvailable(P,u)&&O.field.some(Boolean))activateUnitFx(P,u,z);
     else if((u.id==="c900000501"||u.id==="c900000607"||u.id==="c900001309"||u.id==="c900000616")&&unitFxAvailable(P,u))activateUnitFx(P,u,z);
@@ -9028,7 +9050,7 @@ function serializeState(){
     log:G.log.slice(-60),
     players:G.players.map(function(P){return { name:P.name, deckKey:P.deckKey, hp:P.hp,
       deckCount:P.deck.length, gy:P.gy, banished:P.banished, extra:P.extra, field:P.field, back:P.back,
-      normalUsed:!!P.normalUsed, compUsed:!!P.compUsed,
+      normalUsed:!!P.normalUsed, compUsed:!!P.compUsed, bucleUsed:!!P.bucleUsed, dupUsed:!!P.dupUsed,
       summonLocked:!!P.summonLocked, programLocked:!!P.programLocked, spellLock:!!P.spellLock, trollTaunt:!!P.trollTaunt, haterLockTurn:P.haterLockTurn||0,
       protectUntil:P.protectUntil||0, protectArch:P.protectArch||null,
       curseTurn:(P.curseTurn==null?0:P.curseTurn), airdropTurn:P.airdropTurn||0,
@@ -9069,7 +9091,7 @@ function applyRemoteState(s,hands,decks){
     P.name=sp.name; P.deckKey=sp.deckKey; P.hp=sp.hp;
     P.gy=toArr(sp.gy); P.extra=toArr(sp.extra); P.banished=toArr(sp.banished);
     P.field=arr6(sp.field); P.back=arr5(sp.back);
-    P.normalUsed=!!sp.normalUsed; P.compUsed=!!sp.compUsed;
+    P.normalUsed=!!sp.normalUsed; P.compUsed=!!sp.compUsed; P.bucleUsed=!!sp.bucleUsed; P.dupUsed=!!sp.dupUsed;
     P.summonLocked=!!sp.summonLocked; P.programLocked=!!sp.programLocked; P.spellLock=!!sp.spellLock; P.trollTaunt=!!sp.trollTaunt; P.haterLockTurn=sp.haterLockTurn||0;
     P.protectUntil=sp.protectUntil||0; P.protectArch=sp.protectArch||null;
     P.curseTurn=sp.curseTurn?sp.curseTurn:null; P.airdropTurn=sp.airdropTurn||0;

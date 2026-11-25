@@ -1230,6 +1230,27 @@
          que el botón del lobby (borde #25e2ff y resplandor cian). En el duelo
          --np-cyan no está definido, así que van los valores directos. */
       .midbtns .salabtn{ border-color:#25e2ff; box-shadow:0 0 10px rgba(37,226,255,.35); font-weight:700; }
+      /* ---------- Botón «← Sala de Juegos» FIJO y global: vive fuera de todas las
+         pantallas, en la esquina superior izquierda del viewport, con z-index por
+         encima de hojas, ventanas y overlays, así que se ve SIEMPRE (lobby, salas,
+         duelo y pausa). Navega en la misma ventana a la Sala de Juegos. Los botones
+         antiguos del lobby y de la barra del duelo se ocultan: este los sustituye
+         para que nunca haya dos botones iguales en la misma pantalla. ---------- */
+      .salabtn-fixed{ position:fixed; top:calc(.55rem + env(safe-area-inset-top)); left:.6rem; z-index:200;
+        height:42px; min-height:42px; padding:0 1rem; font-size:1rem; font-weight:700; white-space:nowrap;
+        border-color:#25e2ff; box-shadow:0 0 12px rgba(37,226,255,.45); background:var(--panel2); color:var(--ink); }
+      .salabtn-fixed:hover{ border-color:#25e2ff; box-shadow:0 0 18px rgba(37,226,255,.65); }
+      .wrap{ padding-top:3.4rem; }
+      #btnToSala,#btnSalaDuel{ display:none !important; }
+      @media (max-width:1280px) and (max-height:700px) and (orientation:landscape) and (hover:none) and (pointer:coarse){
+        .wrap{ padding-top:.3rem; }
+        .salabtn-fixed{ height:32px; min-height:32px; font-size:.82rem; padding:0 .6rem; top:.3rem; left:.3rem; }
+      }
+      /* Aviso junto a «Crear sala»: explica el sorteo inicial y por qué el botón
+         está desactivado hasta elegir Cara o Cruz (nunca desactivado sin decir por qué) */
+      #createRoomHint{ display:block; margin:.45rem 0 0; font-size:.98rem; font-weight:600; color:var(--gold); }
+      #createRoomHint.ok{ color:var(--good); }
+      #roomWaitLabel{ font-weight:700; color:var(--neon); margin:.5rem 0 .1rem; }
       /* ---------- Ventana «Cómo se juega»: las reglas viven en su propia ventana
          (reutiliza la ventana de Ajustes) y ya no ocupan espacio en el lobby ---------- */
       .rules-overlay .rules-list{ margin:.35rem 0 0; padding-left:1.25rem; }
@@ -1576,6 +1597,7 @@
   </head>
   <body>
     <script>if(/Android/i.test(navigator.userAgent||"")){document.documentElement.classList.add("android");}</script>
+    <button type="button" id="btnSalaFixed" class="salabtn-fixed" aria-label="Volver a la Sala de Juegos">← Sala de Juegos</button>
     <div class="wrap">
 
       <!-- ============ LOBBY / SETUP ============ -->
@@ -1650,15 +1672,19 @@
             </label>
             <p class="note" id="onlineRandomNote" style="display:none;margin:.2rem 0">🎲 Se sorteará al empezar: un mazo oficial al azar para cada jugador (puede tocar el mismo a los dos).</p>
             <h4 style="margin:1rem 0 .4rem">Crear sala (anfitrión)</h4>
-            <p class="note" style="margin:.2rem 0">Si la moneda sale como elegiste, empiezas tú; si no, empieza tu rival.</p>
+            <p class="note" style="margin:.2rem 0">Sorteo inicial: elige <b>Cara</b> o <b>Cruz</b>. La moneda se lanza sola en cuanto tu rival entra a la sala: si sale como elegiste, empiezas tú; si no, empieza tu rival.</p>
             <div>
-              <button id="onlinePickCara" type="button" class="choicebtn sel">🪙 Cara</button>
+              <button id="onlinePickCara" type="button" class="choicebtn">🪙 Cara</button>
               <button id="onlinePickCruz" type="button" class="choicebtn">🪙 Cruz</button>
               <button class="primary" id="btnCreateRoom" type="button">Crear sala</button>
             </div>
+            <p id="createRoomHint" role="note" aria-live="polite">⚠️ Elige primero Cara o Cruz para el sorteo inicial: por eso «Crear sala» está desactivado. En cuanto elijas, se activa.</p>
             <div id="roomCodeBox" style="display:none; text-align:center; margin:.8rem 0">
               <p style="margin:.2rem 0">Comparte este código con tu rival:</p>
               <span class="code" id="roomCodeLabel">····</span>
+              <button id="btnCopyRoomCode" type="button">📋 Copiar código</button>
+              <p id="roomWaitLabel">⏳ Esperando rival…</p>
+              <p class="note" id="roomExpiryLabel" style="margin:.1rem 0"></p>
             </div>
             <h4 style="margin:1rem 0 .4rem">Unirse a una sala (invitado)</h4>
             <div class="orow">
@@ -1666,8 +1692,8 @@
               <button class="primary" id="btnJoinRoom" type="button">Unirse con código</button>
             </div>
             <p class="onlinestatus" id="onlineStatus"></p>
-            <button id="btnCancelOnline" type="button" class="ghost" style="display:none">Cancelar sala / salir</button>
-            <p class="note">Las salas viven en tu proyecto Firebase «duelo-neural». Sus reglas de base de datos ya están actualizadas: el acceso está abierto solo para las salas de juego, sin fecha de vencimiento.</p>
+            <button id="btnCancelOnline" type="button" class="ghost" style="display:none">Salir de la sala</button>
+            <p class="note">Las salas viven en tu proyecto Firebase «duelo-neural». Una sala que se queda esperando sin rival se cierra sola a los 10 minutos; si caduca, verás el aviso aquí y podrás crear otra.</p>
         </div>
         <div class="prep-nav">
           <button type="button" class="ghost" id="btnBackOnline">← Volver a los modos</button>
@@ -4208,15 +4234,14 @@ function closeRules(){
   document.addEventListener("keydown",function(ev){ var o=$("rulesOverlay"); if(ev.key==="Escape"&&o&&o.classList.contains("on"))closeRules(); });
 })();
 
-/* ---------- Salir a la Sala de Juegos: el mismo destino desde el botón de la
-   esquina del lobby, desde la pantalla de pausa (la hoja de «pásale el
-   dispositivo») y desde la barra de controles del duelo (junto a Sonido,
-   Registro, Pantalla completa y Abandonar). Siempre en la MISMA ventana con
-   location.href: target=_blank queda bloqueado en el visor de Muse y en los
-   WebView de las apps. ---------- */
+/* ---------- Salir a la Sala de Juegos: el mismo destino desde el botón fijo
+   global (esquina superior, siempre visible), desde la pantalla de pausa (la
+   hoja de «pásale el dispositivo») y desde la barra de controles del duelo.
+   Siempre en la MISMA ventana con location.assign: abrir otra pestaña queda
+   bloqueado en el visor de Muse y en los WebView de las apps. ---------- */
 var SALA_URL="https://thedecro3312-ux.github.io/sala-de-juegos/";
-function goSala(){ window.location.href=SALA_URL; }
-(function(){ var b=$("btnToSala"); if(b)b.onclick=goSala; var d=$("btnSalaDuel"); if(d)d.onclick=goSala; })();
+function goSala(){ window.location.assign(SALA_URL); }
+(function(){ var b=$("btnToSala"); if(b)b.onclick=goSala; var d=$("btnSalaDuel"); if(d)d.onclick=goSala; var f=$("btnSalaFixed"); if(f)f.onclick=goSala; })();
 
 /* ---------- Pantalla completa: un botón en la esquina del lobby y otro en la barra
    del duelo; ambos comparten estado y se actualizan con el evento fullscreenchange
@@ -8692,8 +8717,9 @@ var ONLINE={ myIdx:0, role:null, roomRef:null, code:null,
   clientId:"c"+Math.random().toString(36).slice(2,10), seq:0,
   iAmAuthority:false, forcePush:false, applying:false,
   waitingResponse:null, lastPromptId:null, currentPromptId:null,
-  coinChoice:"cara", randomDecks:false, coinDone:false, coinShown:false, duelBuilt:false,
-  inDuel:false, finishShown:false, finishWritten:false, roomData:null, _pt:null };
+  coinChoice:null, randomDecks:false, coinDone:false, coinShown:false, duelBuilt:false,
+  inDuel:false, finishShown:false, finishWritten:false, roomData:null, _pt:null,
+  expiresAt:null, expiryTimer:null, leaving:false };
 var onlineDeck="virus";
 function onlineStatus(msg){ var el=$("onlineStatus"); if(el)el.textContent=msg||""; }
 /* Si el mazo elegido en línea es personalizado, su lista viaja en los datos
@@ -8721,9 +8747,11 @@ $("btnModeOnline").onclick=function(){
   ["btnModePvp","btnModeAi","btnModeSim","btnModeTorneo"].forEach(function(id){var b=$(id);if(b)b.classList.remove("sel");});
   this.classList.add("sel");
   showPrepScreen("scr-online");
+  updateCreateRoomUI();
+  var db=fbInit(); if(db)cleanupOldRooms(db); /* limpieza de salas viejas sin actividad al entrar */
 };
-$("onlinePickCara").onclick=function(){ONLINE.coinChoice="cara";$("onlinePickCara").classList.add("sel");$("onlinePickCruz").classList.remove("sel");};
-$("onlinePickCruz").onclick=function(){ONLINE.coinChoice="cruz";$("onlinePickCruz").classList.add("sel");$("onlinePickCara").classList.remove("sel");};
+$("onlinePickCara").onclick=function(){ONLINE.coinChoice="cara";$("onlinePickCara").classList.add("sel");$("onlinePickCruz").classList.remove("sel");updateCreateRoomUI();};
+$("onlinePickCruz").onclick=function(){ONLINE.coinChoice="cruz";$("onlinePickCruz").classList.add("sel");$("onlinePickCara").classList.remove("sel");updateCreateRoomUI();};
 $("onlineRandomDecks").onchange=function(){
   if(ONLINE.roomRef) return; /* el interruptor solo tiene efecto antes de crear/unirse a la sala */
   ONLINE.randomDecks=this.checked;
@@ -8739,27 +8767,95 @@ function genRoomCode(){
   return s;
 }
 function onlineFail(msg){ onlineStatus(msg); toast(msg,3600); }
+/* ---------- Caducidad de salas (TTL): una sala que se queda «waiting» sin
+   invitado caduca a los 10 minutos de su última actividad. Cada sala guarda
+   createdAt, lastActivity y expiresAt en Firebase; al entrar al modo en línea
+   y al crear/unirse se limpian las salas viejas, y la sala propia lleva una
+   vigilancia local que la cierra con un aviso claro cuando expira. ---------- */
+var ROOM_WAIT_TTL_MS=10*60*1000;
+function roomExpired(r,now){
+  if(!r)return false; now=now||Date.now();
+  if(r.status!=="waiting"||r.guest)return false;
+  if(r.expiresAt&&now>+r.expiresAt)return true;
+  var base=+r.lastActivity||+r.createdAt||0;
+  return !!base&&(now-base>ROOM_WAIT_TTL_MS);
+}
+function cleanupOldRooms(db){
+  if(!db)return;
+  try{
+    db.ref("rooms").once("value").then(function(snap){
+      var now=Date.now();
+      snap.forEach(function(child){
+        var r=child.val(); if(!r)return;
+        var staleWaiting=roomExpired(r,now);
+        var base=+r.lastActivity||+r.createdAt||0;
+        var staleFinished=r.status==="finished"&&base&&(now-base>60*60*1000);
+        if(staleWaiting||staleFinished){ try{child.ref.remove();}catch(e){} }
+      });
+    }).catch(function(){});
+  }catch(e){}
+}
+function fmtClock(ts){ try{ return new Date(ts).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } }
+function startRoomExpiryWatch(){
+  stopRoomExpiryWatch();
+  ONLINE.expiryTimer=setInterval(function(){
+    if(!ONLINE.roomRef||ONLINE.inDuel)return;
+    var exp=ONLINE.expiresAt||(ONLINE.roomData&&ONLINE.roomData.expiresAt);
+    if(exp&&Date.now()>+exp)expireMyRoom();
+  },5000);
+}
+function stopRoomExpiryWatch(){ if(ONLINE.expiryTimer){ clearInterval(ONLINE.expiryTimer); ONLINE.expiryTimer=null; } }
+function expireMyRoom(){
+  var code=ONLINE.code||"";
+  var ref=ONLINE.roomRef;
+  stopRoomExpiryWatch();
+  ONLINE.leaving=true;
+  if(ref){ try{ ref.off(); }catch(e){} try{ ref.remove(); }catch(e){} }
+  onlineCleanup(false);
+  var msg="⏰ La sala "+code+" expiró: nadie se unió en 10 minutos y se cerró sola. Elige Cara o Cruz y crea una sala nueva cuando quieras.";
+  onlineStatus(msg); toast(msg,4200);
+}
+/* «Crear sala» solo se activa tras elegir Cara o Cruz para el sorteo inicial,
+   y el aviso #createRoomHint explica siempre por qué está o no está activo. */
+function updateCreateRoomUI(){
+  var has=!!ONLINE.coinChoice, locked=!!ONLINE.roomRef;
+  var b=$("btnCreateRoom"); if(b)b.disabled=locked||!has;
+  var h=$("createRoomHint"); if(!h)return;
+  if(locked){ h.textContent="Ya estás en una sala. Para crear otra, sal primero con «Salir de la sala»."; h.classList.remove("ok"); }
+  else if(has){ h.textContent="✅ Elegiste "+(ONLINE.coinChoice==="cara"?"Cara":"Cruz")+" para el sorteo inicial. Ya puedes crear la sala: la moneda se lanzará en cuanto entre tu rival."; h.classList.add("ok"); }
+  else { h.textContent="⚠️ Elige primero Cara o Cruz para el sorteo inicial: por eso «Crear sala» está desactivado. En cuanto elijas, se activa."; h.classList.remove("ok"); }
+}
 function lockOnlineButtons(lock){
-  $("btnCreateRoom").disabled=lock; $("btnJoinRoom").disabled=lock;
+  $("btnCreateRoom").disabled=lock||!ONLINE.coinChoice; $("btnJoinRoom").disabled=lock;
   $("btnCancelOnline").style.display=lock?"inline-block":"none";
+  updateCreateRoomUI();
+}
+function showWaitingRoom(code,expiresAt){
+  $("roomCodeLabel").textContent=code; $("roomCodeBox").style.display="block";
+  var w=$("roomWaitLabel"); if(w)w.textContent="⏳ Esperando rival…";
+  var x=$("roomExpiryLabel"); if(x)x.textContent=expiresAt?("Si nadie se une, la sala se cierra sola a las "+fmtClock(expiresAt)+" (10 minutos)."):"";
 }
 function createRoom(){
   var db=fbInit();
   if(!db){onlineFail("No se pudo cargar Firebase. Revisa tu conexión e inténtalo de nuevo.");return;}
   if(ONLINE.roomRef)return;
+  if(!ONLINE.coinChoice){ onlineFail("Elige primero Cara o Cruz para el sorteo inicial: la moneda se lanzará en cuanto entre tu rival."); return; }
+  cleanupOldRooms(db);
   var name=($("onlineName").value||"Jugador").trim()||"Jugador";
   var code=genRoomCode();
   var ref=db.ref("rooms/"+code);
   ref.once("value").then(function(snap){
     if(snap.exists()){ createRoomRetry(name,1); return; }
-    ONLINE.role="host"; ONLINE.myIdx=0; ONLINE.code=code; ONLINE.roomRef=ref;
-    ref.set({ createdAt:Date.now(), status:"waiting", randomDecks:!!ONLINE.randomDecks,
+    ONLINE.role="host"; ONLINE.myIdx=0; ONLINE.code=code; ONLINE.roomRef=ref; ONLINE.leaving=false;
+    var now=Date.now(); ONLINE.expiresAt=now+ROOM_WAIT_TTL_MS;
+    ref.set({ createdAt:now, lastActivity:now, expiresAt:ONLINE.expiresAt, status:"waiting", randomDecks:!!ONLINE.randomDecks,
       host:Object.assign({name:name,deck:(ONLINE.randomDecks?(DECKS[onlineDeck]?"virus":onlineDeck):onlineDeck)}, ONLINE.randomDecks?{}:customPayload()), guest:null });
     $("onlineRandomDecks").disabled=true;
-    $("roomCodeLabel").textContent=code; $("roomCodeBox").style.display="block";
+    showWaitingRoom(code,ONLINE.expiresAt);
     onlineStatus("Sala "+code+" creada. Esperando a que tu rival se una con el código…");
     lockOnlineButtons(true);
     attachRoomListener();
+    startRoomExpiryWatch();
   }).catch(function(){ onlineFail("No se pudo crear la sala. Inténtalo de nuevo."); });
 }
 function createRoomRetry(name,tries){
@@ -8767,12 +8863,13 @@ function createRoomRetry(name,tries){
   var code=genRoomCode(), ref=db.ref("rooms/"+code);
   ref.once("value").then(function(snap){
     if(snap.exists()){createRoomRetry(name,tries+1);return;}
-    ONLINE.role="host"; ONLINE.myIdx=0; ONLINE.code=code; ONLINE.roomRef=ref;
-    ref.set({ createdAt:Date.now(), status:"waiting", randomDecks:!!ONLINE.randomDecks, host:Object.assign({name:name,deck:(ONLINE.randomDecks?(DECKS[onlineDeck]?"virus":onlineDeck):onlineDeck)}, ONLINE.randomDecks?{}:customPayload()), guest:null });
+    ONLINE.role="host"; ONLINE.myIdx=0; ONLINE.code=code; ONLINE.roomRef=ref; ONLINE.leaving=false;
+    var now=Date.now(); ONLINE.expiresAt=now+ROOM_WAIT_TTL_MS;
+    ref.set({ createdAt:now, lastActivity:now, expiresAt:ONLINE.expiresAt, status:"waiting", randomDecks:!!ONLINE.randomDecks, host:Object.assign({name:name,deck:(ONLINE.randomDecks?(DECKS[onlineDeck]?"virus":onlineDeck):onlineDeck)}, ONLINE.randomDecks?{}:customPayload()), guest:null });
     $("onlineRandomDecks").disabled=true;
-    $("roomCodeLabel").textContent=code; $("roomCodeBox").style.display="block";
+    showWaitingRoom(code,ONLINE.expiresAt);
     onlineStatus("Sala "+code+" creada. Esperando a que tu rival se una con el código…");
-    lockOnlineButtons(true); attachRoomListener();
+    lockOnlineButtons(true); attachRoomListener(); startRoomExpiryWatch();
   });
 }
 function joinRoom(){
@@ -8783,24 +8880,49 @@ function joinRoom(){
   if(code.length!==4){onlineFail("Escribe el código de 4 letras de la sala.");return;}
   var name=($("onlineName").value||"Jugador").trim()||"Jugador";
   var ref=db.ref("rooms/"+code);
+  cleanupOldRooms(db);
   ref.once("value").then(function(snap){
     var r=snap.val();
     if(!r){onlineFail("No existe ninguna sala con el código "+code+".");return;}
+    if(roomExpired(r)){ try{ref.remove();}catch(e){} onlineFail("⏰ Esa sala expiró: estuvo 10 minutos sin jugadores y se cerró sola. Pide a tu rival que cree una sala nueva.");return;}
     if(r.guest){onlineFail("Esa sala ya está llena.");return;}
     if(r.status!=="waiting"){onlineFail("Esa sala ya no acepta jugadores.");return;}
-    ONLINE.role="guest"; ONLINE.myIdx=1; ONLINE.code=code; ONLINE.roomRef=ref;
+    ONLINE.role="guest"; ONLINE.myIdx=1; ONLINE.code=code; ONLINE.roomRef=ref; ONLINE.leaving=false; ONLINE.expiresAt=null;
     attachRoomListener();
-    ref.update({ guest:Object.assign({name:name,deck:(r.randomDecks?(DECKS[onlineDeck]?onlineDeck:"virus"):onlineDeck)}, r.randomDecks?{}:customPayload()) });
+    ref.update({ guest:Object.assign({name:name,deck:(r.randomDecks?(DECKS[onlineDeck]?onlineDeck:"virus"):onlineDeck)}, r.randomDecks?{}:customPayload()), lastActivity:Date.now(), expiresAt:null });
     $("onlineRandomDecks").disabled=true;
+    showWaitingRoom(code,null);
+    var w=$("roomWaitLabel"); if(w)w.textContent="✅ Ya estás dentro. Esperando la moneda…";
     onlineStatus("Conectado a la sala "+code+". Esperando la moneda…");
     lockOnlineButtons(true);
   }).catch(function(){ onlineFail("No se pudo entrar a la sala. Inténtalo de nuevo."); });
 }
 $("btnCreateRoom").onclick=createRoom;
 $("btnJoinRoom").onclick=joinRoom;
+updateCreateRoomUI(); /* desde el primer momento: sin Cara/Cruz, desactivado y explicado */
+/* Copiar código: portapapeles del navegador y, si no está disponible (WebView),
+   selección temporal en un campo oculto. Siempre con confirmación visible. */
+$("btnCopyRoomCode").onclick=function(){
+  var code=(ONLINE.code||$("roomCodeLabel").textContent||"").trim();
+  if(!code||code==="····")return;
+  function done(){ toast("📋 Código "+code+" copiado. Pásaselo a tu rival.",2600); }
+  function fallback(){
+    try{
+      var ta=document.createElement("textarea");
+      ta.value=code; ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select();
+      var ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(ta);
+      if(ok)done(); else toast("Tu código es "+code+": cópialo a mano.",3200);
+    }catch(e){ toast("Tu código es "+code+": cópialo a mano.",3200); }
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(code).then(done).catch(fallback); }
+  else fallback();
+};
 $("btnCancelOnline").onclick=function(){
   if(!ONLINE.roomRef)return;
   var ref=ONLINE.roomRef;
+  ONLINE.leaving=true; stopRoomExpiryWatch();
   if(ONLINE.role==="host")ref.remove();
   else if(!ONLINE.inDuel)ref.update({guest:null});
   onlineCleanup(false);
@@ -8811,8 +8933,21 @@ function attachRoomListener(){
 }
 function onRoomSnap(snap){
   var r=snap.val();
-  if(!r){ if(ONLINE.inDuel&&!ONLINE.finishShown){ONLINE.finishShown=true;dlFinishDuel(null,"disconnect","La sala se cerró");showSheet("<h2>La sala se cerró</h2><p>El duelo en línea terminó.</p><button class='primary' id='btnFin'>Volver al inicio</button>");sheetBtn("btnFin",function(){closeSheet();onlineCleanup(false);$("scr-duel").classList.remove("on");$("scr-lobby").classList.add("on");});} return; }
+  if(!r){
+    if(ONLINE.inDuel&&!ONLINE.finishShown){ONLINE.finishShown=true;dlFinishDuel(null,"disconnect","La sala se cerró");showSheet("<h2>La sala se cerró</h2><p>El duelo en línea terminó.</p><button class='primary' id='btnFin'>Volver al inicio</button>");sheetBtn("btnFin",function(){closeSheet();onlineCleanup(false);$("scr-duel").classList.remove("on");$("scr-lobby").classList.add("on");});}
+    else if(ONLINE.code&&!ONLINE.inDuel&&!ONLINE.leaving&&!ONLINE.finishShown){
+      /* La sala desapareció mientras esperábamos: expiró (TTL) o el anfitrión la cerró. */
+      var goneCode=ONLINE.code;
+      onlineCleanup(false);
+      var gm="⏰ La sala "+goneCode+" ya no existe: expiró o fue cerrada. Crea una sala nueva o pide otro código a tu rival.";
+      onlineStatus(gm); toast(gm,4200);
+    }
+    return;
+  }
   ONLINE.roomData=r;
+  if(r.expiresAt)ONLINE.expiresAt=+r.expiresAt;
+  if(roomExpired(r)){ if(ONLINE.role==="host")expireMyRoom(); return; }
+  if(r.guest){ var wl=$("roomWaitLabel"); if(wl&&!ONLINE.coinDone)wl.textContent="✅ ¡Tu rival ya entró! Lanzando la moneda…"; }
   if(ONLINE.roomRef){ var _cb0=$("onlineRandomDecks"); if(_cb0)_cb0.disabled=true; }
   if(r.randomDecks){ ONLINE.randomDecks=true; var cb=$("onlineRandomDecks"); if(cb){cb.checked=true; cb.disabled=true;} lockOnlineDeckUI(true); }
   if(ONLINE.role==="host"&&r.guest&&!ONLINE.coinDone)hostDoCoin(r);
@@ -8835,10 +8970,11 @@ function onRoomSnap(snap){
 }
 function hostDoCoin(r){
   ONLINE.coinDone=true;
-  var choice=ONLINE.coinChoice;
+  stopRoomExpiryWatch(); ONLINE.expiresAt=null; /* con los dos jugadores dentro, la sala ya no caduca */
+  var choice=ONLINE.coinChoice||"cara";
   var result=Math.random()<0.5?"cara":"cruz";
   var first=(choice===result)?0:1;
-  var up={ coin:{choice:choice,result:result,first:first}, status:"coin" };
+  var up={ coin:{choice:choice,result:result,first:first}, status:"coin", lastActivity:Date.now(), expiresAt:null };
   if(r.randomDecks){
     var keys=Object.keys(DECKS); /* los 20 oficiales (incluidos hibVS/hibVE); nunca CUSTOM_DECKS */
     var deckHost=keys[Math.floor(Math.random()*keys.length)];
@@ -8859,6 +8995,7 @@ function showCoinResult(r){
   sheetBtn("btnCoinOk",closeSheet);
 }
 function enterDuelScreen(){
+  stopRoomExpiryWatch();
   if(typeof closeBuilder==="function")closeBuilder();
   if(typeof closeSettings==="function")closeSettings();
   MODE="online"; ONLINE.inDuel=true;
@@ -9138,7 +9275,9 @@ function onlineCleanup(removeRoom){
     try{ ref.onDisconnect().cancel(); }catch(e){}
     if(removeRoom){ try{ ref.remove(); }catch(e){} }
   }
+  stopRoomExpiryWatch();
   ONLINE.roomRef=null; ONLINE.role=null; ONLINE.code=null;
+  ONLINE.expiresAt=null; ONLINE.leaving=false;
   ONLINE.iAmAuthority=false; ONLINE.forcePush=false; ONLINE.applying=false;
   ONLINE.waitingResponse=null; ONLINE.lastPromptId=null; ONLINE.currentPromptId=null;
   ONLINE.coinDone=false; ONLINE.randomDecks=false; ONLINE.coinShown=false; ONLINE.duelBuilt=false;

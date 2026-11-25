@@ -1210,6 +1210,26 @@
       @media (max-width:560px){
         .lobby-corner .fsbtn .fstext{ display:none; }
       }
+      /* ---------- Botón «← Sala de Juegos»: primero en la esquina superior del lobby,
+         con acento cian neón para encontrarlo de un vistazo y alto de sobra (44px)
+         para tocarlo cómodo en Android. Lleva a la Sala en la misma ventana.
+         En pantallas muy estrechas la esquina se repliega en dos filas y el héroe
+         gana aire arriba para que ningún botón pise el título. ---------- */
+      .lobby-corner .salabtn{ height:44px; min-height:44px; padding:0 1rem; font-size:1rem; font-weight:700;
+        border-color:var(--np-cyan); box-shadow:0 0 10px rgba(37,226,255,.35); }
+      @media (max-width:560px){
+        .lobby-corner{ flex-wrap:wrap; justify-content:flex-end; max-width:100%; }
+        .lobby-corner .salabtn{ height:44px; font-size:.95rem; padding:0 .8rem; }
+        #scr-lobby .hero{ padding-top:5.8rem; }
+      }
+      /* El mismo botón dentro de la hoja de pausa («pásale el dispositivo»):
+         grande y fácil de tocar, sin tocar el resto de botones de la hoja */
+      #sheet .salabtn{ min-height:48px; padding:.6rem 1.2rem; font-size:1rem; font-weight:700; }
+      /* El mismo botón en la barra de controles del duelo, junto a Sonido,
+         Registro, Pantalla completa y Abandonar: el mismo acento cian neón
+         que el botón del lobby (borde #25e2ff y resplandor cian). En el duelo
+         --np-cyan no está definido, así que van los valores directos. */
+      .midbtns .salabtn{ border-color:#25e2ff; box-shadow:0 0 10px rgba(37,226,255,.35); font-weight:700; }
       /* ---------- Ventana «Cómo se juega»: las reglas viven en su propia ventana
          (reutiliza la ventana de Ajustes) y ya no ocupan espacio en el lobby ---------- */
       .rules-overlay .rules-list{ margin:.35rem 0 0; padding-left:1.25rem; }
@@ -1561,6 +1581,7 @@
       <!-- ============ LOBBY / SETUP ============ -->
       <section id="scr-lobby" class="screen on">
         <div class="lobby-corner">
+          <button type="button" class="rulesbtn salabtn" id="btnToSala" aria-label="Volver a la Sala de Juegos">← Sala de Juegos</button>
           <button type="button" class="rulesbtn" id="btnOpenRules" aria-label="Abrir cómo se juega">📖 Cómo se juega</button>
           <button type="button" class="rulesbtn fsbtn" id="btnFsLobby" aria-label="Pantalla completa" title="Pantalla completa">⛶ <span class="fstext">Pantalla completa</span></button>
           <button type="button" class="iconbtn" id="btnOpenSettings" aria-label="Ajustes" title="Ajustes">⚙️</button>
@@ -1775,6 +1796,7 @@
                 <button id="btnDuelLog" type="button" class="ghost">📜 Registro (<span id="duelLogCount">0</span>)</button>
                 <button id="btnFsDuel" type="button" class="ghost" aria-label="Pantalla completa" title="Pantalla completa">⛶ <span class="fstext">Pantalla completa</span></button>
                 <button id="btnLeaveOnline" type="button" class="danger" style="display:none">Abandonar</button>
+                <button id="btnSalaDuel" type="button" class="ghost salabtn" aria-label="Volver a la Sala de Juegos">← Sala de Juegos</button>
               </span>
             </div>
             <span class="xzone" id="xzoneMe" aria-hidden="true"></span>
@@ -4186,6 +4208,16 @@ function closeRules(){
   document.addEventListener("keydown",function(ev){ var o=$("rulesOverlay"); if(ev.key==="Escape"&&o&&o.classList.contains("on"))closeRules(); });
 })();
 
+/* ---------- Salir a la Sala de Juegos: el mismo destino desde el botón de la
+   esquina del lobby, desde la pantalla de pausa (la hoja de «pásale el
+   dispositivo») y desde la barra de controles del duelo (junto a Sonido,
+   Registro, Pantalla completa y Abandonar). Siempre en la MISMA ventana con
+   location.href: target=_blank queda bloqueado en el visor de Muse y en los
+   WebView de las apps. ---------- */
+var SALA_URL="https://thedecro3312-ux.github.io/sala-de-juegos/";
+function goSala(){ window.location.href=SALA_URL; }
+(function(){ var b=$("btnToSala"); if(b)b.onclick=goSala; var d=$("btnSalaDuel"); if(d)d.onclick=goSala; })();
+
 /* ---------- Pantalla completa: un botón en la esquina del lobby y otro en la barra
    del duelo; ambos comparten estado y se actualizan con el evento fullscreenchange
    (también cuando se sale con Esc o con el gesto del sistema). Usa la Fullscreen API
@@ -5153,8 +5185,9 @@ function beginTurn(first){
   }
   if(P.ai){ startTurn(); return; }
   if(MODE==="ai"||MODE==="torneo"){ startTurn(); return; }
-  showPassSheet("<div class='big'>📱</div><h2>Pásale el dispositivo a "+esc(P.name)+"</h2><p>Es su turno. La pantalla está tapada en negro: no se ve el tablero ni ninguna mano hasta que "+esc(P.name)+" confirme.</p><button class='primary' id='btnIm'>Soy "+esc(P.name)+"</button>");
+  showPassSheet("<div class='big'>📱</div><h2>Pásale el dispositivo a "+esc(P.name)+"</h2><p>Es su turno. La pantalla está tapada en negro: no se ve el tablero ni ninguna mano hasta que "+esc(P.name)+" confirme.</p><button class='primary' id='btnIm'>Soy "+esc(P.name)+"</button> <button type='button' class='salabtn' id='btnSalaPass'>← Sala de Juegos</button>");
   sheetBtn("btnIm",function(){closeSheet();startTurn();});
+  sheetBtn("btnSalaPass",goSala);
 }
 function transmisionEnVivoCount(){
   /* Transmisión en Vivo (Programa continuo genérico): copias boca arriba
@@ -6937,8 +6970,9 @@ function passToResponder(R,html,cb,pdata){
   if(R.ai){cb(aiDecideResponse(R,html));return;}
   if(MODE==="online"&&R!==viewer()){ if(pdata)onlineRespond(R,pdata,cb); else cb("no"); return; }
   if(MODE==="pvp"&&R!==viewer()){
-    showPassSheet("<div class='big'>⚠️</div><h2>"+esc(R.name)+", puedes responder</h2><p>Pásale el dispositivo a "+esc(R.name)+": tiene un Protocolo que puede activarse. La pantalla está tapada en negro para que no se vea el juego.</p><button class='primary' id='btnIm'>Soy "+esc(R.name)+"</button>");
+    showPassSheet("<div class='big'>⚠️</div><h2>"+esc(R.name)+", puedes responder</h2><p>Pásale el dispositivo a "+esc(R.name)+": tiene un Protocolo que puede activarse. La pantalla está tapada en negro para que no se vea el juego.</p><button class='primary' id='btnIm'>Soy "+esc(R.name)+"</button> <button type='button' class='salabtn' id='btnSalaPass'>← Sala de Juegos</button>");
     sheetBtn("btnIm",function(){showSheet(html,true);wireResponseButtons(cb);});
+    sheetBtn("btnSalaPass",goSala);
     return;
   }
   showSheet(html,true); wireResponseButtons(cb);

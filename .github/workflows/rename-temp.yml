@@ -1,0 +1,16 @@
+name: rename-temp
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git mv duelo-neural-en-linea.html duelo-neural-en-linea-new.html
+          git config user.name "thedecro3312-ux"
+          git config user.email "thedecro3312@gmail.com"
+          git commit -m "Rename uploaded file to duelo-neural-en-linea-new.html"
+          git push

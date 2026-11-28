@@ -1909,7 +1909,7 @@
           <li><b>🗜️ Compresión (RAR):</b> las cartas RAR del Extra Deck tienen <b>Rango</b> en vez de Nivel. Se invocan por <b>Compresión</b>: apila <b>2 unidades RAR boca arriba del mismo Nivel</b> y coloca el jefe de Rango encima; las 2 unidades quedan debajo de él como <b>Archivos</b>. Para activar el efecto del jefe, <b>desprendes 1 Archivo</b> de debajo: el efecto se activa y ese Archivo va al <b>Cementerio</b>. La Compresión no gasta tu invocación normal del turno. Ojo: WinRAR es de <b>Rango 8</b> pero se comprime con 2 unidades de <b>Nivel 4</b>, como dice su carta.</li>
           <li><b>Polémica (Troll):</b> los contadores de Polémica se colocan sobre las unidades y cada unidad pierde <b>300 ATK por cada contador de Polémica</b> que tenga. Cartas como Troll Tormenta de Comentarios o Rey de los Hilos retiran todos los contadores del campo para convertirlos en destrucción o en daño.</li>
           <li><b>🎲 Tirada (Aventurero):</b> muchas cartas Aventurero tiran un <b>d20</b> al invocarse, al atacar o al activarse: <b>15+</b> efecto fuerte, <b>2–14</b> efecto normal y <b>1</b> pifia (el efecto falla). Las probabilidades son: normal <b>65%</b>, fuerte <b>30%</b> y pifia <b>5%</b>. Mientras <b>Dragón de la Suerte</b> esté boca arriba en tu campo, tus tiradas ganan <b>+2</b> y las bandas se aplican sobre el resultado modificado: un 13 natural cuenta como 15 (fuerte) y un 1 natural cuenta como 3 (ya no es pifia). Cada vez que una de tus tiradas sale 15+, <b>Tesoro de la Mazmorra</b> te da 500 de Integridad. El resultado del dado se muestra en el registro y con un aviso 🎲.</li>
-          <li><b>Palabras clave:</b> <b>Eco</b> (Espectro: efecto al ir al cementerio), <b>Respawn</b> (Battle Royale: vuelve con −500 ATK), <b>Nivel</b> (RPG: +300 ATK al destruir en batalla), <b>Congelar</b> (Ping y Tiempo: la unidad no ataca en su próximo turno), <b>Copia</b> (Clon), <b>Superposición</b> (Cuántico: elige 1 de 2 efectos), <b>Interferencia</b> (VHS: apaga los efectos de 1 unidad rival al invocar) y <b>Hackeo</b> (Hacker: roba el control de 1 unidad rival hasta el final del turno) y <b>Madriguera</b> (Roedor: la unidad se coloca boca abajo en Defensa sin disparar nada y su efecto se activa cuando se voltea boca arriba: al invocarla por volteo a Ataque, al ser revelada en batalla o con cartas como Madriguera Profunda) y <b>Cebo</b> (Troll: cuando un Troll es seleccionado como objetivo de un ataque, dispara su efecto de castigo; también se dispara si estaba boca abajo y la batalla lo voltea. Troll de Puente es la excepción: su efecto es de volteo, destruye 1 unidad del rival al voltearse boca arriba.) y <b>Tirada</b> (Aventurero: tira un d20; 15+ efecto fuerte, 2–14 normal, 1 pifia; Dragón de la Suerte da +2 a tus tiradas).</li>
+          <li><b>Palabras clave:</b> <b>Eco</b> (Espectro: efecto al ir al cementerio), <b>Respawn</b> (Battle Royale: vuelve con −500 ATK), <b>Nivel</b> (RPG: +300 ATK al destruir en batalla), <b>Congelar</b> (Ping y Tiempo: la unidad no ataca en su próximo turno), <b>Copia</b> (Clon: al copiar un efecto, las referencias al arquetipo rival se leen como «Clon» y los efectos de invocación copiados se disparan al copiar — regla aprobada 2026-11-27), <b>Superposición</b> (Cuántico: elige 1 de 2 efectos), <b>Interferencia</b> (VHS: apaga los efectos de 1 unidad rival al invocar) y <b>Hackeo</b> (Hacker: roba el control de 1 unidad rival hasta el final del turno) y <b>Madriguera</b> (Roedor: la unidad se coloca boca abajo en Defensa sin disparar nada y su efecto se activa cuando se voltea boca arriba: al invocarla por volteo a Ataque, al ser revelada en batalla o con cartas como Madriguera Profunda) y <b>Cebo</b> (Troll: cuando un Troll es seleccionado como objetivo de un ataque, dispara su efecto de castigo; también se dispara si estaba boca abajo y la batalla lo voltea. Troll de Puente es la excepción: su efecto es de volteo, destruye 1 unidad del rival al voltearse boca arriba.) y <b>Tirada</b> (Aventurero: tira un d20; 15+ efecto fuerte, 2–14 normal, 1 pifia; Dragón de la Suerte da +2 a tus tiradas).</li>
         </ul>
         <div style="margin-top:1.1rem; text-align:right">
           <button class="primary" type="button" id="btnCloseRules2">¡Entendido!</button>
@@ -2418,7 +2418,7 @@ var DECKS = {
   espectro:{ label:"Espectro — Sombra · Eco", desc:"Eco: tus cartas activan efectos desde el cementerio y vuelven como fantasmas. Jefe: Eco Eterno.",
     main:[["c900000401",3],["c900000402",3],["c900000403",3],["c900000404",3],["c900000405",3],["c900000406",3],["c900000407",3],["c900000408",3],["c900000409",3],["c900000410",2],["c900000411",2],["c900000412",2],["c900000413",1],["c900000414",2],["c900000415",2],["c900000416",2],["c900000420",1]],
     extra:["c900000417","c900000417","c900000418","c900000418","c900000419"] },
-  clon:{ label:"Clon — Espejo · Copia", desc:"Copia el ATK y la DEF de las unidades rivales al invocar a tus clones. Jefe: Clon Perfecto.",
+  clon:{ label:"Clon — Espejo · Copia", desc:"Copia el ATK y la DEF de las unidades rivales al invocar a tus clones. Jefe: Clon Perfecto. Copia adaptada: lo que copies se lee como Clon.",
     main:[["c900000501",3],["c900000502",3],["c900000503",3],["c900000504",3],["c900000505",3],["c900000506",3],["c900000507",3],["c900000508",3],["c900000509",3],["c900000510",2],["c900000511",2],["c900000512",3],["c900000513",3],["c900000514",3],["c900000518",1]],
     extra:["c900000515","c900000515","c900000516","c900000516","c900000517"] },
   cuantico:{ label:"Cuántico — Cuántico · Superposición", desc:"Superposición: al invocarse, cada unidad elige 1 de 2 efectos. Jefe: Gato Cuántico.",
@@ -4724,10 +4724,12 @@ function advTiamatRolls(P,n){
   });
 }
 /* Tiradas al ser invocado (601–605, 607, 609, 615, 617). */
-function advRollSummon(P,unit){
+function advRollSummon(P,unit,srcId){
   var O=G.players[1-G.players.indexOf(P)], c=CARDS[unit.id];
+  if(!srcId)srcId=unit.id;
+  var aE=(srcId!==unit.id)?CARDS[unit.id].a:(CARDS[srcId]?CARDS[srcId].a:CARDS[unit.id].a); /* copia adaptada: si el efecto viene copiado, el arquetipo es el de la carta que copia */
   var fail=function(){log("🎲 "+c.n+": ¡pifia! El efecto falla.");};
-  switch(unit.id){
+  switch(srcId){
     case "c900001601":{
       rollD20(P,"Aventurero Guerrero",function(r1){
       if(r1.banda==="fuerte")destroyOppTarget(P,function(){return true;},"Elige la unidad rival a destruir con Aventurero Guerrero");
@@ -4758,7 +4760,7 @@ function advRollSummon(P,unit){
       break; }
     case "c900001605":{
       rollD20(P,"Aventurero Bardo",function(r5){
-      if(r5.banda==="fuerte")searchDeck(P,function(x){return CARDS[x].a==="aventurero";},"Elige 1 carta Aventurero de tu mazo");
+      if(r5.banda==="fuerte")searchDeck(P,function(x){return CARDS[x].a===aE;},"Elige 1 carta Aventurero de tu mazo");
       else if(r5.banda==="normal"){
         if(!P.ai&&P===viewer()){showSheet("<h2>Mano de "+esc(O.name)+"</h2><div class='picklist'>"+(O.hand.length?O.hand.map(function(h){return pickBtn(h,null);}).join(""):"<p>Sin cartas.</p>")+"</div><button id='btnOk'>Cerrar</button>",true);sheetBtn("btnOk",function(){closeSheet();render();});}
         else log("🔍 Aventurero Bardo mira la mano de "+O.name+".");
@@ -4784,8 +4786,8 @@ function advRollSummon(P,unit){
       break; }
     case "c900001609":{
       rollD20(P,"Aventurero Druida",function(r9){
-      if(r9.banda==="fuerte")chooseRevive(P,"aventurero",4,"atk",null,function(){render();});
-      else if(r9.banda==="normal")chooseGraveToHand(P,function(g){return CARDS[g].a==="aventurero";},c.n+": elige 1 carta Aventurero de tu cementerio",function(){render();});
+      if(r9.banda==="fuerte")chooseRevive(P,aE,4,"atk",null,function(){render();});
+      else if(r9.banda==="normal")chooseGraveToHand(P,function(g){return CARDS[g].a===aE;},c.n+": elige 1 carta Aventurero de tu cementerio",function(){render();});
       else fail();
       });
       break; }
@@ -4802,7 +4804,7 @@ function advRollSummon(P,unit){
       });
       break; }
     case "c900001617":{
-      var nT=Math.min(3,countArchUnits(P,"aventurero"));
+      var nT=Math.min(3,countArchUnits(P,aE));
       log("🐉 Tiamat tira un d20 por cada unidad Aventurero que controlas ("+nT+").");
       advTiamatRolls(P,nT);
       break; }
@@ -5290,7 +5292,7 @@ function endTurn(){
   G.players.forEach(function(X){
     for(var i=0;i<6;i++){var u=X.field[i];if(u&&u.counters>=3){log("☣ "+CARDS[u.id].n+" tenía 3 contadores de Corrupción y se destruye.");destroyUnit(X,i,false);}}
   });
-  G.players.forEach(function(X){X.field.forEach(function(u){if(u){u.temp=0;u.defCopy=null;u.copiedId=null;u.lvMod=0;u.freezeShortTurn=null;u._copyUsed=false;u._explRolled=false;}});}); /* freezeShortTurn=null: el congelamiento corto de Lag Menor («hasta el final del turno») se consume al terminar el turno en curso; _copyUsed (copias Clon 1 vez por turno) y _explRolled (tirada del Explorador al declarar) también se renuevan */
+  G.players.forEach(function(X){X.field.forEach(function(u){if(u){u.temp=0;u.defCopy=null;u.copiedId=null;u._copiedSummonFired=false;u.lvMod=0;u.freezeShortTurn=null;u._copyUsed=false;u._explRolled=false;}});}); /* freezeShortTurn=null: el congelamiento corto de Lag Menor («hasta el final del turno») se consume al terminar el turno en curso; _copyUsed (copias Clon 1 vez por turno) y _explRolled (tirada del Explorador al declarar) también se renuevan */
   /* La Cinta Maldita: a los 7 turnos de la maldición, el jugador maldito pierde todo su campo */
   G.players.forEach(function(X){
     if(X.curseTurn!=null&&G.turnNo-X.curseTurn>=7){
@@ -5426,6 +5428,25 @@ function fireSummonFx(P,unit,zone){
       if(P===cur())offerReinicioWindowSoon("summon",function(){ render(); });
     });
   } else if(P===cur())offerReinicioWindowSoon("summon",function(){ render(); });
+}
+/* ---------- Copia adaptada (Clon, regla aprobada 2026-11-27) ----------
+   Cuando una carta copia el EFECTO de una unidad rival y ese efecto es de
+   invocación, se dispara AL COPIAR (gratis: no consume el uso activable,
+   que sigue gobernado por fxUsed). Dentro de onSummonFx, las referencias
+   al arquetipo de la carta copiada se leen como el arquetipo de la carta
+   que copia (aE). Copiar un efecto de copia no dispara nada (sin
+   recursión), y el disparo es 1 vez por copia (_copiedSummonFired). */
+function fireCopiedSummonFx(P, unit, zone, isSpecial){
+  if(!unit || P.field[zone]!==unit || unit.faceDown || !unit.copiedId) return;
+  if(unit._copiedSummonFired) return;               /* 1 disparo por copia */
+  var cc = CARDS[unit.copiedId]; if(!cc) return;
+  if(!SUMMON_FX_SET[cc.fx]) return;                 /* solo fx de invocación */
+  if(cc.fx==="copyAtkSummon"||cc.fx==="copyAtkDefSummon") return; /* copia-de-copia: no hay recursión */
+  if(fxBlocked(P,unit)) return;
+  unit._copiedSummonFired = true;
+  var _ps = G._specSummon; G._specSummon = !!isSpecial;
+  onSummonFx(P, unit, zone, cc);
+  G._specSummon = _ps;
 }
 function addNamedFromDeckToHand(P,name,n){
   var got=0;
@@ -7006,18 +7027,20 @@ function doSummon(P,handIdx,pos,tributes){
      entre sus 5 zonas de unidad libres; la Zona Extra es solo para fusiones. */
   openZonePick(P,freeNormalZones(P),"Toca una zona libre de tu campo para colocar a "+c.n+" ("+(pos==="def"?"boca abajo en Defensa":"en Ataque")+").",placeSummon);
 }
-function onSummonFx(P,unit,zone){
+function onSummonFx(P,unit,zone,copiedC){
   if(!unit||unit.faceDown)return; /* boca abajo: ningún efecto de invocación se dispara */
-  if(!unit._vhsDecided&&vhsFieldAuto(P,unit))return; /* Videoclub Embrujado (Campo VHS): niega el efecto de invocación en invocaciones especiales y volteos */
-  var O=G.players[1-G.players.indexOf(P)], c=CARDS[unit.id];
+  if(!copiedC&&!unit._vhsDecided&&vhsFieldAuto(P,unit))return; /* Videoclub Embrujado (Campo VHS): niega el efecto de invocación en invocaciones especiales y volteos; la vía copiada no se niega por segunda vez */
+  var O=G.players[1-G.players.indexOf(P)], c=copiedC||CARDS[unit.id];
+  var aE=copiedC?CARDS[unit.id].a:c.a; /* copia adaptada: el arquetipo efectivo es el de la carta que copia; sin copia, aE===c.a y la vía normal no cambia */
+  var srcId=copiedC?unit.copiedId:unit.id; /* id efectivo del efecto: el copiado en la vía copiada, el propio en la normal */
   if(c.fx&&/invocad/i.test(c.txt||""))logEffect(G.players.indexOf(P), c.n, "efecto al invocarse"); /* solo las cartas cuyo texto es un efecto al invocarse; los pasivos no se anuncian */
   function cntAll(n){O.field.forEach(function(u){if(u)u.counters+=n;});if(n)log("☣ "+c.n+" pone "+n+" contador(es) de Corrupción en las unidades de "+O.name+".");}
   switch(c.fx){
     case "ddos": cntAll(1); break;
-    case "rar701": chooseSummonFromHand(P,function(h){return CARDS[h].t==="U"&&CARDS[h].a==="rar"&&(CARDS[h].lv||99)===4;},"RAR Archivo Comprimido — Elige 1 unidad RAR de Nivel 4 de tu mano"); break;
-    case "rar702": searchDeck(P,function(x){return CARDS[x].a==="rar";},"RAR Carpeta ZIP — Busca 1 carta RAR"); break;
+    case "rar701": chooseSummonFromHand(P,function(h){return CARDS[h].t==="U"&&CARDS[h].a===aE&&(CARDS[h].lv||99)===4;},"RAR Archivo Comprimido — Elige 1 unidad RAR de Nivel 4 de tu mano"); break;
+    case "rar702": searchDeck(P,function(x){return CARDS[x].a===aE;},"RAR Carpeta ZIP — Busca 1 carta RAR"); break;
     case "rar703": {
-      var r703=P.gy.map(function(id,i){return (CARDS[id]&&CARDS[id].t==="U"&&CARDS[id].a==="rar"&&CARDS[id].lv===4)?i:-1;}).filter(function(i){return i>=0;});
+      var r703=P.gy.map(function(id,i){return (CARDS[id]&&CARDS[id].t==="U"&&CARDS[id].a===aE&&CARDS[id].lv===4)?i:-1;}).filter(function(i){return i>=0;});
       if(r703.length&&firstFreeNormal(P)>=0){
         if(!canChoose(P)||r703.length===1){ var nu703=doReviveAt(P,r703[0],"atk"); if(nu703)fireSummonFx(P,nu703,P.field.indexOf(nu703)); }
         else showGraveChoice(P,r703,"RAR Extraer Aquí","Elige 1 unidad RAR de Nivel 4 de tu Cementerio para invocarla.",function(gi){ var nu=doReviveAt(P,gi,"atk"); if(nu)fireSummonFx(P,nu,P.field.indexOf(nu)); render(); });
@@ -7037,7 +7060,7 @@ function onSummonFx(P,unit,zone){
       else { G.pendingRar709={owner:P,units:comp709,hand:hand709}; showSheet("<h2>📁 RAR Descompresor</h2><p>Elige 1 carta RAR de tu mano para colocarla como Archivo:</p><div class='picklist'>"+hand709.map(function(hi,k){return pickBtn(P.hand[hi],"rar709HandPick("+k+")");}).join("")+"</div>",true); }
       break; }
     case "glitch": corruptAllCards(O,1,c.n); break; /* «todas las cartas rivales»: también zona trasera y Campo, no solo unidades */
-    case "bobina": var burn=P.gy.filter(function(g){return CARDS[g].a==="sobre";}).length>=3?600:300; damage(O,burn,"Bobina de Tesla"); break; /* cuenta el cementerio PROPIO de Bobina (P.gy), no el del rival */
+    case "bobina": var burn=P.gy.filter(function(g){return CARDS[g].a===aE;}).length>=3?600:300; damage(O,burn,"Bobina de Tesla"); break; /* cuenta el cementerio PROPIO de Bobina (P.gy), no el del rival */
     case "ransom":
       if(O.hand.length){
         var afterRansom=function(d){
@@ -7067,8 +7090,8 @@ function onSummonFx(P,unit,zone){
       break;
     case "look1": lookTop(P,1,false); break;
     case "look2": lookTop(P,2,true); break;
-    case "searchalgo": searchDeck(P,function(x){return CARDS[x].a==="algo";},"Elige 1 carta Algoritmo de tu mazo"); break;
-    case "searchprog": searchDeck(P,function(x){return CARDS[x].t==="P"&&CARDS[x].a===c.a;},"Elige 1 Programa "+ARCH[c.a].name+" de tu mazo"); break;
+    case "searchalgo": searchDeck(P,function(x){return CARDS[x].a===aE;},"Elige 1 carta Algoritmo de tu mazo"); break;
+    case "searchprog": searchDeck(P,function(x){return CARDS[x].t==="P"&&CARDS[x].a===aE;},"Elige 1 Programa "+ARCH[aE].name+" de tu mazo"); break;
     case "depurador":
       if(O.back.some(Boolean)||O.fzone){
         if(P.ai){var bz=O.back.findIndex(Boolean);if(bz<0){destroyFieldCard(O);log("🧹 Depurador de Sistema destruye el Campo de "+O.name+".");}else{var bc=O.back[bz];O.back[bz]=null;O.gy.push(bc.id);triggerEco(O,CARDS[bc.id]);log("🧹 Depurador de Sistema destruye "+CARDS[bc.id].n+" de "+O.name+".");}}
@@ -7077,11 +7100,11 @@ function onSummonFx(P,unit,zone){
       break;
     /* ---------- efectos de invocación genéricos ---------- */
     case "drawSummon": for(var ds=0;ds<(c.amt||1);ds++)drawCard(P); log("🃏 "+c.n+": "+P.name+" roba "+(c.amt||1)+" carta(s)."); break;
-    case "drawPerAllySummon": var nd=Math.floor(countArchUnits(P,c.a)/2); for(var dp=0;dp<nd;dp++)drawCard(P); if(nd)log("🃏 "+c.n+": "+P.name+" roba "+nd+" carta(s) por sus unidades "+ARCH[c.a].name+"."); break;
-    case "burnSummon": var bd=(c.altN&&P.gy.filter(function(g){return CARDS[g].a===c.a;}).length>=3)?c.altN:(c.amt||300); damage(O,bd,c.n); break;
-    case "searchSummon": searchDeck(P,function(x){return CARDS[x].a===c.a;},"Elige 1 carta "+ARCH[c.a].name+" de tu mazo"); break;
-    case "searchUnitSummon": searchDeck(P,function(x){return CARDS[x].a===c.a&&CARDS[x].t==="U";},"Elige 1 unidad "+ARCH[c.a].name+" de tu mazo"); break;
-    case "summonNamedDeck": if(unit.id==="c900000109"&&!G._specSummon)break; summonNamedFromDeck(P,c.sName,c.amt||1,"atk"); break; /* Enjambre de Datos (109): SOLO al ser invocado de Modo Especial — ni en invocación normal ni al voltearse */
+    case "drawPerAllySummon": var nd=Math.floor(countArchUnits(P,aE)/2); for(var dp=0;dp<nd;dp++)drawCard(P); if(nd)log("🃏 "+c.n+": "+P.name+" roba "+nd+" carta(s) por sus unidades "+ARCH[aE].name+"."); break;
+    case "burnSummon": var bd=(c.altN&&P.gy.filter(function(g){return CARDS[g].a===aE;}).length>=3)?c.altN:(c.amt||300); damage(O,bd,c.n); break;
+    case "searchSummon": searchDeck(P,function(x){return CARDS[x].a===aE;},"Elige 1 carta "+ARCH[aE].name+" de tu mazo"); break;
+    case "searchUnitSummon": searchDeck(P,function(x){return CARDS[x].a===aE&&CARDS[x].t==="U";},"Elige 1 unidad "+ARCH[aE].name+" de tu mazo"); break;
+    case "summonNamedDeck": if(srcId==="c900000109"&&!G._specSummon)break; summonNamedFromDeck(P,c.sName,c.amt||1,"atk"); break; /* Enjambre de Datos (109): SOLO al ser invocado de Modo Especial — ni en invocación normal ni al voltearse */
     case "summonNamedAny": { /* Larva de Red (107): el Nodo sale de la MANO o del CEMENTERIO, nunca del mazo */
       var inHand=P.hand.map(function(h,i){return CARDS[h].n===c.sName?i:-1;}).filter(function(i){return i>=0;});
       var inGy=P.gy.map(function(g,i){return CARDS[g].n===c.sName?i:-1;}).filter(function(i){return i>=0;});
@@ -7097,30 +7120,30 @@ function onSummonFx(P,unit,zone){
       else if(inHand.length)larvaHand(); else larvaGy();
       break; }
     case "summonArchetypeDeck":
-      if(unit.id==="c900000509"&&canChoose(P)){ /* Clon en Serie (509): su dueño ELIGE qué Clon de Nivel 2 o menor trae de su mazo (antes salía siempre el de mayor ATK) */
-        chooseSummonFromDeck(P,function(x){return CARDS[x].t==="U"&&CARDS[x].a==="clon"&&(CARDS[x].lv||99)<=(c.cap||2);},"Clon en Serie: elige 1 Clon de Nivel "+(c.cap||2)+" o menor de tu mazo",function(){render();});
+      if(srcId==="c900000509"&&canChoose(P)){ /* Clon en Serie (509): su dueño ELIGE qué Clon de Nivel 2 o menor trae de su mazo (antes salía siempre el de mayor ATK) */
+        chooseSummonFromDeck(P,function(x){return CARDS[x].t==="U"&&CARDS[x].a===aE&&(CARDS[x].lv||99)<=(c.cap||2);},"Clon en Serie: elige 1 Clon de Nivel "+(c.cap||2)+" o menor de tu mazo",function(){render();});
       }
-      else summonArchFromDeck(P,c.a,c.cap||99,1,"atk");
+      else summonArchFromDeck(P,aE,c.cap||99,1,"atk");
       break;
     case "summonHandSummon":
-      chooseSummonFromHand(P,function(h){return CARDS[h].t==="U"&&CARDS[h].a===c.a&&(CARDS[h].lv||99)<=(c.cap||99);},"Elige 1 unidad "+ARCH[c.a].name+" de tu mano ("+c.n+")",function(){render();});
+      chooseSummonFromHand(P,function(h){return CARDS[h].t==="U"&&CARDS[h].a===aE&&(CARDS[h].lv||99)<=(c.cap||99);},"Elige 1 unidad "+ARCH[aE].name+" de tu mano ("+c.n+")",function(){render();});
       break;
-    case "summonGrave": chooseRevive(P,c.a,c.cap?c.cap:99,"atk",null,function(){render();}); break;
-    case "summonGraveMulti": reviveMulti(P,c.amt||1,c.a,99,"atk",function(){render();}); break;
+    case "summonGrave": chooseRevive(P,aE,c.cap?c.cap:99,"atk",null,function(){render();}); break;
+    case "summonGraveMulti": reviveMulti(P,c.amt||1,aE,99,"atk",function(){render();}); break;
     case "graveCardSummon":
-      chooseGraveToHand(P,function(g){return CARDS[g].a===c.a;},c.n+": elige 1 carta "+ARCH[c.a].name+" de tu cementerio",function(){render();});
+      chooseGraveToHand(P,function(g){return CARDS[g].a===aE;},c.n+": elige 1 carta "+ARCH[aE].name+" de tu cementerio",function(){render();});
       break;
     case "graveUnitSummon":
-      chooseGraveToHand(P,function(g){return CARDS[g].a===c.a&&CARDS[g].t==="U";},c.n+": elige 1 unidad "+ARCH[c.a].name+" de tu cementerio",function(){render();});
+      chooseGraveToHand(P,function(g){return CARDS[g].a===aE&&CARDS[g].t==="U";},c.n+": elige 1 unidad "+ARCH[aE].name+" de tu cementerio",function(){render();});
       break;
     case "discardFoeSummon":
-      if(unit.id==="c900001008"){ /* Airdrop Sorpresa: su descarte es 1 vez por turno entre todas sus copias */
+      if(srcId==="c900001008"){ /* Airdrop Sorpresa: su descarte es 1 vez por turno entre todas sus copias */
         if(P.airdropTurn===G.turnNo){log("🎁 Airdrop Sorpresa ya hizo descartar este turno: su efecto es 1 vez por turno.");break;}
         P.airdropTurn=G.turnNo;
       }
       foeDiscardRandom(O,c.n); break;
     case "entrelazadorSummon":
-      var lo=P.field.map(function(x,i){return x&&x!==unit&&CARDS[x.id].a==="cuantico"?i:-1;}).filter(function(i){return i>=0;});
+      var lo=P.field.map(function(x,i){return x&&x!==unit&&CARDS[x.id].a===aE?i:-1;}).filter(function(i){return i>=0;});
       if(lo.length){
         var applyLink=function(tz){var t=P.field[tz];if(!t)return;var mx=Math.max(effAtk(P,unit),effAtk(P,t));unit.temp+=mx-effAtk(P,unit);t.temp+=mx-effAtk(P,t);log("🔗 Entrelazador Cuántico: "+c.n+" y "+CARDS[t.id].n+" comparten el mayor ATK ("+mx+") hasta el final del turno.");render();};
         if(P.ai){var lz=lo[0],la=-1;lo.forEach(function(i){if(effAtk(P,P.field[i])>la){la=effAtk(P,P.field[i]);lz=i;}});applyLink(lz);}
@@ -7148,15 +7171,15 @@ function onSummonFx(P,unit,zone){
         sheetBtn("chB",function(){var f=G._choice.alt;G._choice=null;closeSheet();f();}); }
       break;
     case "choiceSearchSummon": /* Onda de Probabilidad: buscar O invocar Cuántico Nv. 2 o menor */
-      var csSearch=function(){searchDeck(P,function(x){return CARDS[x].a===c.a;},"Elige 1 carta "+ARCH[c.a].name+" de tu mazo");};
+      var csSearch=function(){searchDeck(P,function(x){return CARDS[x].a===aE;},"Elige 1 carta "+ARCH[aE].name+" de tu mazo");};
       var csSummon=function(){
-        if(canChoose(P))chooseSummonFromDeck(P,function(x){return CARDS[x].t==="U"&&CARDS[x].a===c.a&&(CARDS[x].lv||99)<=(c.cap||2);},c.n+": elige 1 Cuántico de Nivel "+(c.cap||2)+" o menor de tu mazo",function(){render();}); /* el dueño ELIGE qué Cuántico invoca (antes salía el de mayor ATK) */
-        else {summonArchFromDeck(P,c.a,c.cap||2,1,"atk");render();}
+        if(canChoose(P))chooseSummonFromDeck(P,function(x){return CARDS[x].t==="U"&&CARDS[x].a===aE&&(CARDS[x].lv||99)<=(c.cap||2);},c.n+": elige 1 "+ARCH[aE].name+" de Nivel "+(c.cap||2)+" o menor de tu mazo",function(){render();}); /* el dueño ELIGE qué Cuántico invoca (antes salía el de mayor ATK) */
+        else {summonArchFromDeck(P,aE,c.cap||2,1,"atk");render();}
       };
       if(quantBoth(P)){csSearch();csSummon();}
-      else if(P.ai){ if(firstFreeNormal(P)>=0&&countArchUnits(P,c.a)<3&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a===c.a&&(CARDS[x].lv||99)<=(c.cap||2);}))csSummon(); else csSearch(); }
+      else if(P.ai){ if(firstFreeNormal(P)>=0&&countArchUnits(P,aE)<3&&P.deck.some(function(x){return CARDS[x].t==="U"&&CARDS[x].a===aE&&(CARDS[x].lv||99)<=(c.cap||2);}))csSummon(); else csSearch(); }
       else{ G._choice={main:csSearch,alt:csSummon};
-        showSheet("<h2>🌀 "+esc(c.n)+"</h2><p>Superposición: elige 1 de los 2 efectos.</p><button class='primary' id='chA'>Añadir 1 carta Cuántico de tu mazo a tu mano</button> <button id='chB'>Invocar de modo especial 1 Cuántico de Nivel "+(c.cap||2)+" o menor desde tu mazo</button>",true);
+        showSheet("<h2>🌀 "+esc(c.n)+"</h2><p>Superposición: elige 1 de los 2 efectos.</p><button class='primary' id='chA'>Añadir 1 carta "+ARCH[aE].name+" de tu mazo a tu mano</button> <button id='chB'>Invocar de modo especial 1 "+ARCH[aE].name+" de Nivel "+(c.cap||2)+" o menor desde tu mazo</button>",true);
         sheetBtn("chA",function(){var f=G._choice.main;G._choice=null;closeSheet();f();});
         sheetBtn("chB",function(){var f=G._choice.alt;G._choice=null;closeSheet();f();}); }
       break;
@@ -7170,7 +7193,7 @@ function onSummonFx(P,unit,zone){
       break;
     case "freezeAllSummon": O.field.forEach(function(x){if(x)freezeUnit(x,"both");}); log("🧊 "+c.n+" congela a todas las unidades de "+O.name+": no podrán atacar ni activar efectos en su próximo turno."); break; /* Desconexión Total 917: su texto bloquea ataques y efectos */
     case "bounceSummon":
-      if(unit.id==="c900000706"){bounceAnyCard(P);break;} /* Ayer y Mañana: devuelve 1 CARTA rival en el campo (unidad, zona trasera o Campo) */
+      if(srcId==="c900000706"){bounceAnyCard(P);break;} /* Ayer y Mañana: devuelve 1 CARTA rival en el campo (unidad, zona trasera o Campo) */
       bounceTargets(P,c.amt||1,false,c.cap||0); break; /* Reloj de Arena (704): su cap limita el rebote a unidades de Nivel 4 o menor */
     case "bounceDrawSummon": bounceTargets(P,1,false); drawCard(P); break;
     case "bounceAllSummon": for(var ba=5;ba>=0;ba--){if(O.field[ba])bounceUnit(O,ba,false);} break;
@@ -7184,7 +7207,7 @@ function onSummonFx(P,unit,zone){
       for(var dl=5;dl>=0;dl--){var du2=O.field[dl];if(du2&&(CARDS[du2.id].lv||99)<=(c.cap||4))destroyUnit(O,dl,false);}
       log("💥 "+c.n+" destruye las unidades rivales de Nivel "+(c.cap||4)+" o menor."); break;
     case "destroyCardsPerAllySummon":
-      var ndc=countArchUnits(P,c.a);
+      var ndc=countArchUnits(P,aE);
       (function stepDc(n){ if(n<=0){render();return;}
         destroyOppCardTarget(P,"Elige la carta rival a destruir con "+c.n+" ("+(ndc-n+1)+" de "+ndc+")",unit,function(){stepDc(n-1);});
       })(ndc);
@@ -7192,9 +7215,9 @@ function onSummonFx(P,unit,zone){
     case "weakenAllSummon": O.field.forEach(function(x){if(x)x.temp-=(c.amt||0);}); log("📉 "+c.n+": todas las unidades de "+O.name+" pierden "+(c.amt||0)+" ATK este turno."); break;
     case "weakenSummonPerAlly":
       var wz=-1,wa=-1; O.field.forEach(function(x,i){if(x&&effAtk(O,x)>wa){wa=effAtk(O,x);wz=i;}});
-      if(wz>=0){O.field[wz].temp-=(c.amt||0)*countArchUnits(P,c.a);log("📉 "+c.n+": "+CARDS[O.field[wz].id].n+" pierde "+((c.amt||0)*countArchUnits(P,c.a))+" ATK este turno.");}
+      if(wz>=0){O.field[wz].temp-=(c.amt||0)*countArchUnits(P,aE);log("📉 "+c.n+": "+CARDS[O.field[wz].id].n+" pierde "+((c.amt||0)*countArchUnits(P,aE))+" ATK este turno.");}
       break;
-    case "buffAllSummon": P.field.forEach(function(x){if(x&&CARDS[x.id].a===c.a)x.temp+=(c.amt||0);}); log("📈 "+c.n+": tus unidades "+ARCH[c.a].name+" ganan "+(c.amt||0)+" ATK este turno."); break;
+    case "buffAllSummon": P.field.forEach(function(x){if(x&&CARDS[x.id].a===aE)x.temp+=(c.amt||0);}); log("📈 "+c.n+": tus unidades "+ARCH[aE].name+" ganan "+(c.amt||0)+" ATK este turno."); break;
     case "copyAtkSummon": case "copyAtkDefSummon": {
       /* Copias Clon al invocar: el objetivo lo ELIGE su dueño (la IA se
          queda con la unidad rival de mayor ATK). Clon Supremo (515),
@@ -7211,7 +7234,7 @@ function onSummonFx(P,unit,zone){
         if(c.fx==="copyAtkDefSummon")unit.defCopy=effDef(O,ct);
         if(withFx){
           var fxT=(fxTz!=null&&O.field[fxTz])?O.field[fxTz]:ct;
-          unit.copiedId=fxT.id; unit.fxUsed=false;
+          unit._copiedSummonFired=false; unit.copiedId=fxT.id; unit.fxUsed=false; fireCopiedSummonFx(P, unit, zone, true); /* copia adaptada: el efecto de invocación copiado se dispara al copiar (515/516/517 llegan por Evolución: invocación especial) */
           log("🪞 "+c.n+" copia el ATK"+(c.fx==="copyAtkDefSummon"?" y la DEF":"")+" de "+CARDS[ct.id].n+(fxT!==ct?" y el efecto de "+CARDS[fxT.id].n:" y su efecto")+" hasta el final del turno.");
         } else log("🪞 "+c.n+" copia el ATK"+(c.fx==="copyAtkDefSummon"?" y la DEF":"")+" de "+CARDS[ct.id].n+" hasta el final del turno.");
         render();
@@ -7219,7 +7242,7 @@ function onSummonFx(P,unit,zone){
       if(unit.id==="c900000516"){
         if(P.ai||!canChoose(P)){
           var az=-1,aa=-1; foeZ.forEach(function(i){if(effAtk(O,O.field[i])>aa){aa=effAtk(O,O.field[i]);az=i;}});
-          var efz=az; foeZ.forEach(function(i){if(i!==az&&unitFxAvailable(O,O.field[i]))efz=i;});
+          var efz=az; foeZ.forEach(function(i){if(i!==az&&(unitFxAvailable(O,O.field[i])||SUMMON_FX_SET[CARDS[O.field[i].id].fx]))efz=i;}); /* copia adaptada: un efecto de invocación también es un objetivo valioso */
           applyCopy(az,efz);
         } else {
           startTargeting("🪞 Doble Perfecto: elige la unidad rival cuyo ATK copias",foeZ.map(function(i){return {side:"opp",zone:i,kind:"unit"};}),function(sel1){
@@ -7265,7 +7288,7 @@ function onSummonFx(P,unit,zone){
         else startTargeting("Elige el Programa/Protocolo rival a destruir (su Campo también cuenta)",backrowValid(O),function(sel){if(sel.kind==="field"){destroyFieldCard(sel.player);render();return;}var bc5=sel.player.back[sel.zone];sel.player.back[sel.zone]=null;sel.player.gy.push(bc5.id);triggerEco(sel.player,CARDS[bc5.id]);log("🧹 "+CARDS[unit.id].n+" destruye esa carta.");render();});
       }
       break;
-    case "advRoll": advRollSummon(P,unit); break;
+    case "advRoll": advRollSummon(P,unit,srcId); break;
     case "toDefSummon":
       var tz=-1,ta=-1; O.field.forEach(function(x,i){if(x&&x.pos==="atk"&&effAtk(O,x)>ta){ta=effAtk(O,x);tz=i;}});
       if(tz>=0){O.field[tz].pos="def";log("🔀 "+c.n+" cambia a "+CARDS[O.field[tz].id].n+" a Posición de Defensa.");}
@@ -7286,7 +7309,7 @@ function onSummonFx(P,unit,zone){
       O.back.forEach(function(b,i){if(b){O.back[i]=null;O.gy.push(b.id);triggerEco(O,CARDS[b.id]);}});
       destroyFieldCard(O); /* el Campo también cae: cuenta como Programa */
       log("💥 "+c.n+" destruye todos los Programas y Protocolos de "+O.name+"."); break;
-    case "reviveMultiDefSummon": reviveMulti(P,c.amt||2,c.a,99,"def",function(){render();}); break;
+    case "reviveMultiDefSummon": reviveMulti(P,c.amt||2,aE,99,"def",function(){render();}); break;
     case "polemAllSummon": O.field.forEach(function(x){if(x)x.polem=(x.polem||0)+(c.amt||2);}); log("🔥 "+c.n+" coloca "+(c.amt||2)+" contadores de Polémica en cada unidad de "+O.name+"."); break;
     case "polemBurnSummon":
       var pbT=totalPolem(); G.players.forEach(function(X){X.field.forEach(function(x){if(x)x.polem=0;});});
@@ -8442,16 +8465,16 @@ function resolveProgram(P,handIdx){
     case "progCopyEffect": /* Robo de Identidad: una unidad Clon copia el efecto de 1 unidad rival este turno */
       toGY();
       if(P.ai){
-        var asrc=-1,asa=-1; O.field.forEach(function(x,i){if(x&&unitFxAvailable(O,x)&&effAtk(O,x)>asa){asa=effAtk(O,x);asrc=i;}}); /* prefiere copiar un efecto activable */
+        var asrc=-1,asa=-1; O.field.forEach(function(x,i){if(x&&(unitFxAvailable(O,x)||SUMMON_FX_SET[CARDS[x.id].fx])&&effAtk(O,x)>asa){asa=effAtk(O,x);asrc=i;}}); /* prefiere copiar un efecto activable o de invocación (copia adaptada) */
         if(asrc<0)O.field.forEach(function(x,i){if(x&&effAtk(O,x)>asa){asa=effAtk(O,x);asrc=i;}});
         var adst=-1,ada=-1; P.field.forEach(function(x,i){if(x&&CARDS[x.id].a==="clon"&&effAtk(P,x)>ada){ada=effAtk(P,x);adst=i;}});
-        if(asrc>=0&&adst>=0){P.field[adst].copiedId=O.field[asrc].id;P.field[adst].fxUsed=false;log("🎭 Robo de Identidad: "+CARDS[P.field[adst].id].n+" copia el efecto de "+CARDS[O.field[asrc].id].n+" hasta el final del turno.");}
+        if(asrc>=0&&adst>=0){P.field[adst]._copiedSummonFired=false;P.field[adst].copiedId=O.field[asrc].id;P.field[adst].fxUsed=false;log("🎭 Robo de Identidad: "+CARDS[P.field[adst].id].n+" copia el efecto de "+CARDS[O.field[asrc].id].n+" hasta el final del turno.");fireCopiedSummonFx(P,P.field[adst],adst,false);}
       } else {
         startTargeting("🎭 Robo de Identidad: elige la unidad rival cuyo efecto quieres copiar",O.field.map(function(x,i){return x?{side:"opp",zone:i,kind:"unit"}:null;}).filter(Boolean),function(sel1){
           var srcId=sel1.player.field[sel1.zone].id;
           startTargeting("🎭 Elige 1 de tus unidades Clon: copiará el efecto de "+CARDS[srcId].n,P.field.map(function(x,i){return x&&CARDS[x.id].a==="clon"?{side:"me",zone:i,kind:"unit"}:null;}).filter(Boolean),function(sel2){
-            sel2.player.field[sel2.zone].copiedId=srcId; sel2.player.field[sel2.zone].fxUsed=false;
-            log("🎭 Robo de Identidad: "+CARDS[sel2.player.field[sel2.zone].id].n+" copia el efecto de "+CARDS[srcId].n+" hasta el final del turno."); render();
+            sel2.player.field[sel2.zone]._copiedSummonFired=false; sel2.player.field[sel2.zone].copiedId=srcId; sel2.player.field[sel2.zone].fxUsed=false;
+            log("🎭 Robo de Identidad: "+CARDS[sel2.player.field[sel2.zone].id].n+" copia el efecto de "+CARDS[srcId].n+" hasta el final del turno."); fireCopiedSummonFx(sel2.player, sel2.player.field[sel2.zone], sel2.zone, false); render();
           });
         });
       }
@@ -8517,7 +8540,9 @@ function openUnitSheet(zone){
   } else {
     if(G.phase==="battle"&&!u.atkUsed&&G.turnNo>1&&u.pos==="atk")btns+="<button class='primary' id='uAtk'>⚔️ Atacar</button> ";
     if(isMainPhase()&&!u.posChanged&&u.justTurn!==G.turnNo&&!u.atkUsed)btns+="<button id='uPos'>Cambiar posición</button> ";
-    if(isMainPhase()&&!u.fxUsed&&!fxBlocked(me,u)&&unitFxAvailable(me,u))btns+="<button class='primary' id='uFx'>✨ Activar efecto</button> ";
+    var fxBtnLabel="✨ Activar efecto";
+    if(u.copiedId&&(u.id==="c900000501"||u.id==="c900000515"||SUMMON_FX_SET[(CARDS[u.copiedId]||{}).fx]))fxBtnLabel="🪞 Volver a copiar"; /* copia adaptada: el efecto de invocación copiado ya se disparó al copiar; este botón re-copia */
+    if(isMainPhase()&&!u.fxUsed&&!fxBlocked(me,u)&&unitFxAvailable(me,u))btns+="<button class='primary' id='uFx'>"+fxBtnLabel+"</button> ";
     else if(isMainPhase()&&!u.fxUsed&&fxBlocked(me,u)&&unitFxAvailable(me,u))btns+="<span class='note'>🔇 Esta unidad está silenciada: no puede activar efectos este turno.</span> ";
   }
   btns+="<button id='uClose'>Cerrar</button>";
@@ -8531,12 +8556,13 @@ function openUnitSheet(zone){
 function unitFxAvailable(P,u){
   var O=G.players[1-G.players.indexOf(P)];
   var c=u.copiedId?CARDS[u.copiedId]:CARDS[u.id]; /* Robo de Identidad: manda el efecto copiado */
+  var aE=u.copiedId?CARDS[u.id].a:c.a; /* copia adaptada: el arquetipo efectivo es el de la carta que copia */
   switch(c.fx){
     case "rar704": return P.hand.length>=1;
-    case "rar707": return P.field.some(function(x){return x&&CARDS[x.id].a==="rar"&&CARDS[x.id].lv;});
-    case "rar708": return P.gy.some(function(g){return CARDS[g].a==="rar";});
+    case "rar707": return P.field.some(function(x){return x&&CARDS[x.id].a===aE&&CARDS[x.id].lv;});
+    case "rar708": return P.gy.some(function(g){return CARDS[g].a===aE;});
     case "rar715": return (u.files||[]).length>0&&(O.field.some(Boolean)||O.back.some(Boolean)||O.fzone);
-    case "rar716": return (u.files||[]).length>0&&firstFreeNormal(P)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a==="rar"&&(CARDS[g].lv||99)<=6;});
+    case "rar716": return (u.files||[]).length>0&&firstFreeNormal(P)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===aE&&(CARDS[g].lv||99)<=6;});
     case "rar717": return (u.files||[]).length>0&&O.field.some(Boolean);
     case "subrutina": case "omni": case "procinfinito": return P.deck.length>0;
     case "nucleoq": return O.hand.length>0;
@@ -8557,8 +8583,8 @@ function unitFxAvailable(P,u){
         return true; });
     case "summonNamedTurn": return firstFreeNormal(P)>=0&&(c.cond==="grave"?P.gy.some(function(g){return CARDS[g].n===c.sName;}):P.deck.some(function(g){return CARDS[g].n===c.sName;}));
     case "auraPerNodo": return firstFreeNormal(P)>=0&&P.deck.some(function(g){return CARDS[g].n==="Nodo Enjambre";});
-    case "summonHandTurn": return firstFreeNormal(P)>=0&&P.hand.some(function(h){return CARDS[h].t==="U"&&CARDS[h].a===c.a&&(CARDS[h].lv||99)<=(c.cap||99);});
-    case "reviveTurn": return firstFreeNormal(P)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===c.a;});
+    case "summonHandTurn": return firstFreeNormal(P)>=0&&P.hand.some(function(h){return CARDS[h].t==="U"&&CARDS[h].a===aE&&(CARDS[h].lv||99)<=(c.cap||99);});
+    case "reviveTurn": return firstFreeNormal(P)>=0&&P.gy.some(function(g){return CARDS[g].t==="U"&&CARDS[g].a===aE;});
     case "freezeTurn": return O.field.some(Boolean);
     case "bouncePay": return O.field.some(Boolean);
     case "swapAtkDefTurn": return O.field.some(Boolean);
@@ -8590,18 +8616,19 @@ function activateUnitFx(P,u,zone){
 }
 function activateUnitFxGo(P,u,zone){
   var O=G.players[1-G.players.indexOf(P)], c=u.copiedId?CARDS[u.copiedId]:CARDS[u.id];
+  var aE=u.copiedId?CARDS[u.id].a:c.a; /* copia adaptada: el arquetipo efectivo es el de la carta que copia */
   if(fxBlocked(P,u)){log("🔇 "+CARDS[u.id].n+" está silenciada y no puede activar efectos este turno.");render();return;}
   u.fxUsed=true;
   logEffect(G.players.indexOf(P), c.n, "efecto activado");
   switch(c.fx){
     case "rar704": chooseDiscard(P,{title:"RAR Contraseña Olvidada",prompt:"Descarta 1 carta para robar 1 carta."},function(d){if(d)drawCard(P);}); break;
     case "rar707": {
-      var lvTgts=P.field.map(function(x,i){return (x&&CARDS[x.id].a==="rar"&&CARDS[x.id].lv)?{side:"me",zone:i,kind:"unit"}:null;}).filter(Boolean);
+      var lvTgts=P.field.map(function(x,i){return (x&&CARDS[x.id].a===aE&&CARDS[x.id].lv)?{side:"me",zone:i,kind:"unit"}:null;}).filter(Boolean);
       if(!lvTgts.length){log("🔧 RAR Compresor Potente: no controlas unidades RAR con Nivel.");break;}
       if(P.ai){ var tz=rarAiLevelTarget(P); if(tz<0)break; var want=rarAiLevelWant(P,tz); P.field[tz].lvMod=want; log("🔧 RAR Compresor Potente cambia el Nivel de "+CARDS[P.field[tz].id].n+" a "+want+" hasta el final del turno."); }
       else { G.pendingRar707={owner:P}; startTargeting("🔧 RAR Compresor Potente: elige 1 unidad RAR que controlas",lvTgts,function(sel){ var tu=sel.player.field[sel.zone]; showSheet("<h2>🔧 RAR Compresor Potente</h2><p>¿A qué Nivel cambias a "+esc(CARDS[tu.id].n)+" (ahora Nv. "+unitLv(sel.player,tu)+") hasta el final del turno?</p><button class='primary' id='lv4'>Nivel 4</button> <button class='primary' id='lv6'>Nivel 6</button>",true); sheetBtn("lv4",function(){tu.lvMod=4;log("🔧 RAR Compresor Potente cambia el Nivel de "+CARDS[tu.id].n+" a 4 hasta el final del turno.");closeSheet();render();}); sheetBtn("lv6",function(){tu.lvMod=6;log("🔧 RAR Compresor Potente cambia el Nivel de "+CARDS[tu.id].n+" a 6 hasta el final del turno.");closeSheet();render();}); }); }
       break; }
-    case "rar708": chooseGraveToHand(P,function(id){return CARDS[id].a==="rar";},"RAR Archivo Temporal — Elige 1 carta RAR de tu cementerio",function(){}); break;
+    case "rar708": chooseGraveToHand(P,function(id){return CARDS[id].a===aE;},"RAR Archivo Temporal — Elige 1 carta RAR de tu cementerio",function(){}); break;
     case "rar715": { /* WinZip: primero se ELIGE la carta rival a destruir y DESPUÉS se retira el Archivo (el orden de su texto, como WinRAR 717) */
       if(!(u.files||[]).length)break;
       var wzD=function(sel){
@@ -8622,7 +8649,7 @@ function activateUnitFxGo(P,u,zone){
         startTargeting("🗜️ "+c.n+": elige 1 carta del rival a destruir",wvalid,function(sel){wzD(sel);});
       }
       break; }
-    case "rar716": if(!detachFile(P,u))break; chooseRevive(P,"rar",6,"atk",null,function(){}); break;
+    case "rar716": if(!detachFile(P,u))break; chooseRevive(P,aE,6,"atk",null,function(){}); break;
     case "rar717": {
       if(!(u.files||[]).length)break;
       if(P.ai){ var hz=-1,ha=-1; O.field.forEach(function(x,i){if(x&&effAtk(O,x)>ha){ha=effAtk(O,x);hz=i;}}); if(hz<0)break; detachFile(P,u); var t717=O.field[hz]; t717.temp-=Math.floor(effAtk(O,t717)/2); log("🗜️ "+c.n+" comprime a "+CARDS[t717.id].n+": su ATK se reduce a la mitad ("+effAtk(O,t717)+") hasta el final del turno."); }
@@ -8630,7 +8657,7 @@ function activateUnitFxGo(P,u,zone){
       break; }
     case "subrutina":
       if(P.deck.length){var top=P.deck[P.deck.length-1];
-        if(CARDS[top].t==="U"&&CARDS[top].a==="algo"){P.deck.pop();P.hand.push(top);log("📡 Subrutina Centinela añade "+CARDS[top].n+" a la mano de "+P.name+".");}
+        if(CARDS[top].t==="U"&&CARDS[top].a===aE){P.deck.pop();P.hand.push(top);log("📡 Subrutina Centinela añade "+CARDS[top].n+" a la mano de "+P.name+".");}
         else lookTop(P,1,false);}
       break;
     case "omni": lookTop(P,3,true); break;
@@ -8645,7 +8672,7 @@ function activateUnitFxGo(P,u,zone){
       else{ G.pendingNucleo={owner:P};
         showSheet("<h2>Núcleo Cuántico — mano de "+esc(O.name)+"</h2><p>Elige 1 carta para que "+esc(O.name)+" la descarte:</p><div class='picklist'>"+O.hand.map(function(h,i){return pickBtn(h,"nucleoPick("+i+")");}).join("")+"</div>",true); }
       break;
-    case "dinamo": var cnt=P.field.filter(function(x){return x&&CARDS[x.id].a==="sobre";}).length; heal(P,200*cnt); break;
+    case "dinamo": var cnt=P.field.filter(function(x){return x&&CARDS[x.id].a===aE;}).length; heal(P,200*cnt); break;
     case "cortador":
       damage(P,sobreCost(P,400),"Cortador de Voltaje");
       if(P.ai){var tz=O.field.findIndex(function(x){return x&&CARDS[x.id].def<=1500;});if(tz>=0)destroyUnit(O,tz,false);}
@@ -8660,7 +8687,7 @@ function activateUnitFxGo(P,u,zone){
       break;
     /* ---------- efectos de unidad genéricos (1 vez por turno) ---------- */
     case "healTurn": heal(P,c.amt||800); break;
-    case "healTurnPerAlly": heal(P,(c.amt||1000)*countArchUnits(P,c.a)); break;
+    case "healTurnPerAlly": heal(P,(c.amt||1000)*countArchUnits(P,aE)); break;
     case "boostPay": if(c.cost)damage(P,c.cost,c.n); u.temp+=(c.amt||500); log("🔥 "+c.n+" sube a ATK "+effAtk(P,u)+"."); break;
     case "destroyPay":
       if(c.cost)damage(P,c.cost,c.n);
@@ -8672,14 +8699,14 @@ function activateUnitFxGo(P,u,zone){
       },"Elige la unidad rival a destruir con "+c.n,u);
       break;
     case "summonNamedTurn":
-      if(c.cond==="grave")reviveFromGY(P,c.a,99,"atk",c.sName);
+      if(c.cond==="grave")reviveFromGY(P,aE,99,"atk",c.sName);
       else summonNamedFromDeck(P,c.sName,1,"atk");
       break;
     case "auraPerNodo": summonNamedFromDeck(P,"Nodo Enjambre",1,"atk"); break;
     case "summonHandTurn":
-      chooseSummonFromHand(P,function(h){return CARDS[h].t==="U"&&CARDS[h].a===c.a&&(CARDS[h].lv||99)<=(c.cap||99);},"Elige 1 unidad "+ARCH[c.a].name+" de tu mano ("+c.n+")",function(){render();});
+      chooseSummonFromHand(P,function(h){return CARDS[h].t==="U"&&CARDS[h].a===aE&&(CARDS[h].lv||99)<=(c.cap||99);},"Elige 1 unidad "+ARCH[aE].name+" de tu mano ("+c.n+")",function(){render();});
       break;
-    case "reviveTurn": chooseRevive(P,c.a,99,"atk",null,function(){render();}); break;
+    case "reviveTurn": chooseRevive(P,aE,99,"atk",null,function(){render();}); break;
     case "freezeTurn":
       if(P.ai){var fz2=-1,fa2=-1;O.field.forEach(function(x,i){if(x&&effAtk(O,x)>fa2){fa2=effAtk(O,x);fz2=i;}});if(fz2>=0){freezeUnit(O.field[fz2],"both");log("🧊 "+c.n+" congela a "+CARDS[O.field[fz2].id].n+": no podrá atacar ni activar efectos en su próximo turno.");}}
       else startTargeting("Elige la unidad rival a congelar",O.field.map(function(x,i){return x?{side:"opp",zone:i,kind:"unit"}:null;}).filter(Boolean),function(sel){freezeUnit(sel.player.field[sel.zone],"both");log("🧊 "+CARDS[u.id].n+" congela a "+CARDS[sel.player.field[sel.zone].id].n+": no podrá atacar ni activar efectos en su próximo turno.");render();}); /* Lag Infinito 916: su texto bloquea ataques y efectos */
@@ -8698,7 +8725,7 @@ function activateUnitFxGo(P,u,zone){
       break;
     case "advIgnite": /* Aventurero Hechicero: 1x/turno, tira un d20 */
       rollD20(P,"Aventurero Hechicero",function(hi){
-        if(hi.banda==="fuerte")chooseSummonFromHand(P,function(h){return CARDS[h].t==="U"&&CARDS[h].a==="aventurero"&&(CARDS[h].lv||99)<=4;},"Elige 1 unidad Aventurero de tu mano ("+c.n+")",function(){render();});
+        if(hi.banda==="fuerte")chooseSummonFromHand(P,function(h){return CARDS[h].t==="U"&&CARDS[h].a===aE&&(CARDS[h].lv||99)<=4;},"Elige 1 unidad Aventurero de tu mano ("+c.n+")",function(){render();});
         else if(hi.banda==="normal")damage(O,400,c.n);
         else log("🎲 Aventurero Hechicero: ¡pifia! El efecto falla.");
         render();
@@ -8718,19 +8745,19 @@ function activateUnitFxGo(P,u,zone){
     default:
       if(u.id==="c900000501"){ /* Clon Perfecto: 1 vez por turno, ELIGE 1 unidad rival y copia su ATK y su EFECTO hasta el final del turno */
         u._copyUsed=true;
-        var apply501=function(tz){var ct3=O.field[tz];if(!ct3)return;u.temp+=effAtk(O,ct3)-effAtk(P,u);u.copiedId=ct3.id;u.fxUsed=false;log("🪞 "+c.n+" copia el ATK y el efecto de "+CARDS[ct3.id].n+" hasta el final del turno.");render();};
+        var apply501=function(tz){var ct3=O.field[tz];if(!ct3)return;u.temp+=effAtk(O,ct3)-effAtk(P,u);u._copiedSummonFired=false;u.copiedId=ct3.id;u.fxUsed=false;log("🪞 "+c.n+" copia el ATK y el efecto de "+CARDS[ct3.id].n+" hasta el final del turno.");fireCopiedSummonFx(P,u,zone,false);render();};
         if(P.ai||!canChoose(P)){var cz3=-1,ca4=-1; O.field.forEach(function(x,i){if(x&&effAtk(O,x)>ca4){ca4=effAtk(O,x);cz3=i;}});if(cz3>=0)apply501(cz3);}
         else startTargeting("🪞 "+c.n+": elige la unidad rival cuyo ATK y efecto copias",O.field.map(function(x,i){return x?{side:"opp",zone:i,kind:"unit"}:null;}).filter(Boolean),function(sel){apply501(sel.zone);});
       }
       else if(u.id==="c900000515"){ /* Clon Supremo: su efecto activado — 1 vez por turno, elige OTRA unidad rival y copia su ATK y su efecto en su lugar */
         u._copyUsed=true;
-        var apply515=function(tz){var ct5=O.field[tz];if(!ct5)return;u.temp+=effAtk(O,ct5)-effAtk(P,u);u.copiedId=ct5.id;u.fxUsed=false;log("🪞 "+c.n+" copia ahora el ATK y el efecto de "+CARDS[ct5.id].n+".");render();};
+        var apply515=function(tz){var ct5=O.field[tz];if(!ct5)return;u.temp+=effAtk(O,ct5)-effAtk(P,u);u._copiedSummonFired=false;u.copiedId=ct5.id;u.fxUsed=false;log("🪞 "+c.n+" copia ahora el ATK y el efecto de "+CARDS[ct5.id].n+".");fireCopiedSummonFx(P,u,zone,false);render();};
         if(P.ai||!canChoose(P)){var cz5=-1,ca6=-1; O.field.forEach(function(x,i){if(x&&effAtk(O,x)>ca6){ca6=effAtk(O,x);cz5=i;}});if(cz5>=0)apply515(cz5);}
         else startTargeting("🪞 "+c.n+": elige otra unidad rival para copiar su ATK y su efecto",O.field.map(function(x,i){return x?{side:"opp",zone:i,kind:"unit"}:null;}).filter(Boolean),function(sel){apply515(sel.zone);});
       }
       else if(u.id==="c900000616"){ /* Gato de Schrödinger: copiar el ATK y el EFECTO de 1 unidad rival (a elegir) O recuperar 800 */
         u._copyUsed=true;
-        var scCopyAt=function(tz){var ct4=O.field[tz];if(!ct4){render();return;}u.temp+=effAtk(O,ct4)-effAtk(P,u);u.copiedId=ct4.id;u.fxUsed=false;log("🪞 "+CARDS[u.id].n+" copia el ATK y el efecto de "+CARDS[ct4.id].n+" hasta el final del turno.");render();};
+        var scCopyAt=function(tz){var ct4=O.field[tz];if(!ct4){render();return;}u.temp+=effAtk(O,ct4)-effAtk(P,u);u._copiedSummonFired=false;u.copiedId=ct4.id;u.fxUsed=false;log("🪞 "+CARDS[u.id].n+" copia el ATK y el efecto de "+CARDS[ct4.id].n+" hasta el final del turno.");fireCopiedSummonFx(P,u,zone,false);render();};
         var scCopy=function(){var cz4=-1,ca5=-1;O.field.forEach(function(x,i){if(x&&effAtk(O,x)>ca5){ca5=effAtk(O,x);cz4=i;}});if(cz4>=0)scCopyAt(cz4);else render();};
         var scHeal=function(){heal(P,800);render();};
         if(quantBoth(P)){scCopy();scHeal();}
